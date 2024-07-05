@@ -1,0 +1,8 @@
+#Ignore folders
+
+KnightDemo/x64
+Knight/x64
+Knight/Knight/x64
+Knight/build/raylib/obj/x64
+Knight/build/raylib/bin/x64
+Knight/.vs
