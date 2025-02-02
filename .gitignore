@@ -6,3 +6,18 @@ Knight/Knight/x64
 Knight/build/raylib/obj/x64
 Knight/build/raylib/bin/x64
 Knight/.vs
+
+#Ignore files
+*.log
+*.tlog
+*.iobj
+*.pdb
+*.ipdb
+*.obj
+*.recipe
+*.ilk
+*.idb
+*.vcproj.filters
+*.vcproj.user
+*.vcxproj.FileListAbsolute.txt
+
