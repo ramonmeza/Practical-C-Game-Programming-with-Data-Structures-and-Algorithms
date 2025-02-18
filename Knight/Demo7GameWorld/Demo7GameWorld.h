@@ -5,13 +5,13 @@
 
 #include "TopDownCamera.h"
 
-class Demo6GameWorld : public Knight
+class Demo7GameWorld : public Knight
 {
 public:
 	void Start() override;
 	void EndGame() override;
 
-	Demo6GameWorld();
+	Demo7GameWorld();
 
 	TopDownCamera* pMainCamera = NULL;
 	SceneActor* Actor = NULL;

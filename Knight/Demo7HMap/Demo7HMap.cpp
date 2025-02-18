@@ -1,4 +1,4 @@
-#include "Demo6HMap.h"
+#include "Demo7HMap.h"
 
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
@@ -11,20 +11,20 @@
 
 int main(int argc, char* argv[])
 {
-	Demo6HMap* KnightDemo6Billboard = new Demo6HMap();
+	Demo7HMap* KnightDemo7Billboard = new Demo7HMap();
 
-	KnightDemo6Billboard->Start();
-	KnightDemo6Billboard->GameLoop();
+	KnightDemo7Billboard->Start();
+	KnightDemo7Billboard->GameLoop();
 
-	delete KnightDemo6Billboard;
+	delete KnightDemo7Billboard;
 	return 0;
 }
 
-Demo6HMap::Demo6HMap()
+Demo7HMap::Demo7HMap()
 {
 }
 
-void Demo6HMap::Start()
+void Demo7HMap::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
@@ -51,25 +51,25 @@ void Demo6HMap::Start()
 	UnloadImage(image);             // Unload heightmap image from RAM, already uploaded to VRAM
 }
 
-void Demo6HMap::EndGame()
+void Demo7HMap::EndGame()
 {
 	UnloadTexture(texture);     // Unload texture
 
 	__super::EndGame();
 }
 
-void Demo6HMap::Update(float ElapsedSeconds)
+void Demo7HMap::Update(float ElapsedSeconds)
 {
 	__super::Update(ElapsedSeconds);
 }
 
-void Demo6HMap::DrawFrame()
+void Demo7HMap::DrawFrame()
 {
 	__super::DrawFrame();
 	DrawGrid(20, 1.0f);
 }
 
-void Demo6HMap::DrawGUI()
+void Demo7HMap::DrawGUI()
 {
 	__super::DrawGUI();
 	

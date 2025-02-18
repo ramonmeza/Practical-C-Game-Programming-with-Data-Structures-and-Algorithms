@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{cb86d23d-a3cc-47e4-bbe6-d8f4c57caf7a}</ProjectGuid>
-    <RootNamespace>Demo6HMap</RootNamespace>
+    <ProjectGuid>{1152d0c4-3ec3-4345-b127-27b79ba00b83}</ProjectGuid>
+    <RootNamespace>Demo7PCFShadow</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -72,10 +72,10 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LibraryPath>..\x64\Debug;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
-    <IncludePath>..\Knight;..\..\raylib\src;..\..\raylib\src\external;..\..\raylib\src\platforms;$(VC_IncludePath);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\Knight;..\..\raylib\src;..\..\raylib\src\external;..\..\raylib\src\platforms;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\Knight;..\..\raylib\src;..\..\raylib\src\external;..\..\raylib\src\platforms;$(VC_IncludePath);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\Knight;..\..\raylib\src;..\..\raylib\src\external;..\..\raylib\src\platforms;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -136,12 +136,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Demo6HMap.cpp" />
-    <ClCompile Include="HMapTerrainModelComponent.cpp" />
+    <ClInclude Include="Demo7PCFShadow.h" />
+    <ClInclude Include="DepthRenderPass.h" />
+    <ClInclude Include="ShadowMapRenderPass.h" />
+    <ClInclude Include="ShadowSceneLight.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Demo6HMap.h" />
-    <ClInclude Include="HMapTerrainModelComponent.h" />
+    <ClCompile Include="Demo7PCFShadow.cpp" />
+    <ClCompile Include="DepthRenderPass.cpp" />
+    <ClCompile Include="ShadowMapRenderPass.cpp" />
+    <ClCompile Include="ShadowSceneLight.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

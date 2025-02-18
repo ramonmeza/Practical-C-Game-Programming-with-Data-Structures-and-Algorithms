@@ -6,13 +6,13 @@
 
 #include "ParticleComponent.h"
 
-class Demo6Particle : public Knight
+class Demo7Particle : public Knight
 {
 public:
 	void Start() override;
 	void EndGame() override;
 
-	Demo6Particle();
+	Demo7Particle();
 
 	FlyThroughCamera* pMainCamera;
 	SceneActor* Actor = NULL;

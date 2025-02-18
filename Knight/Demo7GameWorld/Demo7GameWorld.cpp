@@ -1,4 +1,4 @@
-#include "Demo6GameWorld.h"
+#include "Demo7GameWorld.h"
 
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
@@ -17,22 +17,22 @@ static Mesh GenMeshHeightmapEx(Image heightmap, Vector3 size);
 
 int main(int argc, char* argv[])
 {
-	Demo6GameWorld* KnightDemo6GameWorld = new Demo6GameWorld();
+	Demo7GameWorld* KnightDemo7GameWorld = new Demo7GameWorld();
 
-	KnightDemo6GameWorld->Start();
-	KnightDemo6GameWorld->GameLoop();
+	KnightDemo7GameWorld->Start();
+	KnightDemo7GameWorld->GameLoop();
 
-	delete KnightDemo6GameWorld;
+	delete KnightDemo7GameWorld;
 	return 0;
 }
 
-Demo6GameWorld::Demo6GameWorld()
+Demo7GameWorld::Demo7GameWorld()
 {
 }
 
 float GetMeshHeightmapValue(Mesh terrainMesh, Image heightmap, Vector3 terrainPosition, float x, float z);
 
-void Demo6GameWorld::Start()
+void Demo7GameWorld::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
@@ -73,7 +73,7 @@ void Demo6GameWorld::Start()
 
 }
 
-void Demo6GameWorld::EndGame()
+void Demo7GameWorld::EndGame()
 {
 	UnloadTexture(texture);     // Unload texture
 	UnloadModel(model);         // Unload model
@@ -81,7 +81,7 @@ void Demo6GameWorld::EndGame()
 	__super::EndGame();
 }
 
-void Demo6GameWorld::Update(float ElapsedSeconds)
+void Demo7GameWorld::Update(float ElapsedSeconds)
 {
 	if (IsKeyDown(KEY_W)) {
 		// Move player forward based on their rotation
@@ -125,7 +125,7 @@ void Demo6GameWorld::Update(float ElapsedSeconds)
 	pMainCamera->SetLookAtPosition(LookAt);
 }
 
-void Demo6GameWorld::DrawFrame()
+void Demo7GameWorld::DrawFrame()
 {
 	__super::DrawFrame();
 
@@ -135,7 +135,7 @@ void Demo6GameWorld::DrawFrame()
 
 }
 
-void Demo6GameWorld::DrawGUI()
+void Demo7GameWorld::DrawGUI()
 {
 	__super::DrawGUI();
 }

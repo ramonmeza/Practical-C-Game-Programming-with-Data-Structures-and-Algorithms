@@ -1,4 +1,4 @@
-#include "Demo6Particle.h"
+#include "Demo7Particle.h"
 
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
@@ -8,20 +8,20 @@
 
 int main(int argc, char* argv[])
 {
-	Demo6Particle* KnightDemo6Particle = new Demo6Particle();
+	Demo7Particle* KnightDemo7Particle = new Demo7Particle();
 
-	KnightDemo6Particle->Start();
-	KnightDemo6Particle->GameLoop();
+	KnightDemo7Particle->Start();
+	KnightDemo7Particle->GameLoop();
 
-	delete KnightDemo6Particle;
+	delete KnightDemo7Particle;
 	return 0;
 }
 
-Demo6Particle::Demo6Particle()
+Demo7Particle::Demo7Particle()
 {
 }
 
-void Demo6Particle::Start()
+void Demo7Particle::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
@@ -49,12 +49,12 @@ void Demo6Particle::Start()
 
 }
 
-void Demo6Particle::EndGame()
+void Demo7Particle::EndGame()
 {
 	__super::EndGame();
 }
 
-void Demo6Particle::Update(float ElapsedSeconds)
+void Demo7Particle::Update(float ElapsedSeconds)
 {
 	if (IsKeyDown(KEY_W)) {
 		// Move player forward based on their rotation
@@ -76,14 +76,14 @@ void Demo6Particle::Update(float ElapsedSeconds)
 	__super::Update(ElapsedSeconds);
 }
 
-void Demo6Particle::DrawFrame()
+void Demo7Particle::DrawFrame()
 {
 	DrawGrid(10, 1);
 
 	__super::DrawFrame();
 }
 
-void Demo6Particle::DrawGUI()
+void Demo7Particle::DrawGUI()
 {
 	__super::DrawGUI();
 

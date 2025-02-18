@@ -4,12 +4,10 @@
 
 BillboardComponent::BillboardComponent()
 {
-
 }
 
 void BillboardComponent::Update(float ElapsedSeconds)
 {
-
 }
 
 void BillboardComponent::Draw()
@@ -22,7 +20,6 @@ void BillboardComponent::Draw()
 
 BillboardComponent::~BillboardComponent()
 {
-
 }
 
 //end of BillboardComponent.cpp

@@ -4,13 +4,13 @@
 
 #include "HMapTerrainModelComponent.h"
 
-class Demo6HMap : public Knight
+class Demo7HMap : public Knight
 {
 public:
 	void Start() override;
 	void EndGame() override;
 
-	Demo6HMap();
+	Demo7HMap();
 
 	PerspectiveCamera* pMainCamera = NULL;
 	SceneActor* pTerrain = NULL;

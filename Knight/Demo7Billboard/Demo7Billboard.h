@@ -11,7 +11,7 @@ public:
 
 	FlyThroughCamera* mainCamera = NULL;
 	SceneActor* player = NULL;
-	SceneActor* imposter = NULL;
+	vector<SceneActor*> imposters;
 
 	Texture2D billboardImage = { 0 };
 

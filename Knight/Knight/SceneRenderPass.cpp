@@ -51,16 +51,20 @@ void SceneRenderPass::BuildRenderQueue(SceneObject* pRoot, Shader *pShaderOverri
 
 	if (pRoot) {
 
+		map<Component::eComponentType, Component*>::iterator it = pRoot->_Components.begin();
+
 		SceneActor* pActor = dynamic_cast<SceneActor*>(pRoot);
 
 		if (pActor != NULL) {
+
+			if (pActor->IsActive == false)
+				goto _continue;
+
 			Vector3 pos = pActor->Position;
 			if (pActiveCamera != NULL)
 				dist2 = Vector3DistanceSqr(pos, pActiveCamera->GetPosition());
 		}
-
-		map<Component::eComponentType, Component*>::iterator it = pRoot->_Components.begin();
-
+		
 		while (it != pRoot->_Components.end())
 		{
 			if (it->second != nullptr && pShaderOverride != nullptr) {
@@ -85,6 +89,8 @@ void SceneRenderPass::BuildRenderQueue(SceneObject* pRoot, Shader *pShaderOverri
 
 			++it;
 		}
+
+		_continue:
 
 		if (pRoot->NextSibling)
 		{

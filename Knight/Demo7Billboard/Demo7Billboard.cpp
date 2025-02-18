@@ -3,6 +3,8 @@
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
 
+#include <random>
+
 int main(int argc, char* argv[])
 {
 	Demo7Billboard* KnightDemo7Billboard = new Demo7Billboard();
@@ -28,7 +30,7 @@ void Demo7Billboard::Start()
 
 	//Place player
 	player = _Scene->CreateSceneObject<SceneActor>("Player");
-	player->Scale = Vector3{ 0.3f, 0.3f, 0.3f };
+	player->Scale = Vector3{ 0.1f, 0.1f, 0.1f };
 	player->Position = Vector3{ 0.f,0.5f,0.f };
 	player->Rotation = Vector3{ 0,0,0 };
 	ModelComponent* animPlayerComponent = player->CreateAndAddComponent<ModelComponent>();
@@ -37,24 +39,36 @@ void Demo7Billboard::Start()
 
 	mainCamera->SetUp(player->Position, 10.0f, 0, 30, 45.0f, CAMERA_PERSPECTIVE);
 
-	//imposter (billboard)
-	imposter = _Scene->CreateSceneObject<SceneActor>("Billboard Object");
-	imposter->Scale = Vector3{ 1, 1, 1 };
-	imposter->Position = Vector3{ 0.f,0.5f,0.f };
-	imposter->Rotation = Vector3{ 0,0,0 };
-	BillboardComponent* billboard = imposter->CreateAndAddComponent<BillboardComponent>();
-
 	//Load a texture as billboard image
-	billboardImage = LoadTexture("../../resources/textures/glow.png");    // Our billboard texture
+	billboardImage = LoadTexture("../../resources/billboard.png");    // Our billboard texture
 
-	//initialize billbard
-	billboard->texture = billboardImage;
-	// Entire billboard texture, source is used to take a segment from a larger texture.
-	billboard->source = { 0.0f, 0.0f, (float)billboard->texture.width, (float)billboard->texture.height };
-	billboard->size = { billboard->source.width / billboard->source.height, 1.0f };
-	billboard->origin = Vector2Scale(billboard->size, 0.5f);
-	billboard->blendingMode = BLEND_ADDITIVE;
-	billboard->renderQueue = Component::eRenderQueueType::AlphaBlend;
+	// Create a random device and seed the Mersenne Twister engine
+	std::random_device rd;
+	std::mt19937 gen(rd());
+
+	// Define a uniform real distribution in the range [-50, 50]
+	std::uniform_real_distribution<float> dist(-5.0f, 5.0f);
+
+	for (int i = 0; i < 100; i++) {
+
+		//imposter (billboard)
+		SceneActor* imposter = _Scene->CreateSceneObject<SceneActor>("Billboard Object");
+		imposter->Scale = Vector3{ 1, 1, 1 };
+		imposter->Position = Vector3{ dist(gen),0.5f, dist(gen)};
+		imposter->Rotation = Vector3{ 0,0,0 };
+		BillboardComponent* billboard = imposter->CreateAndAddComponent<BillboardComponent>();
+
+		//initialize billbard
+		billboard->texture = billboardImage;
+		// Entire billboard texture, source is used to take a segment from a larger texture.
+		billboard->source = { 0.0f, 0.0f, (float)billboard->texture.width, (float)billboard->texture.height };
+		billboard->size = { billboard->source.width / billboard->source.height, 1.0f };
+		billboard->origin = Vector2Scale(billboard->size, 0.5f);
+		billboard->blendingMode = BLEND_ADDITIVE;
+		billboard->renderQueue = Component::eRenderQueueType::AlphaBlend;
+
+		imposters.push_back(imposter);
+	}
 }
 
 void Demo7Billboard::EndGame()

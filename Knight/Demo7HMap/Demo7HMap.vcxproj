@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{a76c8f6d-963f-4a1b-9711-4453029be877}</ProjectGuid>
-    <RootNamespace>Demo7Particles</RootNamespace>
+    <ProjectGuid>{25204467-c9e0-49e7-8187-f72810eefce5}</ProjectGuid>
+    <RootNamespace>Demo7HMap</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -71,11 +71,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>..\Knight;..\..\raylib\src;..\..\raylib\src\external;..\..\raylib\src\platforms;$(VC_IncludePath);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
     <LibraryPath>..\x64\Debug;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
-    <IncludePath>..\Knight;..\..\raylib\src;..\..\raylib\src\external;..\..\raylib\src\platforms;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>..\Knight;..\..\raylib\src;..\..\raylib\src\external;..\..\raylib\src\platforms;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <IncludePath>..\Knight;..\..\raylib\src;..\..\raylib\src\external;..\..\raylib\src\platforms;$(VC_IncludePath);$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -136,12 +136,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Demo7Particle.h" />
-    <ClInclude Include="ParticleComponent.h" />
+    <ClInclude Include="Demo7HMap.h" />
+    <ClInclude Include="HMapTerrainModelComponent.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Demo7Particle.cpp" />
-    <ClCompile Include="ParticleComponent.cpp" />
+    <ClCompile Include="Demo7HMap.cpp" />
+    <ClCompile Include="HMapTerrainModelComponent.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
