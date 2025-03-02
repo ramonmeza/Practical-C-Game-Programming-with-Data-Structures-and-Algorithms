@@ -98,7 +98,7 @@ void Demo8b::Update(float ElapsedSeconds)
 		}
 		else
 		{
-			strcpy_s(strBuf1, 100, "Transition Mode: Linear");
+			strcpy_s(strBuf1, 100, "Transition Mode: Immediate");
 			AnimModelComponent->SetTransitionMode(ModelComponent::eAnimTransitionMode::Immediate);
 		}
 	}
