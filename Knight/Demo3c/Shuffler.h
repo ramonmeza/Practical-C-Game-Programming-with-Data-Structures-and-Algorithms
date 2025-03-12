@@ -33,7 +33,7 @@ public:
 			Items[i] = temp;
 		}
 
-		//Fill up the output araay with the selected number of items
+		//Fill up the output array with the selected number of items
 		for (int k = 0; k < PickedSize; ++k)
 		{
 			PickedItems[k] = Items[k];
