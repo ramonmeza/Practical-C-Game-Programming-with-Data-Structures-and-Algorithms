@@ -38,7 +38,7 @@ private:
 	void DFS(int row, int col)
 	{
 		int directions[] = { UP, DOWN, RIGHT, LEFT };
-		Shuffler::FisherYateShuffe(directions, 4);
+		Shuffler::FisherYateShuffle(directions, 4);
 
 		for (int dir = 0; dir < 4; ++dir)
 		{
@@ -52,11 +52,11 @@ private:
 				_maze[newRow][newCol] == FlagWall)
 			{
 
-				//Cave the path by setting the cells coonecting the two cells to be empty
+				//Cave the path by setting the cells connecting the two cells to be empty
 				_maze[row + dirRow[direction]][col + dirCol[direction]] = FlagEmpty;
 				_maze[newRow][newCol] = FlagEmpty;
 
-				//Reciursively find the next way point on the path to the exit point
+				//Recursively find the next way point on the path to the exit point
 				DFS(newRow, newCol);
 			}
 		}

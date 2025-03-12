@@ -81,5 +81,5 @@ void Demo3c::DrawGUI()
 
 void Demo3c::Shuffle()
 {
-	Shuffler::FisherYateShuffe(CardIDs, DECK_CARD_COUNT, PickedCardIDs, PICK_CARDS_COUNT);
+	Shuffler::FisherYateShuffle(CardIDs, DECK_CARD_COUNT, PickedCardIDs, PICK_CARDS_COUNT);
 }
