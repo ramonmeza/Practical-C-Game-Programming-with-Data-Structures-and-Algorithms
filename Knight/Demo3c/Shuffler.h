@@ -8,7 +8,7 @@ private:
 	static Random _random;
 
 public:
-	/*	Function: FisherYateShuffe
+	/*	Function: FisherYateShuffle
 		Parameters:
 			Items: array which contains the items to be shuffled
 			ArraySize: size of the items array
@@ -17,7 +17,7 @@ public:
 		Returns: true-succeeded, false-failed
 	*/
 	template<typename T>
-	static bool FisherYateShuffe(T Items[], int Size, T PickedItems[], int PickedSize)
+	static bool FisherYateShuffle(T Items[], int Size, T PickedItems[], int PickedSize)
 	{
 		if (Size <= 0 || PickedSize > Size)
 		{
@@ -33,7 +33,7 @@ public:
 			Items[i] = temp;
 		}
 
-		//Fill up the output araay with the selected number of items
+		//Fill up the output array with the selected number of items
 		for (int k = 0; k < PickedSize; ++k)
 		{
 			PickedItems[k] = Items[k];
