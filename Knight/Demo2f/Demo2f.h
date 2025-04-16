@@ -40,5 +40,7 @@ private:
 
 	static std::list<std::string> messages;
 	static GameResult _gameOver;
+
+	friend EnemyEntity;
 };
 

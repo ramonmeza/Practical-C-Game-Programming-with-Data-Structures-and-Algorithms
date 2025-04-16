@@ -46,6 +46,11 @@ void Demo5FPC::Start()
 	DisableCursor();
 }
 
+void Demo5FPC::Update(float elaspedTime)
+{
+	UpdateCamera(FPSCamera->GetCamera3D(), CAMERA_FIRST_PERSON);
+}
+
 void Demo5FPC::DrawFrame()
 {
 	DrawPlane(Vector3{ 0.0f, 0.0f, 0.0f }, Vector2{ 32.0f, 32.0f }, LIGHTGRAY); // Draw ground

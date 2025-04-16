@@ -19,15 +19,18 @@ void EnemyEntity::Create(Scene* pScene, Entity* pParent)
 
 void EnemyEntity::Update(float elaspedTime)
 {
-	//Check if enemy can attack
-	if (rechargeTime >= attackCooldown)
-	{
-		if (_target != NULL && _target->HP > 0)
-		{  // countdown end!
-			DoAttack();
+	if (Demo2f::_gameOver == InProgress) {
+		//Check if enemy can attack
+		if (rechargeTime >= attackCooldown)
+		{
+			if (_target != NULL && _target->HP > 0)
+			{  // countdown end!
+				DoAttack();
+			}
 		}
-	} else {
-		rechargeTime += elaspedTime;
+		else {
+			rechargeTime += elaspedTime;
+		}
 	}
 
 	//process usual entity updates
