@@ -70,6 +70,7 @@ void Demo5TrkCam::Update(float ElapsedSeconds)
 
 void Demo5TrkCam::DrawFrame()
 {
+	OnRailCamera->Draw();
 	DrawGrid(50, 3.0f);
 	__super::DrawFrame();
 }
