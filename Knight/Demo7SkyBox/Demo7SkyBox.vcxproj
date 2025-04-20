@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{b9ccb601-5300-489b-9139-b714c503b727}</ProjectGuid>
-    <RootNamespace>Demo7GameWorld</RootNamespace>
+    <ProjectGuid>{b62e92fa-1788-483c-97dd-825254d0a4ab}</ProjectGuid>
+    <RootNamespace>Demo7SkyBox</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -71,8 +71,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>..\x64\Debug;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
     <IncludePath>..\Knight;..\..\raylib\src;..\..\raylib\src\external;..\..\raylib\src\platforms;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <LibraryPath>..\x64\Debug;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>..\Knight;..\..\raylib\src;..\..\raylib\src\external;..\..\raylib\src\platforms;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
@@ -136,12 +136,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Demo7GameWorld.h" />
-    <ClInclude Include="TopDownCamera.h" />
+    <ClInclude Include="Demo7Skybox.h" />
+    <ClInclude Include="SkyboxComponent.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Demo7GameWorld.cpp" />
-    <ClCompile Include="TopDownCamera.cpp" />
+    <ClCompile Include="Demo7SkyBox.cpp" />
+    <ClCompile Include="SkyBoxComponent.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,4 +1,4 @@
-#include "Demo6Skybox.h"
+#include "Demo7Skybox.h"
 
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"

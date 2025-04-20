@@ -30,9 +30,6 @@ void Demo5MultiCams::Start()
 	//initialize global UI attributes
 	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
 
-	//initialize global UI attributes
-	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
-
 	// Create camera for both render targets
 	pChaseCamera = new FollowUpCamera(_Scene, "Chase Camera", false);
 	pTopDownCamera = new TopDownCamera(_Scene, "Map Camera", false);

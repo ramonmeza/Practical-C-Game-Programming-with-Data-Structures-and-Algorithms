@@ -14,8 +14,6 @@ public:
 
 	SceneActor* Actor = NULL;
 
-	//Camera3D cameraPlayer1 = { 0 };
-	//Camera3D cameraPlayer2 = { 0 };
 	FollowUpCamera* pChaseCamera = nullptr;
 	TopDownCamera* pTopDownCamera = nullptr;
 

@@ -65,6 +65,7 @@ void Demo7Billboard::Start()
 		billboard->size = { billboard->source.width / billboard->source.height, 1.0f };
 		billboard->origin = Vector2Scale(billboard->size, 0.5f);
 		billboard->blendingMode = BLEND_ADDITIVE;
+		//billboard->AlignType = SCREEN_ALIGNED; 
 		billboard->renderQueue = Component::eRenderQueueType::AlphaBlend;
 
 		imposters.push_back(imposter);
