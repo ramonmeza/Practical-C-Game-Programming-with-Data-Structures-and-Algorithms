@@ -35,7 +35,7 @@ private:
     vector<Neuron> _Neurons;    //Neurons on this layer
 public:
     Layer(size_t NeuronSize, size_t InputSize);
-    vector<Neuron>& GetNeruons() { return _Neurons; }
+    vector<Neuron>& GetNeurons() { return _Neurons; }
 };
 
 class NeuralNetwork 

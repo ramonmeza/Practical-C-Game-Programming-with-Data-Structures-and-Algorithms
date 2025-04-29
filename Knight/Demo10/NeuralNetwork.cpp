@@ -63,7 +63,7 @@ vector<float> NeuralNetwork::ForwardPropagate(vector<float>& Inputs)
 	for (size_t layer = 0; layer < _Layers.size(); ++layer)
 	{
 		outputs.clear();
-		vector<Neuron>& neurons = _Layers[layer].GetNeruons();
+		vector<Neuron>& neurons = _Layers[layer].GetNeurons();
 		for (size_t i = 0; i < neurons.size(); ++i)
 		{
 			neurons[i].Activate(inputs);
@@ -79,7 +79,7 @@ void NeuralNetwork::BackPropagate(vector<float>& Targets)
 {
 	size_t i;
 	float error, output;
-	vector<Neuron>& outputs = _Layers.back().GetNeruons();
+	vector<Neuron>& outputs = _Layers.back().GetNeurons();
 	assert(Targets.size() == outputs.size());
 	//Calculate errors for the outputs
 	for (i = 0; i < outputs.size(); ++i)
@@ -95,11 +95,11 @@ void NeuralNetwork::BackPropagate(vector<float>& Targets)
 	//Calculate errors for hidden layers’ neurons
 	for (int layer = (int)_Layers.size() - 2; layer >= 0; --layer)
 	{
-		vector<Neuron>& neurons = _Layers[layer].GetNeruons();
+		vector<Neuron>& neurons = _Layers[layer].GetNeurons();
 		for (size_t i = 0; i < neurons.size(); ++i)
 		{
 			error = 0.0f;
-			vector<Neuron>& nextLayerNeurons = _Layers[layer + 1].GetNeruons();
+			vector<Neuron>& nextLayerNeurons = _Layers[layer + 1].GetNeurons();
 			for (size_t j = 0; j < nextLayerNeurons.size(); ++j)
 			{
 				error += nextLayerNeurons[j].GetWeights()[i] * nextLayerNeurons[j].GetError();
@@ -125,14 +125,14 @@ void NeuralNetwork::UpdateWeights(vector<float>& Inputs)
 		else
 		{
 			inputs.clear();
-			vector<Neuron>& prevLayerNeurons = _Layers[layer - 1].GetNeruons();
+			vector<Neuron>& prevLayerNeurons = _Layers[layer - 1].GetNeurons();
 			for (size_t i = 0; i < prevLayerNeurons.size(); ++i)
 			{
 				inputs.push_back(prevLayerNeurons[i].GetOutput());
 			}
 		}
 
-		vector<Neuron>& neurons = _Layers[layer].GetNeruons();
+		vector<Neuron>& neurons = _Layers[layer].GetNeurons();
 		for (size_t i = 0; i < neurons.size(); ++i)
 		{
 			vector<float>& weights = neurons[i].GetWeights();
