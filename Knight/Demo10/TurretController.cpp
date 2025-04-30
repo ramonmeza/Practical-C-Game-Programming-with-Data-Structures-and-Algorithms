@@ -34,16 +34,16 @@ void TurretController::InitANN(int Method)
 	{
 		vector<size_t> layerSizes;
 		layerSizes.push_back(2);	//Input layers: 2 inputs 
-		layerSizes.push_back(1);	//Hidden layer: 1 nerual
-		layerSizes.push_back(1);	//Output layer: 1 nerual
+		layerSizes.push_back(1);	//Hidden layer: 1 neural
+		layerSizes.push_back(1);	//Output layer: 1 neural
 		_ANN = new NeuralNetwork(layerSizes, 0.3f, false);
 	}
 	else if (Method == 2)
 	{
 		vector<size_t> layerSizes;
 		layerSizes.push_back(2);	//Input layers: 2 inputs 
-		layerSizes.push_back(3);	//Hidden layer 1: 3 neruals
-		layerSizes.push_back(3);	//Hidden layer 2: 3 neruals
+		layerSizes.push_back(3);	//Hidden layer 1: 3 neurals
+		layerSizes.push_back(3);	//Hidden layer 2: 3 neurals
 		layerSizes.push_back(2);	//Output layers: 2 outputs
 		_ANN = new NeuralNetwork(layerSizes, 0.1f, true);
 	}
@@ -94,7 +94,7 @@ void TurretController::Train(int Method, int SampleCount, int epochs)
 			{
 				targets.push_back(0.0);
 			}
-			//Pus the sample data into the dataset
+			//Push the sample data into the dataset
 			sampleData.clear();
 			sampleData.push_back(inputs[0]);
 			sampleData.push_back(inputs[1]);
@@ -145,7 +145,7 @@ void TurretController::Train(int Method, int SampleCount, int epochs)
 			//Determine the second output value for turning the turret
 			targets.push_back((float)sign(angleError));
 
-			//Pus the sample data into the dataset
+			//Push the sample data into the dataset
 			sampleData.clear();
 			sampleData.push_back(inputs[0]);
 			sampleData.push_back(inputs[1]);
