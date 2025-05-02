@@ -28,7 +28,7 @@ vector<Vector3> AStarPathFinder::FindPath(Vector3& Start, Vector3& Target)
 		int col = currentNode->GridPos[1];
 		ClosedList[row][col] = true;	//Mark as a visited node
 
-		//If it already reaches the target node, return the found path
+		//If it reaches the target node, return the found path
 		if (currentNode->GridPos[0] == targetNode->GridPos[0] &&
 			currentNode->GridPos[1] == targetNode->GridPos[1])
 		{
