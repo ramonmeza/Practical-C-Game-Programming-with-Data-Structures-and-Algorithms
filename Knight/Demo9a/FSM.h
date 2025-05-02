@@ -20,20 +20,9 @@ public:
     typedef enum
     {
         UNKNOWN = 0,
-        DIE = 1,
         IDLE = 2,
-        JUMP = 3,
-        IDLE1 = 4,
         ATTACK = 5,
-        RUN = 6,
-        HIT = 7,
-        HIT2 = 8,
-        SHOOT = 9,
         WALK = 10,
-        JUMP_OVER = 11,
-        WAVE = 12,
-        NODE = 13,
-        SORRY = 14
     } ECharacterState;          //The enum of animation states
 public:
     FSM(SceneActor* Character, ModelComponent* AnimController);
