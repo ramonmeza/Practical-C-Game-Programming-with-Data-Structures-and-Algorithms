@@ -2,7 +2,17 @@
 
 class SceneActor;
 class ModelComponent;
-class FSMState;
+class FSM;
+
+class FSMState
+{
+public:
+    virtual void Enter(FSM* FiniteStateMachine) = 0;
+    //is called when entering this state
+    virtual void Update(FSM* FiniteStateMachine, float DeltaTime) = 0;
+    //is called every frame
+    virtual ~FSMState() = default;
+};
 
 class FSM
 {
@@ -42,12 +52,4 @@ protected:
     ModelComponent* _AnimController;
 };
 
-class FSMState
-{
-public:
-    virtual void Enter(FSM* FiniteStateMachine) = 0;
-    //is called when entering this state
-    virtual void Update(FSM* FiniteStateMachine, float DeltaTime) = 0;
-    //is called every frame
-    virtual ~FSMState() = default;
-};
+
