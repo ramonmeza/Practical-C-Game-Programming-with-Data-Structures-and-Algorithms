@@ -7,10 +7,10 @@ Entity::Entity()
 	isReady = false;
 }
 
-SimpleDrawTextureDemo::SimpleDrawTextureDemo()
+SimpleDrawTextureDemo::SimpleDrawTextureDemo()  // Initialize texture to default values
 {
-	title = "Draw Texture";
-	description = "This demo loads a png graphics file as texture and draw it on the center of the screen.\nPress Enter to continue.";
+   title = "Draw Texture";
+   description = "This demo loads a png graphics file as texture and draw it on the center of the screen.\nPress Enter to continue.";
 }
 
 void SimpleDrawTextureDemo::Create()

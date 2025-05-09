@@ -3,6 +3,7 @@
 #include <vector>
 #include "Knight.h"   //Engine includes
 #include "Entities.h"
+#include "LRUTextureCacheDemo.h"
 
 #include "raygui.h"
 

@@ -30,7 +30,7 @@ public:
 	SimpleDrawTextureDemo();
 
 private:
-	Texture2D texture;
+	Texture2D texture = { 0 };
 };
 
 class CompressTextureDemo : public Entity
@@ -44,9 +44,10 @@ public:
 	CompressTextureDemo();
 
 private:
-	Texture2D original;
-	Texture2D compressed;
+	Texture2D original = { 0 };
+	Texture2D compressed = { 0 };
 };
+
 
 class DrawPartialRotateDemo : public Entity
 {
@@ -60,9 +61,9 @@ public:
 	DrawPartialRotateDemo();
 
 private:
-	Texture2D texture;
-	float currentAngle;
-	float timeDiff;
+	Texture2D texture = { 0 };
+	float currentAngle = 0.0f;
+	float timeDiff = 0.0f;
 };
 
 class ColorBlendingDemo : public Entity
@@ -77,9 +78,9 @@ public:
 	ColorBlendingDemo();
 
 protected:
-	Texture2D texture;
-	int currentIdx;
-	float timeDiff;
+	Texture2D texture = { 0 };
+	int currentIdx = -1;
+	float timeDiff = 0.0f;
 };
 
 class SmoothColorBlendingDemo : public ColorBlendingDemo
@@ -102,10 +103,10 @@ public:
 	SceneTransitionDemo();
 
 private:
-	Texture2D scene1;
-	Texture2D scene2;
-	float currentProgress;
-	float elapsed_time;
+	Texture2D scene1 = { 0 };
+	Texture2D scene2 = { 0 };
+	float currentProgress = 0.0f;
+	float elapsed_time = 0.0f;
 };
 
 class AnimatedTexDemo : public Entity
@@ -120,10 +121,10 @@ public:
 	AnimatedTexDemo();
 
 protected:
-	Texture2D _spritesSheet;
-	float _currentIdx;
-	float _anim_time;
-	float _anim_length;
+	Texture2D _spritesSheet = { 0 };
+	float _currentIdx = -1;
+	float _anim_time = 0.0f;
+	float _anim_length = 1.0f;
 };
 
 
@@ -139,9 +140,9 @@ public:
 	GlowDemo();
 
 private:
-	Texture2D background;
-	Texture2D glow;
-	float currentAngle;
+	Texture2D background = {0};
+	Texture2D glow = { 0 };
+	float currentAngle = 0.0f;
 };
 
 class NPatchDemo : public Entity
@@ -156,8 +157,8 @@ public:
 	NPatchDemo();
 
 private:
-	Texture2D _npatchTex;
-	NPatchInfo _ninePatchInfo;
-	Rectangle _dest;
-	float elapsed_time;
+	Texture2D _npatchTex = { 0 };
+	NPatchInfo _ninePatchInfo = {0};
+	Rectangle _dest = { 0 };
+	float elapsed_time = 0.0f;
 };

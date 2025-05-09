@@ -72,6 +72,7 @@ void Demo4TexOps::InitEntities()
 {	
 	demos.push_back(new SimpleDrawTextureDemo());
 	demos.push_back(new CompressTextureDemo());
+	demos.push_back(new LRUTextureCacheDemo(3));
 	demos.push_back(new DrawPartialRotateDemo());
 	demos.push_back(new ColorBlendingDemo());
 	demos.push_back(new SmoothColorBlendingDemo()); 
