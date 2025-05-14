@@ -1,43 +1,28 @@
 #include "Demo7Skybox.h"
 
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
-
-#if defined(PLATFORM_DESKTOP)
-#define GLSL_VERSION            330
-#else   // PLATFORM_ANDROID, PLATFORM_WEB
-#define GLSL_VERSION            100
-#endif
-
-// Define particle count
-const int maxParticles = 1000;
-
 static TextureCubemap GenTextureCubemap(Shader shader, Texture2D panorama, int size, int format);
 
 int main(int argc, char* argv[])
 {
-	Demo6Skybox* KnightDemo6Billboard = new Demo6Skybox();
+	Demo7Skybox* KnightDemo7SkyBox = new Demo7Skybox();
 
-	KnightDemo6Billboard->Start();
-	KnightDemo6Billboard->GameLoop();
+	KnightDemo7SkyBox->Start();
+	KnightDemo7SkyBox->GameLoop();
 
-	delete KnightDemo6Billboard;
+	delete KnightDemo7SkyBox;
 	return 0;
 }
 
-Demo6Skybox::Demo6Skybox()
+Demo7Skybox::Demo7Skybox()
 {
 }
 
-void Demo6Skybox::Start()
+void Demo7Skybox::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
 
 	ShowFPS = true;
-
-	//initialize global UI attributes
-	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
 
 	pMainCamera = _Scene->CreateSceneObject<PerspectiveCamera>("Main Camera");
 	pMainCamera->SetFovY(45.0f);
@@ -47,7 +32,7 @@ void Demo6Skybox::Start()
 
 	//pSkyBox = new SkyboxComponent();
 	pSkyBox = pMainCamera->CreateAndAddComponent<SkyboxComponent>();
-	pSkyBox->CreateFromFile("../../resources/textures/skybox.png", CUBEMAP_LAYOUT_AUTO_DETECT, 5.0f, false);
+	pSkyBox->CreateFromFile("../../resources/textures/skybox.png", CUBEMAP_LAYOUT_CROSS_FOUR_BY_THREE, 5.0f, false);
 
 	//Place player
 	Actor = _Scene->CreateSceneObject<SceneActor>("Player");
@@ -59,13 +44,14 @@ void Demo6Skybox::Start()
 	animPlayerComponent->SetAnimation(6);
 }
 
-void Demo6Skybox::EndGame()
+void Demo7Skybox::EndGame()
 {
 	__super::EndGame();
 }
 
-void Demo6Skybox::Update(float ElapsedSeconds)
+void Demo7Skybox::Update(float ElapsedSeconds)
 {
+	UpdateCamera(pMainCamera->GetCamera3D(), CAMERA_FREE);
 	if (IsKeyDown(KEY_W)) {
 		// Move player forward based on their rotation
 		Actor->Position.x += sinf(DegreesToRadians(Actor->Rotation.y)) * 0.1f;
@@ -88,14 +74,14 @@ void Demo6Skybox::Update(float ElapsedSeconds)
 	pSkyBox->Update(ElapsedSeconds);
 }
 
-void Demo6Skybox::DrawFrame()
+void Demo7Skybox::DrawFrame()
 {
 	pSkyBox->Draw();
 	__super::DrawFrame();
 	DrawGrid(10, 1.0f);
 }
 
-void Demo6Skybox::DrawGUI()
+void Demo7Skybox::DrawGUI()
 {
 	__super::DrawGUI();
 
@@ -159,14 +145,6 @@ static TextureCubemap GenTextureCubemap(Shader shader, Texture2D panorama, int s
 		// Load and draw a cube, it uses the current enabled texture
 		rlClearScreenBuffers();
 		rlLoadDrawCube();
-
-		// ALTERNATIVE: Try to use internal batch system to draw the cube instead of rlLoadDrawCube
-		// for some reason this method does not work, maybe due to cube triangles definition? normals pointing out?
-		// TODO: Investigate this issue...
-		//rlSetTexture(panorama.id); // WARNING: It must be called after enabling current framebuffer if using internal batch system!
-		//rlClearScreenBuffers();
-		//DrawCubeV(Vector3Zero(), Vector3One(), WHITE);
-		//rlDrawRenderBatchActive();
 	}
 	//------------------------------------------------------------------------------------------
 

@@ -9,14 +9,18 @@ FlyThroughCamera::FlyThroughCamera(Scene* Scene, const char* Name, bool IsMainCa
 
 bool FlyThroughCamera::Update(float ElapsedSeconds)
 {
+    Vector2 delta = GetMouseDelta();
+
+	__super::Update(ElapsedSeconds); // Call base class update
+
     if (!IsActive)
         return false;
 
     // Handle mouse rotation
     if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
         // Adjust yaw and pitch based on mouse movement
-        yaw += GetMouseDelta().x * sensitivity;
-        pitch -= GetMouseDelta().y * sensitivity;
+        yaw += delta.x * sensitivity;
+        pitch -= delta.x * sensitivity;
 
         // Clamp pitch to avoid flipping
         const float pitchLimit = PI / 2 - 0.1f; // Just below 90 degrees
@@ -67,9 +71,6 @@ bool FlyThroughCamera::Update(float ElapsedSeconds)
 
     //update Camera3D
     _Camera.position = pos;
-
-
-
 
     return true;
 }

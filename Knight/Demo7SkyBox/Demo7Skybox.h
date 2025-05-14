@@ -3,24 +3,23 @@
 #include "raylib.h"
 #include "rlgl.h"
 #include "raymath.h"
-#include "Knight.h"   //Engine includes
+#include "Knight.h"   
 
 #include "SkyboxComponent.h"
 
 #include <vector>
 
-class Demo6Skybox : public Knight
+class Demo7Skybox : public Knight
 {
 public:
 	void Start() override;
 	void EndGame() override;
 
-	Demo6Skybox();
+	Demo7Skybox();
 
-	PerspectiveCamera* pMainCamera;
-	SceneActor* Actor = NULL;
-	
-	SkyboxComponent* pSkyBox = NULL;
+	PerspectiveCamera* pMainCamera = nullptr;
+	SceneActor* Actor = nullptr;	
+	SkyboxComponent* pSkyBox = nullptr;
 
 protected:
 

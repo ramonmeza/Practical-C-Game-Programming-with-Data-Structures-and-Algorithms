@@ -6,7 +6,12 @@
 
 
 
-
+// Helper structure for a plane (Ax + By + Cz + D = 0)
+// Normal points inwards for the frustum
+typedef struct _FrustumPlane {
+	Vector3 normal;
+	float d;
+} FrustumPlane;
 
 class SceneCamera : public SceneObject
 {
@@ -32,6 +37,8 @@ public:
 
 	bool Update(float ElapsedSeconds) override;
 
+	void ExtractFrustumPlanes(FrustumPlane frustumPlanes[6]);
+	bool IsBoundingBoxInFrustum(BoundingBox box, const FrustumPlane frustumPlanes[6]);
 
 	Camera3D* GetCamera3D();
 
