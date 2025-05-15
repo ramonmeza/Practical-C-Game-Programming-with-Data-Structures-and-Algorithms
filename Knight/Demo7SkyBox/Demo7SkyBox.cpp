@@ -32,7 +32,7 @@ void Demo7Skybox::Start()
 
 	//pSkyBox = new SkyboxComponent();
 	pSkyBox = pMainCamera->CreateAndAddComponent<SkyboxComponent>();
-	pSkyBox->CreateFromFile("../../resources/textures/skybox.png", CUBEMAP_LAYOUT_CROSS_FOUR_BY_THREE, 5.0f, false);
+	pSkyBox->CreateFromFile("../../resources/textures/skybox2.png", CUBEMAP_LAYOUT_CROSS_FOUR_BY_THREE, 5.0f, false);
 
 	//Place player
 	Actor = _Scene->CreateSceneObject<SceneActor>("Player");
