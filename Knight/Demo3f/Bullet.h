@@ -8,14 +8,14 @@ class Bullet : public PoolableObject
 {
 private:
     Vector3 _position;
-    Vector3 _veloicity;
+    Vector3 _velocity;
     float _radius;
 
 public:
 
     Bullet()
         : _position{ 0.0f, 0.0f, 0.0f }
-        , _veloicity{ 0.0f, 0.0f, 0.0f }
+        , _velocity{ 0.0f, 0.0f, 0.0f }
         , _radius(1.0f)
     {
         _lifespan = BULLET_LIFETIME;
@@ -30,7 +30,7 @@ public:
     void SetPosition(Vector3 Position, Vector3 Velocity)
     {
         _position = Position;
-        _veloicity = Velocity;
+        _velocity = Velocity;
     }
 
     /* Function Update
@@ -43,9 +43,9 @@ public:
         if (_isActive)
         {
             _lifespan -= ElapsedSeconds;
-            _position.x += _veloicity.x * ElapsedSeconds;
-            _position.y += _veloicity.y * ElapsedSeconds;
-            _position.z += _veloicity.z * ElapsedSeconds;
+            _position.x += _velocity.x * ElapsedSeconds;
+            _position.y += _velocity.y * ElapsedSeconds;
+            _position.z += _velocity.z * ElapsedSeconds;
         }
     }
 
