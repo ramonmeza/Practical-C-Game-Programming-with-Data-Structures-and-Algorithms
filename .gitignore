@@ -14,6 +14,7 @@ Knight/.vs
 *.pdb
 *.ipdb
 *.obj
+!resources/models/obj/*.obj
 *.recipe
 *.ilk
 *.idb
