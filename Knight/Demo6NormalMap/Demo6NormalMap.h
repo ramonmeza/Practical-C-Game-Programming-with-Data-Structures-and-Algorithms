@@ -22,14 +22,16 @@ public:
 
 	Shader shader = { 0 };
 
-	Vector3 lightPos = { 0, 2, 0.0f };
+	Vector3 lightPos = { -0.33, 0, 4.14f };
 	int lightPosLoc = -1;
 	int lightPowerLoc = -1;
 	int lightColorLoc = -1;
 	Vector3 lightColor = { 1,1,1 };
-	float lightPower = 40.0f;
+	float lightPower = 20.0f;
 
 protected:
+
+	SceneActor* characterActor = NULL; 
 
 	void Update(float ElapsedSeconds) override;
 	void DrawFrame() override;

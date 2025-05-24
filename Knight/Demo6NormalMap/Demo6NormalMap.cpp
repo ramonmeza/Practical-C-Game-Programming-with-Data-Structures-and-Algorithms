@@ -43,30 +43,39 @@ void Demo6NormalMap::Start()
 	SetConfigFlags(FLAG_MSAA_4X_HINT);  // Enable Multi Sampling Anti Aliasing 4x (if available)
 
 	pMainCamera = _Scene->CreateSceneObject<FlyThroughCamera>("Main Camera");
-	pMainCamera->SetUp(Vector3{ 0.0f, 3.0f, 0.0f }, 8.0f, 0, 30, 45, CAMERA_PERSPECTIVE);
+	pMainCamera->SetUp(Vector3{ -2.0f, 1.0f, 5.0f }, 2.0f, 0, 10, 60, CAMERA_PERSPECTIVE);
 
 	// Load model, diffuse texture, and normal map
 	model = LoadModel("../../resources/models/obj/cylinder.obj");            // Replace with your model path
-	diffuse = LoadTexture("../../resources/models/obj/wall_diffuse.png");  // Replace with your diffuse texture path
-	normalMap = LoadTexture("../../resources/models/obj/wall_normal.png"); // Replace with your normal map texture path
+	diffuse = LoadTexture("../../resources/textures/stonewall.png");  // Replace with your diffuse texture path
+	normalMap = LoadTexture("../../resources/textures/stonewall_n.png"); // Replace with your normal map texture path
 	model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = diffuse;
 	model.materials[0].maps[MATERIAL_MAP_NORMAL].texture = normalMap;
 	for (int i = 0; i < model.meshCount; i++) {
 		GenMeshTangents(&model.meshes[i]);
 	}
 
-	model2 = LoadModel("../../resources/models/obj/cylinder.obj");
-	model2.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = diffuse;
-	model2.materials[0].maps[MATERIAL_MAP_NORMAL].texture = normalMap;
-	for (int i = 0; i < model2.meshCount; i++) {
-		GenMeshTangents(&model2.meshes[i]);
-	}
-
+	// Load a MD3 format model
+	characterActor = _Scene->CreateSceneObject<SceneActor>("Character");
+	characterActor->Scale = Vector3{ 2.0f, 2.0f, 2.0f };
+	characterActor->Position = Vector3{ -4.0f, 0.0f, 0.0f };
+	ModelComponent* animModelComponent = characterActor->CreateAndAddComponent<ModelComponent>();
+	animModelComponent->Load3DModel("../../resources/models/m3d/suzanne.m3d");
+	animModelComponent->SetAnimation(10);
 	// Load shaders
 	shader = LoadShader("../../resources/shaders/glsl330/normalmap.vs", 
 		"../../resources/shaders/glsl330/normalmap.fs");
 	model.materials[0].shader = shader;
-	model2.materials[0].shader = shader;
+
+	for (int i = 0; i < animModelComponent->GetModel()->materialCount; i++) {
+		animModelComponent->GetModel()->materials[i].shader = shader;
+		animModelComponent->GetModel()->materials[i].maps[MATERIAL_MAP_DIFFUSE].texture = diffuse;
+		animModelComponent->GetModel()->materials[i].maps[MATERIAL_MAP_NORMAL].texture = normalMap;
+	}
+	characterActor->AddComponent(animModelComponent);
+	for (int i = 0; i < animModelComponent->GetModel()->meshCount; i++) {
+		GenMeshTangents(&animModelComponent->GetModel()->meshes[i]);
+	}
 
 	// Get shader uniform locations
 	lightPosLoc = GetShaderLocation(shader, "LightPosition_worldspace");	
@@ -102,9 +111,15 @@ void Demo6NormalMap::Update(float ElapsedSeconds)
 	if (IsKeyDown(KEY_D)) {
 		lightPos.x += ElapsedSeconds;  // right
 	}
-	SetShaderValue(shader, lightPosLoc, &lightPos, SHADER_UNIFORM_VEC3);
 
-	model.transform = MatrixRotateXYZ(Vector3 { 0.0f, (float)GetTime(), 0.0f });
+	SetShaderValue(shader, lightPosLoc, (void *) &lightPos, SHADER_UNIFORM_VEC3);
+
+	Vector3 rot = characterActor->Rotation;
+	rot.y	+= ElapsedSeconds * 20.0f;
+	if (rot.y > 360.0f) {
+		rot.y -= 360.0f;
+	}	
+	characterActor->Rotation = rot;
 
 	__super::Update(ElapsedSeconds);
 }
@@ -112,7 +127,6 @@ void Demo6NormalMap::Update(float ElapsedSeconds)
 void Demo6NormalMap::DrawFrame()
 {
 	DrawModel(model, modelpos, 1.0f, WHITE);
-	DrawModel(model2, modelpos2, 1.0f, BLUE);
 
 	__super::DrawFrame();
 
@@ -128,7 +142,10 @@ void Demo6NormalMap::DrawGUI()
 
 	Vector3 v = pMainCamera->GetPosition();
 	sprintf_s(buf, sizeof(buf), "cam: %f, %f, %f", v.x, v.y, v.z);
-
 	DrawText(buf, 100, 100, 24, WHITE);
+
+	v = lightPos;
+	sprintf_s(buf, sizeof(buf), "light: %f, %f, %f", v.x, v.y, v.z);
+	DrawText(buf, 100, 140, 24, WHITE);
 }
 

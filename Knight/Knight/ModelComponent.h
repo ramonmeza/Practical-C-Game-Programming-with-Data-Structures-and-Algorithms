@@ -68,6 +68,8 @@ public:
 	void SetFrameDuration(float Seconds);
 	eAnimMode GetAnimationMode();
 
+	Model* GetModel() { return &_Model; }
+
 	/* Funciton: TransitionAnimation
 	*  Description; Start transitioning current animation to a new animation
 	*  Paramaters: 
