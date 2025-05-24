@@ -13,8 +13,6 @@ public:
 	FlyThroughCamera* pMainCamera = NULL;
 	SceneActor* Actor = NULL;
 
-	Model model = { 0 };
-	Model model2 = { 0 };
 	Vector3 modelpos = { 0,0,0 };
 	Vector3 modelpos2 = { -2,0,0 };
 	Texture2D diffuse = { 0 };
@@ -31,7 +29,8 @@ public:
 
 protected:
 
-	SceneActor* characterActor = NULL; 
+	SceneActor* characterActor = nullptr;
+	SceneActor* cubeActor = nullptr;
 
 	void Update(float ElapsedSeconds) override;
 	void DrawFrame() override;

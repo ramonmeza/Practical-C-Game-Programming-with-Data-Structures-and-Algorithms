@@ -43,30 +43,35 @@ void Demo6NormalMap::Start()
 	SetConfigFlags(FLAG_MSAA_4X_HINT);  // Enable Multi Sampling Anti Aliasing 4x (if available)
 
 	pMainCamera = _Scene->CreateSceneObject<FlyThroughCamera>("Main Camera");
-	pMainCamera->SetUp(Vector3{ -2.0f, 1.0f, 5.0f }, 2.0f, 0, 10, 60, CAMERA_PERSPECTIVE);
+	pMainCamera->SetUp(Vector3{ 0.0f, 1.0f, 0.0f }, 8.0f, 0, 10, 60, CAMERA_PERSPECTIVE);
 
-	// Load model, diffuse texture, and normal map
-	model = LoadModel("../../resources/models/obj/cylinder.obj");            // Replace with your model path
 	diffuse = LoadTexture("../../resources/textures/stonewall.png");  // Replace with your diffuse texture path
 	normalMap = LoadTexture("../../resources/textures/stonewall_n.png"); // Replace with your normal map texture path
-	model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = diffuse;
-	model.materials[0].maps[MATERIAL_MAP_NORMAL].texture = normalMap;
-	for (int i = 0; i < model.meshCount; i++) {
-		GenMeshTangents(&model.meshes[i]);
+
+	// Load shaders
+	shader = LoadShader("../../resources/shaders/glsl330/normalmap.vs",
+		"../../resources/shaders/glsl330/normalmap.fs");
+
+	cubeActor = _Scene->CreateSceneObject<SceneActor>("Cube");
+	cubeActor->Position = Vector3{ 3.0f, -1.0f, 0.0f };
+	ModelComponent* modelComponent = cubeActor->CreateAndAddComponent<ModelComponent>();
+	modelComponent->Load3DModel("../../resources/models/obj/well.obj", "../../resources/models/obj/well_diffuse.png");
+	for (int i = 0; i < modelComponent->GetModel()->materialCount; i++) {
+		modelComponent->GetModel()->materials[i].shader = shader;
+		modelComponent->GetModel()->materials[i].maps[MATERIAL_MAP_DIFFUSE].texture = diffuse;
+		modelComponent->GetModel()->materials[i].maps[MATERIAL_MAP_NORMAL].texture = normalMap;
+	}
+	for (int i = 0; i < modelComponent->GetModel()->meshCount; i++) {
+		GenMeshTangents(&modelComponent->GetModel()->meshes[i]);
 	}
 
 	// Load a MD3 format model
 	characterActor = _Scene->CreateSceneObject<SceneActor>("Character");
 	characterActor->Scale = Vector3{ 2.0f, 2.0f, 2.0f };
-	characterActor->Position = Vector3{ -4.0f, 0.0f, 0.0f };
+	characterActor->Position = Vector3{ -3.0f, 0.0f, 0.0f };
 	ModelComponent* animModelComponent = characterActor->CreateAndAddComponent<ModelComponent>();
 	animModelComponent->Load3DModel("../../resources/models/m3d/suzanne.m3d");
 	animModelComponent->SetAnimation(10);
-	// Load shaders
-	shader = LoadShader("../../resources/shaders/glsl330/normalmap.vs", 
-		"../../resources/shaders/glsl330/normalmap.fs");
-	model.materials[0].shader = shader;
-
 	for (int i = 0; i < animModelComponent->GetModel()->materialCount; i++) {
 		animModelComponent->GetModel()->materials[i].shader = shader;
 		animModelComponent->GetModel()->materials[i].maps[MATERIAL_MAP_DIFFUSE].texture = diffuse;
@@ -89,7 +94,6 @@ void Demo6NormalMap::Start()
 void Demo6NormalMap::EndGame()
 {
 	// Unload resources
-	UnloadModel(model);
 	UnloadTexture(diffuse);
 	UnloadTexture(normalMap);
 	UnloadShader(shader);
@@ -120,14 +124,13 @@ void Demo6NormalMap::Update(float ElapsedSeconds)
 		rot.y -= 360.0f;
 	}	
 	characterActor->Rotation = rot;
+	cubeActor->Rotation = rot;
 
 	__super::Update(ElapsedSeconds);
 }
 
 void Demo6NormalMap::DrawFrame()
 {
-	DrawModel(model, modelpos, 1.0f, WHITE);
-
 	__super::DrawFrame();
 
 	// Draw light as a small sphere
