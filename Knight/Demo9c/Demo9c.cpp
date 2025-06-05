@@ -125,8 +125,10 @@ void Demo9c::DrawFrame()
 	//Draw Path
 	for(int i = 0; i < (int)(Path.size() - 1); ++i)
 	{
-		DrawLine3D(Path[i], Path[i + 1], RED);
+		//DrawLine3D(Path[i], Path[i + 1], RED);
+		DrawCylinderEx(Path[i], Path[i + 1], 0.3f, 0.3f, 8, RED);
 	}
+
 }
 
 void Demo9c::DrawGUI()
