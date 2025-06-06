@@ -49,8 +49,8 @@ ETreeStatus Selector::Update(float DeltaTime)
 
 ETreeStatus GuardTask::Update(float DeltaTime)
 {
-    auto modelComponet = _BT->GetBlackboard().NPC->GetComponent<ModelComponent>();
-    FSM::ECharacterState animState = (FSM::ECharacterState)modelComponet->GetAnimation();
+    auto modelComponent = _BT->GetBlackboard().NPC->GetComponent<ModelComponent>();
+    FSM::ECharacterState animState = (FSM::ECharacterState)modelComponent->GetAnimation();
 
     if (_BT->GetBlackboard().DistanceFromPlayer <= 15.0f)
     {
@@ -69,8 +69,8 @@ ETreeStatus GotoHeroTask::Update(float DeltaTime)
     auto blackboard = _BT->GetBlackboard();
     auto player = blackboard.Player;
     auto npc = blackboard.NPC;
-    auto modelComponet = npc->GetComponent<ModelComponent>();
-    FSM::ECharacterState animState = (FSM::ECharacterState)modelComponet->GetAnimation();
+    auto modelComponent = npc->GetComponent<ModelComponent>();
+    FSM::ECharacterState animState = (FSM::ECharacterState)modelComponent->GetAnimation();
     auto fsm = blackboard.FSM;
 
     if (blackboard.DistanceFromPlayer <= 3.0f)
@@ -90,8 +90,8 @@ ETreeStatus GotoHeroTask::Update(float DeltaTime)
 ETreeStatus AttackTask::Update(float DeltaTime)
 {
     auto blackboard = _BT->GetBlackboard();
-    auto modelComponet = blackboard.NPC->GetComponent<ModelComponent>();
-    FSM::ECharacterState animState = (FSM::ECharacterState)modelComponet->GetAnimation();
+    auto modelComponent = blackboard.NPC->GetComponent<ModelComponent>();
+    FSM::ECharacterState animState = (FSM::ECharacterState)modelComponent->GetAnimation();
     auto fsm = blackboard.FSM;
 
     if (animState != FSM::ECharacterState::ATTACK)
@@ -145,8 +145,8 @@ void BehaviourTree::Update(float DeltaTime)
 
 void BehaviourTree::Steering(float DeltaTime)
 {
-    auto modelComponet = _blackboard.NPC->GetComponent<ModelComponent>();
-    FSM::ECharacterState animState = (FSM::ECharacterState)modelComponet->GetAnimation();
+    auto modelComponent = _blackboard.NPC->GetComponent<ModelComponent>();
+    FSM::ECharacterState animState = (FSM::ECharacterState)modelComponent->GetAnimation();
     
     //Get the vector from Player to NPC
     Vector3 dir = Vector3Subtract(_blackboard.Player->Position, _blackboard.NPC->Position);

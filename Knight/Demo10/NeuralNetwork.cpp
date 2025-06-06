@@ -46,7 +46,7 @@ Layer::Layer(size_t NeuronSize, size_t InputSize)
 }
 
 NeuralNetwork::NeuralNetwork(vector<size_t>& LayerSizes, float LearningRate, bool MinusActivation)
-	: _LearingRate(LearningRate)
+	: _LearningRate(LearningRate)
 {
 	EnableMinusActivation = MinusActivation;
 	//Add all the hidden and output layers
@@ -138,9 +138,9 @@ void NeuralNetwork::UpdateWeights(vector<float>& Inputs)
 			vector<float>& weights = neurons[i].GetWeights();
 			for (size_t j = 0; j < inputs.size(); ++j)
 			{
-				weights[j] += _LearingRate * neurons[i].GetError() * inputs[j];
+				weights[j] += _LearningRate * neurons[i].GetError() * inputs[j];
 			}
-			neurons[i].SetBias(neurons[i].GetBias() +_LearingRate * neurons[i].GetError());
+			neurons[i].SetBias(neurons[i].GetBias() +_LearningRate * neurons[i].GetError());
 		}
 	}
 }

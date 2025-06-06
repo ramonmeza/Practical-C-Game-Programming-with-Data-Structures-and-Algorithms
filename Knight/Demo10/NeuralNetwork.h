@@ -64,7 +64,7 @@ public:
     static bool EnableMinusActivation;
 private:
     vector<Layer> _Layers;      //The hidden and outpout layers
-    float _LearingRate = 0.5f;  //Range from 0 to 1. 
+    float _LearningRate = 0.5f;  //Range from 0 to 1. 
     vector<float> ForwardPropagate(vector<float>& Inputs);
     void BackPropagate(vector<float>& Targets);
     void UpdateWeights(vector<float>& Inputs);
