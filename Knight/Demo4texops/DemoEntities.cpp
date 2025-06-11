@@ -10,7 +10,7 @@ Entity::Entity()
 SimpleDrawTextureDemo::SimpleDrawTextureDemo()  // Initialize texture to default values
 {
    title = "Draw Texture";
-   description = "This demo loads a png graphics file as texture and draw it on the center of the screen.\nPress Enter to continue.";
+   description = "This demo loads a png graphics file as texture and draw it\n\n\n on the center of the screen.";
 }
 
 void SimpleDrawTextureDemo::Create()
@@ -36,7 +36,7 @@ void SimpleDrawTextureDemo::Release()
 CompressTextureDemo::CompressTextureDemo()
 {
 	title = "Comparison of compressed and original texture demo";
-	description = "This demo loads two graphics file. They are same image but one is in comprssed format and the other is in original uncompressed format.\nPress Enter to continue.";
+	description = "The demo shows two same image but right one is in comprssed format\n\n\nand the left one is in the original uncompressed format.";
 }
 
 void CompressTextureDemo::Create()
@@ -71,7 +71,7 @@ void CompressTextureDemo::Draw2D()
 DrawPartialRotateDemo::DrawPartialRotateDemo()
 {
 	title = "Draw Partial of Texture and Roatet Demo";
-	description = "This demo loads a png graphics file as texture. We can draw partial image from the soure texture.\nPress Enter to continue.";
+	description = "This demo loads a png graphics file as texture.\n\n\nWe can draw partial image from the soure texture.";
 	timeDiff = currentAngle = 0;
 }
 

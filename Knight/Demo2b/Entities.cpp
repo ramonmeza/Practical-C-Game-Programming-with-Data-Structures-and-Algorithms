@@ -10,6 +10,8 @@ Entity::Entity()
 
 void Entity::Update(float elaspedTime)
 {
+	//We do not need to call Actor->Update() here, because the Scene will automatically call it for us
+	//If you have common logic shared by all kinds of inherited class of Entity, you can put it here
 }
 
 void PlayerEntity::Create(Scene* pScene, Entity* pParent)
@@ -17,8 +19,8 @@ void PlayerEntity::Create(Scene* pScene, Entity* pParent)
 	//Place player
 	Actor = pScene->CreateSceneObject<SceneActor>("Player");
 	Actor->Scale = Vector3{ 3.0f, 3.0f, 3.0f };
-	Actor->Position.z = 30.0f;
-	Actor->Rotation.y = 90.0f;
+	Actor->Position = Vector3{ 0, -3, 30.0f };
+	Actor->Rotation.y = 180.0f;
 	ModelComponent* animPlayerComponent = Actor->CreateAndAddComponent<ModelComponent>();
 	animPlayerComponent->Load3DModel("../../resources/models/gltf/robot.glb");
 	animPlayerComponent->SetAnimation(6);
@@ -75,7 +77,8 @@ void TerrainEntity::Create(Scene* pScene, Entity* pParent)
 	//Create a plan as terrain
 	Actor = pScene->CreateSceneObject<SceneActor>("Terrain");
 	Actor->Position = Vector3{ 0, -5, 0 };
-	Actor->Scale = Vector3{ 100, 1, 100 };
-	PlaneComponent* planeComponent = Actor->CreateAndAddComponent<PlaneComponent>();
-	planeComponent->SetColor(DARKGREEN);
+	Actor->Scale = Vector3{ 20, 1, 20 };
+	ModelComponent* animEnemyComponent = Actor->CreateAndAddComponent<ModelComponent>();
+	animEnemyComponent->Load3DModel("../../resources/models/obj/bridge.obj", "../../resources/models/obj/bridge_diffuse.png");
+	Actor->AddComponent(animEnemyComponent);
 }

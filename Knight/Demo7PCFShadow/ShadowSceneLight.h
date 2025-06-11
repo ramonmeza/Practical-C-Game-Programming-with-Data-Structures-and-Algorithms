@@ -4,6 +4,11 @@
 
 #include "SceneActor.h"
 
+typedef enum {
+	DIRECTIONAL_LIGHT = 0, // Directional light (infinite distance)
+	POINT_LIGHT,           // Point light (omnidirectional)
+} SceneLightType;
+
 class ShadowSceneLight : public SceneActor
 {
 	public:
@@ -18,7 +23,8 @@ class ShadowSceneLight : public SceneActor
 		Matrix lightViewProj = { 0 };
 		Vector3 lightDir = { 0 };
 		Color lightColor = WHITE;
-		float ambient[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
+		Color lightAmbient = CLITERAL(Color) { 26, 26, 26, 255 };
+		SceneLightType lightType = DIRECTIONAL_LIGHT;
 };
 
 

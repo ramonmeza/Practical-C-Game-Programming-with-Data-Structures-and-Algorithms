@@ -13,22 +13,18 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-Demo7Skybox::Demo7Skybox()
-{
-}
-
 void Demo7Skybox::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
 
-	ShowFPS = true;
+	Config.ShowFPS = true;
 
 	pMainCamera = _Scene->CreateSceneObject<PerspectiveCamera>("Main Camera");
 	pMainCamera->SetFovY(45.0f);
 	pMainCamera->SetPosition(Vector3{ 4, 1, 4 });
-	pMainCamera->SetLookAtPosition(Vector3{ 0, 0.5f, 0 });
-	pMainCamera->CameraMode = CAMERA_FIRST_PERSON;
+	pMainCamera->SetLookAtPosition(Vector3{ 0, 0.0f, 0 });
+	pMainCamera->CameraMode = CAMERA_THIRD_PERSON;
 
 	//pSkyBox = new SkyboxComponent();
 	pSkyBox = pMainCamera->CreateAndAddComponent<SkyboxComponent>();
@@ -37,16 +33,11 @@ void Demo7Skybox::Start()
 	//Place player
 	Actor = _Scene->CreateSceneObject<SceneActor>("Player");
 	Actor->Scale = Vector3{ 0.3f, 0.3f, 0.3f};
-	Actor->Position = Vector3{ 0.f,0.5f,0.f };
+	Actor->Position = Vector3{ 0.f,0.0f,0.f };
 	Actor->Rotation = Vector3{ 0,0,0 };
 	ModelComponent* animPlayerComponent = Actor->CreateAndAddComponent<ModelComponent>();
 	animPlayerComponent->Load3DModel("../../resources/models/gltf/robot.glb");
 	animPlayerComponent->SetAnimation(6);
-}
-
-void Demo7Skybox::EndGame()
-{
-	__super::EndGame();
 }
 
 void Demo7Skybox::Update(float ElapsedSeconds)
@@ -83,8 +74,7 @@ void Demo7Skybox::DrawFrame()
 
 void Demo7Skybox::DrawGUI()
 {
-	__super::DrawGUI();
-
+	DrawText("Move mouse to rotate the camera!", 10, 50, 30, WHITE);
 }
 
 // Generate cubemap texture from HDR texture
@@ -94,8 +84,7 @@ static TextureCubemap GenTextureCubemap(Shader shader, Texture2D panorama, int s
 
 	rlDisableBackfaceCulling();     // Disable backface culling to render inside the cube
 
-	// STEP 1: Setup framebuffer
-	//------------------------------------------------------------------------------------------
+	// Setup framebuffer
 	unsigned int rbo = rlLoadTextureDepth(size, size, true);
 	cubemap.id = rlLoadTextureCubemap(0, size, format);
 
@@ -107,9 +96,7 @@ static TextureCubemap GenTextureCubemap(Shader shader, Texture2D panorama, int s
 	if (rlFramebufferComplete(fbo)) TraceLog(LOG_INFO, "FBO: [ID %i] Framebuffer object created successfully", fbo);
 	//------------------------------------------------------------------------------------------
 
-	// STEP 2: Draw to framebuffer
-	//------------------------------------------------------------------------------------------
-	// NOTE: Shader is used to convert HDR equirectangular environment map to cubemap equivalent (6 faces)
+	// Draw to framebuffer. Shader is used to convert HDR equirectangular environment map to cubemap equivalent (6 faces)
 	rlEnableShader(shader.id);
 
 	// Define projection matrix and send it to shader
@@ -146,10 +133,8 @@ static TextureCubemap GenTextureCubemap(Shader shader, Texture2D panorama, int s
 		rlClearScreenBuffers();
 		rlLoadDrawCube();
 	}
-	//------------------------------------------------------------------------------------------
 
 	// STEP 3: Unload framebuffer and reset state
-	//------------------------------------------------------------------------------------------
 	rlDisableShader();          // Unbind shader
 	rlDisableTexture();         // Unbind texture
 	rlDisableFramebuffer();     // Unbind framebuffer
@@ -158,7 +143,6 @@ static TextureCubemap GenTextureCubemap(Shader shader, Texture2D panorama, int s
 	// Reset viewport dimensions to default
 	rlViewport(0, 0, rlGetFramebufferWidth(), rlGetFramebufferHeight());
 	rlEnableBackfaceCulling();
-	//------------------------------------------------------------------------------------------
 
 	cubemap.width = size;
 	cubemap.height = size;
@@ -166,4 +150,12 @@ static TextureCubemap GenTextureCubemap(Shader shader, Texture2D panorama, int s
 	cubemap.format = format;
 
 	return cubemap;
+}
+
+void Demo7Skybox::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+
+	UnloadFont(_Font);
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }

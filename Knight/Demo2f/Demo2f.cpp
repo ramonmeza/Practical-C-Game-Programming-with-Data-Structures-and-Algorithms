@@ -3,9 +3,12 @@
 
 #include <time.h>
 
+// Include the necessary headers for the UI functions of raylib
+// Check https://github.com/raysan5/raygui for more details
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
 
+//Main function of the application
 int main(int argc, char* argv[])
 {
 	Demo2f* KnightDemo2f = new Demo2f();
@@ -17,36 +20,37 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
+//Console messages
 std::list<std::string> Demo2f::messages;
+
+//Gameplay state
 GameResult Demo2f::_gameOver = InProgress;
 
+//Initialize the game
 void Demo2f::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
 
-	srand(time(NULL));
+	Config.ShowFPS = true;
 
-	ShowFPS = true;
+	//initialize global UI attributes
+	GuiSetFont(_Font);
+	GuiSetStyle(PROGRESSBAR, TEXT_COLOR_NORMAL, 0xffffffff);
+	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
+
+	srand(time(NULL));
 
 	//Prepare a camera
 	camera = _Scene->CreateSceneObject<PerspectiveCamera>("Camera");
 	camera->CameraMode = CameraMode::CAMERA_FIRST_PERSON;
 	camera->ShowCursor = false;
 	camera->SetPosition(Vector3{ 60, 60, 60 });
-	camera->SetLookAtPosition(Vector3{0, 10, 0});
+	camera->SetLookAtPosition(Vector3{0, 3, 0});
 
 	InitEntities();
 
-	//initialize global UI attributes
-	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
-
-	Log("Start the game!");
-}
-
-void Demo2f::EndGame()
-{
-	__super::EndGame();
+	Log("Start game!");
 }
 
 void Demo2f::Update(float ElapsedSeconds)
@@ -58,11 +62,7 @@ void Demo2f::Update(float ElapsedSeconds)
 	__super::Update(ElapsedSeconds);
 }
 
-void Demo2f::DrawFrame()
-{
-	__super::DrawFrame();
-}
-
+//Render gameplay status
 void Demo2f::DrawGUI()
 {
 	player->DrawGUI();
@@ -74,7 +74,7 @@ void Demo2f::DrawGUI()
 		{
 			int line = 0;
 			for (const auto& msg : messages) {
-				DrawText(msg.c_str(), 150, 150 + 40 * line, 25, WHITE);
+				DrawText(msg.c_str(), 150, 150 + 40 * line, 32, WHITE);
 				++line;
 			}
 			break;
@@ -101,6 +101,7 @@ void Demo2f::DrawGUI()
 
 }
 
+//Initialize entities in the scene
 void Demo2f::InitEntities()
 {
 	terrain = new TerrainEntity();
@@ -114,7 +115,6 @@ void Demo2f::InitEntities()
 
 	player->SetTarget(enemy);
 	enemy->SetTarget(player);
-
 }
 
 void Demo2f::GameOver(GameResult gr)

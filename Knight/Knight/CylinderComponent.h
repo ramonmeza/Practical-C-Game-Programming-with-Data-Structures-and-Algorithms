@@ -17,7 +17,7 @@ public:
 	~CylinderComponent();
 
 	void Update(float ElapsedSeconds) override;
-	void Draw() override;
+	void Draw(RenderHints* pRH = nullptr) override;
 
 	void SetColor(Color Color);
 	Color GetColor();

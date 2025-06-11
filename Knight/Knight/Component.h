@@ -2,8 +2,12 @@
 
 #include "raylib.h"
 
-class SceneObject;
-class SceneActor;
+typedef struct _RenderHints {
+
+	// If not null, this shader will be used to render this component
+	Shader* pOverrideShader = nullptr;  
+
+} RenderHints;
 
 class Component
 {
@@ -60,9 +64,9 @@ public:
 	eComponentType Type;
 
 	virtual void Update(float ElapsedSeconds) {}
-	virtual void Draw() { }
+	virtual void Draw(RenderHints *pRH = nullptr) { }
 
-	virtual void SetShader(Shader* pNewShader, int idx) {};
+	//virtual void SetShader(Shader* pNewShader, int idx) {};
 
 protected:
 	friend class SceneObject;

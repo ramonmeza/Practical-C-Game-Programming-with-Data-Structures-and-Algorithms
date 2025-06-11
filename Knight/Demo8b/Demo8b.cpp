@@ -26,7 +26,6 @@ void Demo8b::Start()
 	__super::Start();
 
 	SetTargetFPS(60);
-	ShowFPS = true;
 
 	camera = _Scene->CreateSceneObject<PerspectiveCamera>("Camera");
 	camera->SetPosition(Vector3{ 0.0f, 6.0f, -15.0f });

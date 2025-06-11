@@ -15,7 +15,7 @@ public:
 	~BillboardComponent();
 
 	void Update(float ElapsedSeconds) override;
-	void Draw() override;
+	void Draw(RenderHints *pRH = nullptr) override;
 
 	Texture2D texture = { 0 };
 	Rectangle source = { 0 };

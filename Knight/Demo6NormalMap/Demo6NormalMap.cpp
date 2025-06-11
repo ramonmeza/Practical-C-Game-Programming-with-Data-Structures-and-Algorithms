@@ -2,19 +2,13 @@
 
 #include "raymath.h"
 
-#if defined(PLATFORM_DESKTOP)
 #define GLSL_VERSION            330
-#else   // PLATFORM_ANDROID, PLATFORM_WEB
-#define GLSL_VERSION            100
-#endif
-
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
 
 #include <cmath>
 
 #include "rlgl.h"
 
+//Main entry point for the application
 int main(int argc, char* argv[])
 {
 	Demo6NormalMap* KnightDemo6NormalMap = new Demo6NormalMap();
@@ -26,19 +20,12 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-Demo6NormalMap::Demo6NormalMap()
-{
-}
-
 void Demo6NormalMap::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
 
-	ShowFPS = true;
-
-	//initialize global UI attributes
-	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
+	Config.ShowFPS = true;
 
 	SetConfigFlags(FLAG_MSAA_4X_HINT);  // Enable Multi Sampling Anti Aliasing 4x (if available)
 
@@ -51,6 +38,8 @@ void Demo6NormalMap::Start()
 	// Load shaders
 	shader = LoadShader("../../resources/shaders/glsl330/normalmap.vs",
 		"../../resources/shaders/glsl330/normalmap.fs");
+
+	_Scene->_CurrentRenderPass->Hints.pOverrideShader = &shader; // Set the shader to be used for rendering
 
 	cubeActor = _Scene->CreateSceneObject<SceneActor>("Cube");
 	cubeActor->Position = Vector3{ 3.0f, -1.0f, 0.0f };
@@ -129,6 +118,7 @@ void Demo6NormalMap::Update(float ElapsedSeconds)
 	__super::Update(ElapsedSeconds);
 }
 
+//Render scene and light source as a small sphere
 void Demo6NormalMap::DrawFrame()
 {
 	__super::DrawFrame();
@@ -137,6 +127,7 @@ void Demo6NormalMap::DrawFrame()
 	DrawSphere(lightPos, 0.1f, YELLOW);
 }
 
+//Render help text and debug information 
 void Demo6NormalMap::DrawGUI()
 {
 	__super::DrawGUI();
@@ -145,10 +136,20 @@ void Demo6NormalMap::DrawGUI()
 
 	Vector3 v = pMainCamera->GetPosition();
 	sprintf_s(buf, sizeof(buf), "cam: %f, %f, %f", v.x, v.y, v.z);
-	DrawText(buf, 100, 100, 24, WHITE);
+	DrawTextEx(_Font, buf, Vector2{ 100, 100 }, 40,4, WHITE);
 
 	v = lightPos;
 	sprintf_s(buf, sizeof(buf), "light: %f, %f, %f", v.x, v.y, v.z);
-	DrawText(buf, 100, 140, 24, WHITE);
+	DrawTextEx(_Font, buf, Vector2{ 100, 170 }, 40,4, WHITE);
+
+	DrawTextEx(_Font, "Use WSAD to move light source.", Vector2{100, 50}, 40, 4, WHITE);
 }
 
+//Create default resources for the demo
+void Demo6NormalMap::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+
+	UnloadFont(_Font);
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+}

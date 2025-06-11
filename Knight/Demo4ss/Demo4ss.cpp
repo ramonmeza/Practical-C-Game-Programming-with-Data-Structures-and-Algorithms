@@ -1,9 +1,6 @@
 #include "Knight.h"
 #include "Demo4ss.h"
 
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
-
 int main(int argc, char* argv[])
 {
 	Demo4ss* KnightDemo4ss = new Demo4ss();
@@ -17,9 +14,20 @@ int main(int argc, char* argv[])
 
 Demo4ss::Demo4ss()
 {
+	background = { 0 };
+	midground = { 0 };
+	foreground = { 0 };
 	scrollingBack = 0;
 	scrollingMid = 0;
 	scrollingFore = 0;
+}
+
+void Demo4ss::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+
+	UnloadFont(_Font);
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }
 
 void Demo4ss::Start()
@@ -27,14 +35,11 @@ void Demo4ss::Start()
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
 
-	ShowFPS = true;
+	Config.ShowFPS = true;
 
-	background = LoadTexture("../../resources/textures/cyberpunk_street_background.png");
-	midground = LoadTexture("../../resources/textures/cyberpunk_street_midground.png");
-	foreground = LoadTexture("../../resources/textures/cyberpunk_street_foreground.png");
-
-	//initialize global UI attributes
-	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
+	background = LoadTexture("../../resources/textures/p10.png");
+	midground = LoadTexture("../../resources/textures/p11.png");
+	foreground = LoadTexture("../../resources/textures/p12.png");
 }
 
 void Demo4ss::EndGame()
@@ -52,7 +57,7 @@ void Demo4ss::Update(float ElapsedSeconds)
 
 	scrollingBack -= 0.1f;
 	scrollingMid -= 0.5f;
-	scrollingFore -= 1.0f;
+	scrollingFore -= 1.2f;
 
 	// NOTE: Texture is scaled twice its size, so it sould be considered on scrolling
 	if (scrollingBack <= -background.width * 2) scrollingBack = 0;
@@ -88,9 +93,7 @@ void Demo4ss::DrawGUI()
 	v2.x = foreground.width * 2 + scrollingFore; 
 	DrawTextureEx(foreground, v2, 0.0f, 2.0f, WHITE);
 
-	DrawText("BACKGROUND SCROLLING & PARALLAX", 10, 50, 20, RED);
-	DrawText("(c) Cyberpunk Street Environment by Luis Zuno (@ansimuz)", SCREEN_WIDTH - 330, SCREEN_HEIGHT - 20, 10, RAYWHITE);
-
+	DrawText("Parallax scrolling rendering 3 layer maps", 10, 60, 40, DARKBROWN);
 }
 
 

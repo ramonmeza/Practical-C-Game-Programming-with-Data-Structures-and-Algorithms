@@ -9,18 +9,18 @@ class Demo53PV : public Knight
 {
 public:
 	void Start() override;
-	void EndGame() override;
 
 	Demo53PV();
 	
-	FollowUpCamera* ChaseCamera;
-	SceneActor* Actor = NULL;
+	FollowUpCamera* ChaseCamera = nullptr;
+	SceneActor* Actor = nullptr;
 
 protected:
 
 	void Update(float ElapsedSeconds) override;
 	void DrawFrame() override;
 	void DrawGUI() override;
+	void OnCreateDefaultResources();
 };
 
 

@@ -1,7 +1,5 @@
 #include "Demo5Ortho.h"
 
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
 #include <ctime>
 
 int main(int argc, char* argv[])
@@ -25,25 +23,13 @@ void Demo5Ortho::Start()
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
 
-	ShowFPS = true;
-
-	//initialize global UI attributes
-	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
+	Config.ShowFPS = true;
 
 	OrthCam = _Scene->CreateSceneObject<OrthogonalCamera>("Orthogonal Camera");
 	OrthCam->SetUp(Vector3{ 0.0f, 15.0f, 15.0f }, Vector3{ 0.0f, 0.0f, 0.0f }, 20.0f);
 }
 
-void Demo5Ortho::EndGame()
-{
-	__super::EndGame();
-}
-
-void Demo5Ortho::Update(float ElapsedSeconds)
-{
-	__super::Update(ElapsedSeconds);
-}
-
+// Update the camera position based on user input
 void Demo5Ortho::DrawFrame()
 {
 	__super::DrawFrame();
@@ -51,11 +37,32 @@ void Demo5Ortho::DrawFrame()
 	DrawGrid(20, 1.0f);
 
 	Vector3 pos = OrthCam->GetCamera3D()->target;
-	DrawCube(pos, 1.0f, 1.0f, 1.0f, PURPLE);
+	for(int i=-1;i< 2;i++)
+	{
+		for(int j=-1;j< 2;j++)
+		{
+			pos.x = OrthCam->GetCamera3D()->target.x + i * 2.0f;
+			pos.z = OrthCam->GetCamera3D()->target.z + j * 2.0f;
+
+			DrawCube(pos, 1.0f, 1.0f, 1.0f, PURPLE);
+		}
+	}
 	DrawCubeWires(pos, 1.0f, 1.0f, 1.0f, YELLOW);
 }
 
+//Render help text on the screen
 void Demo5Ortho::DrawGUI()
 {
 	__super::DrawGUI();
+	DrawText("Rotate camera angle: move mouse.", 10, 100, 40, WHITE);
+	DrawText("Move camera: Use W/S/A/D.", 10, 150, 40, WHITE);
+}
+
+// Load default resources for the demo
+void Demo5Ortho::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+
+	UnloadFont(_Font);
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }

@@ -10,12 +10,9 @@ class Demo5RTSCam : public Knight
 {
 public:
 	void Start() override;
-	void EndGame() override;
 
-	Demo5RTSCam();
-
-	TopDownCamera* RTSCamera;
-	SceneActor* Actor = NULL;
+	TopDownCamera* RTSCamera = nullptr;
+	SceneActor* Actor = nullptr;
 
 	std::vector<UnitEntity> units;
 
@@ -24,6 +21,7 @@ protected:
 	void Update(float ElapsedSeconds) override;
 	void DrawFrame() override;
 	void DrawGUI() override;
+	void OnCreateDefaultResources() override;
 };
 
 

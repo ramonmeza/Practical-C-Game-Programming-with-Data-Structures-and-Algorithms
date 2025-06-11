@@ -17,6 +17,8 @@ void SceneLight::Create()
 {
 	shader = LoadShader("../../resources/shaders/glsl330/light_point.vs", "../../resources/shaders/glsl330/light_point.fs");
 
+	_Scene->_CurrentRenderPass->Hints.pOverrideShader = &shader;
+
 	// Set shader uniform locations
 	locLightDirection = GetShaderLocation(shader, "lightDirection");
 	locLightPosition = GetShaderLocation(shader, "lightPosition");

@@ -1,7 +1,9 @@
 
 #pragma once
-#include "Component.h"
+
 #include "raylib.h"
+
+#include "Component.h"
 
 #define LOAD_FLAG_COUNT  (MATERIAL_MAP_BRDF + 1)
 
@@ -44,7 +46,7 @@ public:
 	~ModelComponent();
 
 	void Update(float ElapsedSeconds) override;
-	void Draw() override;
+	void Draw(RenderHints *pRH = nullptr) override;
 
 	void Load3DModel(const char* ModelPath,	
 		const char* DiffuseMapPath = nullptr, 
@@ -58,7 +60,28 @@ public:
 		const char* OcclusionMapPath = nullptr,
 		Color Color = WHITE);
 
-	void SetShader(Shader* pNewShader, int idx) override;
+	void LoadFromMesh(Mesh mesh, 
+		const char* DiffuseMapPath = nullptr,
+		const char* SpecularMapPath = nullptr,
+		const char* NormalMapPath = nullptr,
+		const char* MetalicMapPath = nullptr,
+		const char* RoughnessMapPath = nullptr,
+		const char* HeightMapPath = nullptr,
+		const char* CubeMapPath = nullptr,
+		const char* EmissionMapPath = nullptr,
+		const char* OcclusionMapPath = nullptr,
+		Color Color = WHITE);
+
+	void LoadMaterialTextures(int idx, 
+		const char* DiffuseMapPath = nullptr,
+		const char* SpecularMapPath = nullptr,
+		const char* NormalMapPath = nullptr,
+		const char* MetalicMapPath = nullptr,
+		const char* RoughnessMapPath = nullptr,
+		const char* HeightMapPath = nullptr,
+		const char* CubeMapPath = nullptr,
+		const char* EmissionMapPath = nullptr,
+		const char* OcclusionMapPath = nullptr);
 
 	int GetAnimationIndex();
 
@@ -91,8 +114,8 @@ public:
 protected:
 	unsigned char _LoadState;
 
-	Model _Model;
-	ModelAnimation* _Animations;
+	Model _Model = { 0 };
+	ModelAnimation* _Animations = nullptr;
 	int _AnimationsCount;
 	int _AnimationIndex;
 	int _CurrentFrame[2];			//Current frame indices for the current and next animations

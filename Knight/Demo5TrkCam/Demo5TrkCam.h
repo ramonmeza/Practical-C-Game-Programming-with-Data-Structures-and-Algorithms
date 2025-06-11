@@ -9,12 +9,9 @@ class Demo5TrkCam : public Knight
 {
 public:
 	void Start() override;
-	void EndGame() override;
 
-	Demo5TrkCam();
-
-	WaypointsCamera* OnRailCamera = NULL;
-	SceneActor* Actor = NULL;
+	WaypointsCamera* OnRailCamera = nullptr;
+	SceneActor* Actor = nullptr;
 
 	// Moving cube parameters
 	Vector3 cubePosition = { -10.0f, 1.0f, 0.0f }; // Initial position of the moving cube
@@ -26,5 +23,6 @@ protected:
 	void Update(float ElapsedSeconds) override;
 	void DrawFrame() override;
 	void DrawGUI() override;
+	void OnCreateDefaultResources() override;
 };
 

@@ -3,7 +3,7 @@
 AnimatedTexDemo::AnimatedTexDemo()
 {
 	title = "Animated Texture Demo";
-	description = "This demo draws animated graphics from a spritesheet texture.\nPress Enter to continue.";
+	description = "This demo draws animated graphics from a spritesheet texture.";
 	_currentIdx = 0;
 	_anim_time = 0;
 	_anim_length = 1.0f;

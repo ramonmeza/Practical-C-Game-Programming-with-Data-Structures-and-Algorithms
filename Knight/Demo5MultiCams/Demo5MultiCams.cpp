@@ -25,7 +25,7 @@ void Demo5MultiCams::Start()
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
 
-	ShowFPS = true;
+	Config.ShowFPS = true;
 
 	//initialize global UI attributes
 	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
@@ -38,18 +38,20 @@ void Demo5MultiCams::Start()
 	Actor = _Scene->CreateSceneObject<SceneActor>("Player");
 	Actor->Scale = Vector3{ 0.3f, 0.3f, 0.3f };
 	Actor->Position = Vector3{ 0.f,0.1f,0.f };
-	Actor->Rotation = Vector3{ 0,0,0 };
+	Actor->Rotation = Vector3{ 0,90,0 };
 	ModelComponent* animPlayerComponent = Actor->CreateAndAddComponent<ModelComponent>();
 	animPlayerComponent->Load3DModel("../../resources/models/gltf/robot.glb");
 	animPlayerComponent->SetAnimation(6);
 	Actor->AddComponent(animPlayerComponent);
 
-	// Setup player 1 camera and screen	
+	// Setup view 1 camera and screen	
 	pChaseCamera->SetUp(Actor, 45.0f, 5.0f, CAMERA_PERSPECTIVE);
 	pChaseCamera->processMouseInput = false;
 
+	//Setup view 2 camera and screen
 	pTopDownCamera->SetUp(Vector3{ -3.0f, 3.0f, 0 }, Actor->Position, 45.0f, CAMERA_PERSPECTIVE);
 
+	//Create render textures
 	ChaseCamRT = LoadRenderTexture(SCREEN_WIDTH / 2, SCREEN_HEIGHT);
 	TopDownCamRT = LoadRenderTexture(SCREEN_WIDTH / 2, SCREEN_HEIGHT);
 
@@ -99,7 +101,7 @@ void Demo5MultiCams::DrawOffscreen()
 	EndMode3D();
 
 	DrawRectangle(0, 0, GetScreenWidth() / 2, 40, Fade(RAYWHITE, 0.8f));
-	DrawText("The 3rd person camera view", 10, 50, 20, MAROON);
+	DrawText("The 3rd person camera view", 10, 60, 40, YELLOW);
 
 	EndTextureMode();
 
@@ -112,13 +114,9 @@ void Demo5MultiCams::DrawOffscreen()
 	EndMode3D();
 
 	DrawRectangle(0, 0, GetScreenWidth() / 2, 40, Fade(RAYWHITE, 0.8f));
-	DrawText("The top down camera view", 10, 50, 20, DARKBLUE);
+	DrawText("The top down camera view", 10, 60, 40, YELLOW);
 
 	EndTextureMode();
-}
-
-void Demo5MultiCams::DrawFrame()
-{
 }
 
 void Demo5MultiCams::DrawGUI()
@@ -129,10 +127,23 @@ void Demo5MultiCams::DrawGUI()
 	DrawTextureRec(TopDownCamRT.texture, splitScreenRect, Vector2{ SCREEN_WIDTH / 2.0f, 0 }, WHITE);
 
 	DrawRectangle(GetScreenWidth() / 2 - 2, 0, 4, GetScreenHeight(), LIGHTGRAY);
+
+	DrawText("Use WSAD to move player character..", 10, 150, 40, WHITE);
+	DrawText("Use mouse wheel to zoom and right-click drag to rotate.", 10, 200, 40, WHITE);
 }
 
 void Demo5MultiCams::DrawGameWorld(SceneCamera *pCam)
 {
 	_Scene->DrawFrame();
 	DrawGrid(10, 1);
+}
+
+// This function is called when the engine is ready to create default resources like fonts, textures, etc.
+void Demo5MultiCams::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+
+	UnloadFont(_Font);
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+
 }

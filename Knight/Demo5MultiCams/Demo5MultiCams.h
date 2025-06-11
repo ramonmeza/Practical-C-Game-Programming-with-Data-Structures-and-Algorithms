@@ -25,8 +25,8 @@ protected:
 
 	void Update(float ElapsedSeconds) override;
 	void DrawOffscreen() override;
-	void DrawFrame() override;
 	void DrawGUI() override;
+	void OnCreateDefaultResources() override;
 
 	void DrawGameWorld(SceneCamera* pCam);
 };

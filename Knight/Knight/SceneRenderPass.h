@@ -26,6 +26,7 @@ struct CompareDistanceDescending {
 struct RenderQueues {
 	vector<RenderContext> Background;
 	multiset<RenderContext, CompareDistanceAscending> Geometry;
+	multiset<RenderContext, CompareDistanceDescending> AlphaTest;
 	multiset<RenderContext, CompareDistanceDescending> AlphaBlending;
 	vector<RenderContext> Overlay;
 };
@@ -37,16 +38,19 @@ class SceneRenderPass
 		virtual bool Create(Scene *sc) = 0;
 		virtual void Release() = 0;
 
-		virtual void BeginScene(SceneCamera *cam = NULL) = 0;
+		virtual void BeginScene(SceneCamera *cam = nullptr) = 0;
 		virtual void Render();
 		virtual void EndScene() = 0;
 
-		virtual void BuildRenderQueue(SceneObject *pR, Shader* pShaderOverride = nullptr);
+		virtual void BuildRenderQueue(SceneObject *pR);
+		virtual bool OnAddToRender(Component* pSC, SceneObject* pSO);
 		virtual void ClearRenderQueue();
+
+		RenderHints Hints = { 0 };
 
 	protected:
 
 		RenderQueues renderQueue;
-		Scene* pScene = NULL;
-		SceneCamera* pActiveCamera = NULL;
+		Scene* pScene = nullptr;
+		SceneCamera* pActiveCamera = nullptr;
 };

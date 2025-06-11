@@ -15,12 +15,12 @@ public:
 	~CubeComponent();
 
 	void Update(float ElapsedSeconds) override;
-	void Draw() override;
+	void Draw(RenderHints* pRH = nullptr) override;
 
 	void SetColor(Color Color);
 	Color GetColor();
 
-	void SetShader(Shader* pNewShader, int idx) override;
+	//void SetShader(Shader* pNewShader, int idx) override;
 
 protected:
 	Mesh _Mesh;

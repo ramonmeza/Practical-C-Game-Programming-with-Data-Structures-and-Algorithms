@@ -61,11 +61,13 @@ void main()
     
     if (curDepth - bias > sampleDepth)
     {
-    	finalColor = vec4(0, 0, 0, 1);            
+    	finalColor = texelColor*ambient*colDiffuse;            
+    } 
+    else 
+    {
+        // Add ambient lighting whether in shadow or not
+        finalColor += texelColor*ambient*colDiffuse;
     }
-
-    // Add ambient lighting whether in shadow or not
-    finalColor += texelColor*(ambient/10.0)*colDiffuse;
 
     // Gamma correction
     finalColor = pow(finalColor, vec4(1.0/2.2));

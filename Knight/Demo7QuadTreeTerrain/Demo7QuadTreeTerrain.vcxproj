@@ -137,12 +137,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Demo7QuadTreeTerrain.h" />
-    <ClInclude Include="HMapTerrainModelComponent.h" />
+    <ClInclude Include="QuadTreeTerrainComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Demo7QuadTreeTerrain.cpp" />
-    <ClCompile Include="QuadTreeModelTerrainComponent.cpp" />
-    <ClCompile Include="QuadTreeTerrainModelComponent.h" />
+    <ClCompile Include="QuadTreeTerrainComponent.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

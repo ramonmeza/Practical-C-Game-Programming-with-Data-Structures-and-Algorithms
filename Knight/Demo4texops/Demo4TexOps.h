@@ -11,14 +11,13 @@ class Demo4TexOps : public Knight
 {
 public:
 	void Start() override;
-	void EndGame() override;
 
 protected:
 	PerspectiveCamera* camera;
 
 	void Update(float ElapsedSeconds) override;
 	void DrawGUI() override;
-
+	void OnCreateDefaultResources() override;
 
 private:
 

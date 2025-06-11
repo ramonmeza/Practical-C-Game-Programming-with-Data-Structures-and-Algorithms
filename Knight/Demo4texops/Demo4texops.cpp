@@ -15,19 +15,23 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
+void Demo4TexOps::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+
+	UnloadFont(_Font);
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+	GuiSetFont(_Font);
+}
+
 void Demo4TexOps::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
 
-	ShowFPS = true;
+	GuiSetStyle(DEFAULT, TEXT_SIZE, 30);
 
 	InitEntities();
-}
-
-void Demo4TexOps::EndGame()
-{
-	__super::EndGame();
 }
 
 void Demo4TexOps::Update(float ElapsedSeconds)
@@ -46,7 +50,9 @@ void Demo4TexOps::Update(float ElapsedSeconds)
 
 void Demo4TexOps::DrawGUI()
 {
-	Rectangle r = {800,800,600,100};
+	Rectangle r = {200,800,1520,250};
+	Rectangle r1 = { 200,830,1520,250};
+	Rectangle r2 = { 200, 1000, 1520, 50};
 
 	__super::DrawGUI();
 
@@ -64,8 +70,8 @@ void Demo4TexOps::DrawGUI()
 	}
 
 	GuiWindowBox(r, (*it)->title.c_str());
-	GuiDrawText((*it)->description.c_str(), r, TEXT_ALIGN_CENTER, BLUE);
-
+	GuiDrawText((*it)->description.c_str(), r1, TEXT_ALIGN_CENTER, BLUE);
+	GuiDrawText("Press 'Enter' or click mouse left button to continue...", r2, TEXT_ALIGN_CENTER, RED);
 }
 
 void Demo4TexOps::InitEntities()

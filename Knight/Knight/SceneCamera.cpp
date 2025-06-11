@@ -26,24 +26,15 @@ SceneCamera::~SceneCamera()
 
 bool SceneCamera::Update(float ElapsedSeconds)
 {
-	__super::Update(ElapsedSeconds); // Call base class update
-
 	if (!IsActive)
 	{
 		return false;
 	}
 
-	if (ShowCursor)
-	{
-		EnableCursor();
-	}
-	else
-	{
-		DisableCursor();
-	}
-
 	if (CameraMode != CAMERA_CUSTOM)
 		UpdateCamera(&_Camera, CameraMode);
+
+	__super::Update(ElapsedSeconds); // Call base class update
 
 	return true;
 }

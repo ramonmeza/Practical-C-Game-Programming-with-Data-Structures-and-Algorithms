@@ -2,11 +2,7 @@
 
 #include "raymath.h"
 
-#if defined(PLATFORM_DESKTOP)
 #define GLSL_VERSION            330
-#else   // PLATFORM_ANDROID, PLATFORM_WEB
-#define GLSL_VERSION            100
-#endif
 
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
@@ -28,15 +24,20 @@ Demo6LightShader::Demo6LightShader()
 {
 }
 
+void Demo6LightShader::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+
+	UnloadFont(_Font);
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+}
+
 void Demo6LightShader::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
 
-	ShowFPS = true;
-
-	//initialize global UI attributes
-	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
+	Config.ShowFPS = true;
 
 	// Create lights
 	pMainCamera = _Scene->CreateSceneObject<FlyThroughCamera>("Main Camera");
@@ -55,16 +56,8 @@ void Demo6LightShader::Start()
 	player->Rotation = Vector3{ 0,0,0 };
 	ModelComponent* animPlayerComponent = player->CreateAndAddComponent<ModelComponent>();
 	animPlayerComponent->Load3DModel("../../resources/models/gltf/robot.glb");
-	animPlayerComponent->SetShader(&pLight->shader, -1);
 	animPlayerComponent->SetAnimation(6);
-	player->AddComponent(animPlayerComponent);
-
-	
-}
-
-void Demo6LightShader::EndGame()
-{
-	__super::EndGame();
+	player->AddComponent(animPlayerComponent);	
 }
 
 void Demo6LightShader::Update(float ElapsedSeconds)

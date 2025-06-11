@@ -71,4 +71,5 @@ protected:
 	map<Component::eComponentType, Component*> _Components;
 
 	friend class SceneRenderPass;
+	friend class ShadowMapRenderPass;
 };

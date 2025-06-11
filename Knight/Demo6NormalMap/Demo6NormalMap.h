@@ -8,10 +8,8 @@ public:
 	void Start() override;
 	void EndGame() override;
 
-	Demo6NormalMap();
-
-	FlyThroughCamera* pMainCamera = NULL;
-	SceneActor* Actor = NULL;
+	FlyThroughCamera* pMainCamera = nullptr;
+	SceneActor* Actor = nullptr;
 
 	Vector3 modelpos = { 0,0,0 };
 	Vector3 modelpos2 = { -2,0,0 };
@@ -32,6 +30,7 @@ protected:
 	SceneActor* characterActor = nullptr;
 	SceneActor* cubeActor = nullptr;
 
+	void OnCreateDefaultResources() override;
 	void Update(float ElapsedSeconds) override;
 	void DrawFrame() override;
 	void DrawGUI() override;

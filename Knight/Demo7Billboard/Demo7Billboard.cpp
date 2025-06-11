@@ -1,8 +1,5 @@
 #include "Demo7Billboard.h"
 
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
-
 #include <random>
 
 int main(int argc, char* argv[])
@@ -18,29 +15,30 @@ int main(int argc, char* argv[])
 
 void Demo7Billboard::Start()
 {
-	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
 
-	ShowFPS = true;
-
-	//initialize global UI attributes
-	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
-
-	mainCamera = _Scene->CreateSceneObject<FlyThroughCamera>("Chase Camera");
+	Config.ShowFPS = true;
 
 	//Place player
 	player = _Scene->CreateSceneObject<SceneActor>("Player");
-	player->Scale = Vector3{ 0.1f, 0.1f, 0.1f };
-	player->Position = Vector3{ 0.f,0.5f,0.f };
-	player->Rotation = Vector3{ 0,0,0 };
+	player->Scale = Vector3{ 0.2f, 0.2f, 0.2f };
 	ModelComponent* animPlayerComponent = player->CreateAndAddComponent<ModelComponent>();
 	animPlayerComponent->Load3DModel("../../resources/models/gltf/robot.glb");
 	animPlayerComponent->SetAnimation(6);
 
+	mainCamera = _Scene->CreateSceneObject<FlyThroughCamera>("Chase Camera");
 	mainCamera->SetUp(player->Position, 10.0f, 0, 30, 45.0f, CAMERA_PERSPECTIVE);
 
+	//Ground bridge
+	ground = _Scene->CreateSceneObject<SceneActor>("Terrain");
+	ground->Position = Vector3{ 0, -3.8f, 0 };
+	ground->Scale = Vector3{ 2, 1, 2 };
+	ModelComponent* animEnemyComponent = ground->CreateAndAddComponent<ModelComponent>();
+	animEnemyComponent->Load3DModel("../../resources/models/obj/bridge.obj", "../../resources/models/obj/bridge_diffuse.png");
+	ground->AddComponent(animEnemyComponent);
+
 	//Load a texture as billboard image
-	billboardImage = LoadTexture("../../resources/billboard.png");    // Our billboard texture
+	billboardImage = LoadTexture("../../resources/textures/p15-1.png");    // Our billboard texture
 
 	// Create a random device and seed the Mersenne Twister engine
 	std::random_device rd;
@@ -53,7 +51,7 @@ void Demo7Billboard::Start()
 
 		//imposter (billboard)
 		SceneActor* imposter = _Scene->CreateSceneObject<SceneActor>("Billboard Object");
-		imposter->Scale = Vector3{ 1, 1, 1 };
+		imposter->Scale = Vector3{ 2, 2, 1 };
 		imposter->Position = Vector3{ dist(gen),0.5f, dist(gen)};
 		imposter->Rotation = Vector3{ 0,0,0 };
 		BillboardComponent* billboard = imposter->CreateAndAddComponent<BillboardComponent>();
@@ -64,18 +62,11 @@ void Demo7Billboard::Start()
 		billboard->source = { 0.0f, 0.0f, (float)billboard->texture.width, (float)billboard->texture.height };
 		billboard->size = { billboard->source.width / billboard->source.height, 1.0f };
 		billboard->origin = Vector2Scale(billboard->size, 0.5f);
-		billboard->blendingMode = BLEND_ADDITIVE;
-		//billboard->AlignType = SCREEN_ALIGNED; 
-		billboard->renderQueue = Component::eRenderQueueType::AlphaBlend;
+		billboard->renderQueue = Component::eRenderQueueType::AlphaTest;
+		billboard->AlignType = SCREEN_ALIGNED;
 
 		imposters.push_back(imposter);
 	}
-}
-
-void Demo7Billboard::EndGame()
-{
-	
-	__super::EndGame();
 }
 
 void Demo7Billboard::Update(float ElapsedSeconds)
@@ -102,17 +93,17 @@ void Demo7Billboard::Update(float ElapsedSeconds)
 	__super::Update(ElapsedSeconds);
 }
 
-void Demo7Billboard::DrawFrame()
-{
-	__super::DrawFrame();
-
-	// Draw grid for better spatial reference
-	DrawGrid(10, 1.0f);
-}
-
 void Demo7Billboard::DrawGUI()
 {
 	__super::DrawGUI();
-
+	DrawText("Drag mouse with right click to rotate camera.", 10, 50, 40, WHITE);
 }
 
+//Create default resources like fonts, textures, etc.
+void Demo7Billboard::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+
+	UnloadFont(_Font);
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+}

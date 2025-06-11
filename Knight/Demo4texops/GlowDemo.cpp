@@ -3,7 +3,7 @@
 GlowDemo::GlowDemo()
 {
 	title = "Glow Effect Demo";
-	description = "This demo use additive blending mode to draw glowing effect.\nPress Enter to continue.";
+	description = "This demo use additive blending mode to draw glowing effect.";
 	currentAngle = 0;
 }
 
@@ -36,7 +36,7 @@ void GlowDemo::Draw2D()
 	Rectangle dest = { position.x+778, position.y+536, (float)glow.width * scale, (float)glow.height * scale };
 	Vector2 origin = { (float)glow.width * scale /2, (float)glow.height * scale /2 };
 
-	DrawTexture(background, position.x, position.y, WHITE);
+	DrawTexture(background, (int)position.x, (int)position.y, WHITE);
 	BeginBlendMode(BLEND_ADDITIVE);
 	DrawTexturePro(glow, source, dest, origin,currentAngle, YELLOW);
 	EndBlendMode();

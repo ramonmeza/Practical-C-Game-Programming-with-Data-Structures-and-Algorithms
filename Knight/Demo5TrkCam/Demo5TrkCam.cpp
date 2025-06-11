@@ -1,8 +1,5 @@
 #include "Demo5TrkCam.h"
 
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
-
 int main(int argc, char* argv[])
 {
 	Demo5TrkCam* KnightDemo5TrkCam = new Demo5TrkCam();
@@ -14,20 +11,12 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-Demo5TrkCam::Demo5TrkCam()
-{
-	OnRailCamera = NULL;
-}
-
 void Demo5TrkCam::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
 
-	ShowFPS = true;
-
-	//initialize global UI attributes
-	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
+	Config.ShowFPS = true;
 
 	//initialize a first person camera
 	OnRailCamera = _Scene->CreateSceneObject<WaypointsCamera>("Raill Camera");
@@ -47,14 +36,11 @@ void Demo5TrkCam::Start()
 	DisableCursor();
 }
 
-void Demo5TrkCam::EndGame()
-{
-	__super::EndGame();
-}
-
 void Demo5TrkCam::Update(float ElapsedSeconds)
 {
 	float actorSpeed = 10.0f;
+
+	Vector3 oldPos = Actor->Position;
 
 	// Update cube position along a straight path
 	cubePosition.x += cubeDirection.x * ElapsedSeconds * actorSpeed;
@@ -64,20 +50,40 @@ void Demo5TrkCam::Update(float ElapsedSeconds)
 	}
 	Actor->Position = cubePosition;
 
+	Vector3 vel = Vector3Subtract(Actor->Position, oldPos);
+	float angle = atan2f(vel.z, vel.x) * RAD2DEG; // Calculate angle in degrees
+
+	angle += 90;
+	if (angle > 360) angle -= 360; // Normalize angle to [0, 360)
+	Actor->Rotation = Vector3{ 0, angle, 0 };
+
 	__super::Update(ElapsedSeconds);
 
 }
 
 void Demo5TrkCam::DrawFrame()
 {
-	OnRailCamera->Draw();
+	OnRailCamera->Draw(); //render waypoint as cube
 	DrawGrid(50, 3.0f);
 	__super::DrawFrame();
 }
 
+//Display current status (on waypoint, or moving to next waypoint, etc.)
 void Demo5TrkCam::DrawGUI()
 {
 	__super::DrawGUI();
 
+	if (OnRailCamera->waypointWaitTimer > 0)
+		DrawText(TextFormat("Stop at waypoint #%d, wait time left=%1.2f", OnRailCamera->currentWaypoint, OnRailCamera->waypointWaitTimer), 10, 50, 40, WHITE);
+	else
+		DrawText(TextFormat("Moving from waypoint %d to %d", OnRailCamera->currentWaypoint, (OnRailCamera->currentWaypoint + 1 >= OnRailCamera->waypoints.size())?0: OnRailCamera->currentWaypoint+1), 10, 50, 40, WHITE);
+}
 
+// Load default resources for the demo
+void Demo5TrkCam::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+
+	UnloadFont(_Font);
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }

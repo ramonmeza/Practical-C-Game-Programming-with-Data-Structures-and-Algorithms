@@ -43,18 +43,25 @@ void EnemyEntity::DrawGUI()
 	if (rate > 1)
 		rate = 1;
 
-	GuiSetStyle(PROGRESSBAR, BASE_COLOR_PRESSED, 0xffff2f2f);
+	if (rate < 1)
+		GuiSetStyle(PROGRESSBAR, TEXT_COLOR_NORMAL, 0xff0000ff);
+	else
+		GuiSetStyle(PROGRESSBAR, TEXT_COLOR_NORMAL, 0x00ff00ff);
 	GuiProgressBar(
-		Rectangle{ 1300, 50, 400, 10 },
-		Actor->GetName(), "Ready",
+		Rectangle{ 1300, 110, 400, 10 },
+		Actor->GetName(), (rate < 1)?"Charging":"Ready",
 		&rate, 0, 1);
 
 	float health = ((float)HP) / 100.0f;
-	GuiSetStyle(PROGRESSBAR, BASE_COLOR_PRESSED, 0xff2fff2f);
+	if (health < 0.3f)
+		GuiSetStyle(PROGRESSBAR, TEXT_COLOR_NORMAL, 0xff0000ff);
+	else
+		GuiSetStyle(PROGRESSBAR, TEXT_COLOR_NORMAL, 0xffffffff);
 	GuiProgressBar(
-		Rectangle{ 1300, 30, 400, 20 },
+		Rectangle{ 1300, 80, 400, 30 },
 		"0", "100",
 		&health, 0, 1);
+
 }
 
 void EnemyEntity::Die()

@@ -61,6 +61,3 @@ bool WaypointsCamera::Draw()
     return true;
 }
 
-WaypointsCamera::~WaypointsCamera()
-{
-}

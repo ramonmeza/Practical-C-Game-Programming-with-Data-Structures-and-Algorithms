@@ -1,8 +1,5 @@
 #include "Demo7PCFShadow.h"
 
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
-
 int main(int argc, char* argv[])
 {
 	Demo7PCFShadow* KnightDemo7PCFShadow = new Demo7PCFShadow();
@@ -12,49 +9,43 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-Demo7PCFShadow::Demo7PCFShadow()
-{
-}
-
 void Demo7PCFShadow::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
-	ShowFPS = true;
-
-	//initialize global UI attributes
-	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
+	Config.ShowFPS = true;
 	
 	pMainCamera = _Scene->CreateSceneObject<FlyThroughCamera>("Main Camera");
 	pMainCamera->SetUp(Vector3{ 0,0,0 }, 60, 0, 60, 45, CAMERA_PERSPECTIVE);
 	
 	sceneLight = _Scene->CreateSceneObject<ShadowSceneLight>("Light");
-	sceneLight->SetLight(Vector3{ 0.35f, -1.0f, -0.35f }, WHITE);
+	sceneLight->SetLight(Vector3{ 0.1f, -0.4f, -1.0f }, WHITE);
 	
-	Floor = _Scene->CreateSceneObject<SceneActor>("Floor");
-	Floor->Scale = Vector3{ 1.0f, 1.0f, 1.0f };
-	Floor->Position = Vector3{ 0.f,0.0f,0.f };
-	Floor->Rotation = Vector3{ 0,0,0 };
+	pFloor = _Scene->CreateSceneObject<SceneActor>("Terrain");
+	pFloor->Position = Vector3{ 0, -3, 0 };
+	pFloor->Scale = Vector3{ 2, 1, 2 };	
+
+	pFloor = _Scene->CreateSceneObject<SceneActor>("Floor");
+	Mesh floorMesh = GenMeshCube(32.0f, 0.1f, 32.0f);
+	ModelComponent* floorComponent = pFloor->CreateAndAddComponent<ModelComponent>();
+	floorComponent->LoadFromMesh(floorMesh, "../../resources/textures/p8.png");
+	pFloor->AddComponent(floorComponent);
 	
-	CubeComponent* floor = new CubeComponent();
-	floor->Size = Vector3{ 10, 1, 10 };
-	floor->SetColor(BLUE);
-	Floor->AddComponent(floor);
+	pProp = _Scene->CreateSceneObject<SceneActor>("Prop");
+	pProp->Scale = Vector3{ 0.1f, 0.1f, 0.1f };
+	pProp->Position = Vector3{ 2.f,0.7f,6.0f };
+	pProp->Rotation = Vector3{ 0,0,0 };
 	
-	Box = _Scene->CreateSceneObject<SceneActor>("Box");
-	Box->Scale = Vector3{ 1.0f, 1.0f, 1.0f };
-	Box->Position = Vector3{ 2.f,0.0f,2.f };
-	Box->Rotation = Vector3{ 0,0,0 };
-	
-	CubeComponent* box = new CubeComponent();
-	box->Size = Vector3{ 3, 3, 3 };
-	box->SetColor(WHITE);
-	Box->AddComponent(box);
+	ModelComponent* propModelComponent = pProp->CreateAndAddComponent<ModelComponent>();
+	propModelComponent->Load3DModel("../../resources/models/obj/plane.obj", "../../resources/models/obj/plane_diffuse.png");
+	propModelComponent->castShadow = Component::eShadowCastingType::Shadow;
+	propModelComponent->receiveShadow = true;
+	pProp->AddComponent(propModelComponent);
 	
 	//Place player
 	Actor = _Scene->CreateSceneObject<SceneActor>("Player");
 	Actor->Scale = Vector3{ 0.3f, 0.3f, 0.3f };
-	Actor->Position = Vector3{ 0.f,0.5f,0.f };
+	Actor->Position = Vector3{ 0.f,0.0f,0.f };
 	Actor->Rotation = Vector3{ 0,0,0 };
 	ModelComponent* animPlayerComponent = Actor->CreateAndAddComponent<ModelComponent>();
 	animPlayerComponent->Load3DModel("../../resources/models/gltf/robot.glb");
@@ -66,12 +57,6 @@ void Demo7PCFShadow::Start()
 
 	pShadowMapRenderer = new ShadowMapRenderPass(sceneLight, pDepthRenderer->shadowMap.depth.id);
 	pShadowMapRenderer->Create(_Scene);
-}
-
-void Demo7PCFShadow::EndGame()
-{
-	UnloadModelAnimations(robotAnimations, animCount);
-	__super::EndGame();
 }
 
 void Demo7PCFShadow::Update(float ElapsedSeconds)
@@ -123,6 +108,18 @@ void Demo7PCFShadow::Update(float ElapsedSeconds)
 			sceneLight->lightDir.z -= cameraSpeed * 60.0f * dt;
 	}
 
+	if (IsKeyDown(KEY_O))
+	{
+		if (sceneLight->lightDir.y < 0.6f)
+			sceneLight->lightDir.y += cameraSpeed * 60.0f * dt;
+	}
+
+	if (IsKeyDown(KEY_P))
+	{
+		if (sceneLight->lightDir.y > -0.6f)
+			sceneLight->lightDir.y -= cameraSpeed * 60.0f * dt;
+	}
+
 	sceneLight->lightDir = Vector3Normalize(sceneLight->lightDir);
 	pDepthRenderer->lightCam.position = Vector3Scale(sceneLight->lightDir, -15.0f);
 	SetShaderValue(pShadowMapRenderer->shadowShader, pShadowMapRenderer->lightDirLoc, &sceneLight->lightDir, SHADER_UNIFORM_VEC3);
@@ -142,7 +139,7 @@ void Demo7PCFShadow::DrawFrame()
 {
 	pShadowMapRenderer->BeginScene();
 	__super::DrawFrame();
-	pShadowMapRenderer->EndScene();
+	pShadowMapRenderer->EndScene();	
 }
 
 void Demo7PCFShadow::DrawGUI()
@@ -151,7 +148,16 @@ void Demo7PCFShadow::DrawGUI()
 	Rectangle dr = { 0,0,255, 255 };
 	Vector2 pos = { SCREEN_WIDTH - 300, 300 };
 	DrawTextureEx(pDepthRenderer->shadowMap.depth, pos, 0, 0.25f, WHITE);
-	__super::DrawGUI();
-	DrawText("Shadows in raylib using the shadowmapping algorithm!", SCREEN_WIDTH - 320, SCREEN_HEIGHT - 20, 10, GRAY);
-	DrawText("Use the arrow keys to rotate the light!", 10, 10, 30, RED);
+	DrawText("Use the I/J/K/M to move the light!", 10, 50, 30, WHITE);
+	DrawText("Drag mouse with right click to rotate the camera!", 10, 90, 30, WHITE);
+	DrawText("Use mouse wheel to zoom the camera", 10, 130, 30, WHITE);
 }
+
+void Demo7PCFShadow::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+
+	UnloadFont(_Font);
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+}
+

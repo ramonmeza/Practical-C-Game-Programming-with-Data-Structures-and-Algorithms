@@ -8,7 +8,6 @@ class Demo6Light : public Knight
 {
 public:
 	void Start() override;
-	void EndGame() override;
 
 	FlyThroughCamera* pMainCamera;
 	SceneActor* actor = NULL;
@@ -24,5 +23,6 @@ protected:
 	void Update(float ElapsedSeconds) override;
 	void DrawFrame() override;
 	void DrawGUI() override;
+	void OnCreateDefaultResources() override;
 };
 

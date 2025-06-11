@@ -16,7 +16,9 @@ class ShadowMapRenderPass : public ForwardRenderPass
 		void Release() override;
 
 		void BeginScene(SceneCamera* cam = NULL) override;
+		void Render() override;
 		void EndScene() override;
+		bool OnAddToRender(Component* pSC, SceneObject* pSO) override;
 
 		int depthTextureId = -1;
 		int shadowMapResolution = SHADOWMAP_RESOLUTION;
@@ -24,7 +26,6 @@ class ShadowMapRenderPass : public ForwardRenderPass
 		// Record the light matrices for future use!
 	
 		ShadowSceneLight* pLight = nullptr;
-		
 
 		Shader shadowShader = { 0 };
 		int lightDirLoc = -1;

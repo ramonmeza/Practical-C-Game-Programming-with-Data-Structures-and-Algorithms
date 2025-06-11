@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "SceneObject.h"
 #include "SceneActor.h"
+#include "SceneCamera.h"
 #include "PerspectiveCamera.h"
 #include "OrthogonalCamera.h"
 #include "FlyThroughCamera.h"
@@ -18,6 +19,12 @@
 #include "ForwardRenderPass.h"
 #include "KnightUtils.h"
 
+struct KnightConfig
+{
+	bool ShowFPS = false;
+	bool ShowDebugInfo = false;
+};
+
 class Knight
 {
 public:
@@ -28,10 +35,15 @@ public:
 	virtual void Start();
 	void GameLoop();
 	virtual void EndGame();
-
 	void ExitGameLoop();
 
-	bool ShowFPS = false;	
+	void DrawText(const char* text, int x, int y, int size, const Color& color = Color{ 255,255,255,255 });
+	void SaveScreenshot(const char* fileName);
+
+	//bool ShowFPS = false;
+	KnightConfig Config;
+
+	static Knight* Instance;
 
 protected:
 	virtual void Update(float ElapsedSeconds);
@@ -39,11 +51,16 @@ protected:
 	virtual void DrawFrame();
 	virtual void DrawGUI();
 
+	void DrawFPS(int x, int y);
+
+
 protected:
 	Scene* _Scene;
 	Font _Font;
 	bool _shouldExitGameLoop;
 
-	SceneRenderPass* pDefaultRenderer = nullptr;
+	virtual void OnCreateDefaultResources();
+	virtual void OnReleaseDefaultResources();
+	virtual void OnConfigKnightApp();
 };
 

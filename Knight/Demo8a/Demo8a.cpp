@@ -23,7 +23,6 @@ void Demo8a::Start()
 
 	FrameRate = 30;
 	SetTargetFPS(FrameRate);
-	ShowFPS = true;
 
 	camera = _Scene->CreateSceneObject<PerspectiveCamera>("Camera");
 	camera->SetPosition(Vector3{0.0f, 20.0f, -30.0f});

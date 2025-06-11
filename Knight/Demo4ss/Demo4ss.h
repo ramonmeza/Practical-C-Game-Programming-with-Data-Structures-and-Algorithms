@@ -11,18 +11,16 @@ public:
 	Demo4ss();
 
 protected:
-	float scrollingBack;
-	float scrollingMid;
-	float scrollingFore;
+	float scrollingBack; //The farest background layer
+	float scrollingMid;  //The middle layer
+	float scrollingFore;  //The closest layer
 
 	Texture2D background;
 	Texture2D midground;
 	Texture2D foreground;
 
-	int map[10][10];
-
 	void Update(float ElapsedSeconds) override;
 	void DrawFrame() override;
 	void DrawGUI() override;
-
+	void OnCreateDefaultResources() override;
 };

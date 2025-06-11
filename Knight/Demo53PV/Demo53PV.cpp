@@ -1,8 +1,5 @@
 #include "Demo53PV.h"
 
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
-
 #include <cmath>
 
 int main(int argc, char* argv[])
@@ -25,13 +22,7 @@ void Demo53PV::Start()
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
 
-	ShowFPS = true;
-
-	//initialize global UI attributes
-	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
-
-	//initialize global UI attributes
-	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
+	Config.ShowFPS = true;
 
 	ChaseCamera = _Scene->CreateSceneObject<FollowUpCamera>("Chase Camera");
 
@@ -39,18 +30,13 @@ void Demo53PV::Start()
 	Actor = _Scene->CreateSceneObject<SceneActor>("Player");
 	Actor->Scale = Vector3{ 0.3f, 0.3f, 0.3f };
 	Actor->Position = Vector3{ 0.f,0.5f,0.f };
-	Actor->Rotation = Vector3{ 0,0,0 };
+	Actor->Rotation = Vector3{ 0,180.0f,0 };
 	ModelComponent* animPlayerComponent = Actor->CreateAndAddComponent<ModelComponent>();
 	animPlayerComponent->Load3DModel("../../resources/models/gltf/robot.glb");
 	animPlayerComponent->SetAnimation(6);
 	Actor->AddComponent(animPlayerComponent);
 
 	ChaseCamera->SetUp(Actor, 45.0f, 5.0f, CAMERA_PERSPECTIVE);
-}
-
-void Demo53PV::EndGame()
-{
-	__super::EndGame();
 }
 
 void Demo53PV::Update(float ElapsedSeconds)
@@ -95,8 +81,15 @@ void Demo53PV::DrawGUI()
 {
 	__super::DrawGUI();
 
-	DrawText("Use WASD to move player", 10, 40, 20, DARKGRAY);
-	DrawText("Hold right mouse button to rotate camera", 10, 70, 20, DARKGRAY);
-	DrawText("Use mouse wheel to adjust camera distance", 10, 100, 20, DARKGRAY);
+	DrawText("Use W/A/S/D to move player", 10, 50, 40, WHITE);
+	DrawText("Hold right mouse button and move mouse to rotate camera", 10, 100, 40, WHITE);
+	DrawText("Use mouse wheel to adjust camera distance", 10, 150, 40, WHITE);
 }
 
+void Demo53PV::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+
+	UnloadFont(_Font);
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+}

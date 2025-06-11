@@ -9,17 +9,12 @@ class HMapTerrainModelComponent : public Component
 {
 public:
 
-	HMapTerrainModelComponent();
-	~HMapTerrainModelComponent();
-
 	bool CreateFromFile(Vector3 terrainDimension, Vector2 texTileSize, const char* pHightmapFilePath, const char* pTerrainTexurePath);
+	void Draw(RenderHints *pRH = nullptr) override;
 
-	void Update(float ElapsedSeconds) override;
-	void Draw() override;
-
-	Image hightMapImage;
-	Model model;
-	Mesh mesh;
+	Image hightMapImage = { 0 };
+	Model model = { 0 };
+	Mesh mesh = { 0 };
 
 	Color tint = WHITE;
 

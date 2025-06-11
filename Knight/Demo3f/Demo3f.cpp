@@ -17,8 +17,6 @@ void Demo3f::Start()
 {
 	__super::Start();
 
-	ShowFPS = true;
-
 	camera = _Scene->CreateSceneObject<PerspectiveCamera>("Camera");
 	camera->SetPosition(Vector3{0.0f, 50.0f, -120.0f});
 	camera->CameraMode = CameraMode::CAMERA_CUSTOM;

@@ -17,16 +17,12 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-Demo7Particle::Demo7Particle()
-{
-}
-
 void Demo7Particle::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
 
-	ShowFPS = true;
+	Config.ShowFPS = true;
 
 	//initialize global UI attributes
 	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
@@ -83,9 +79,11 @@ void Demo7Particle::DrawFrame()
 	__super::DrawFrame();
 }
 
-void Demo7Particle::DrawGUI()
+//Create default resources for the demo
+void Demo7Particle::OnCreateDefaultResources()
 {
-	__super::DrawGUI();
+	__super::OnCreateDefaultResources();
 
+	UnloadFont(_Font);
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }
-

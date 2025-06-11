@@ -11,7 +11,7 @@ void PlayerEntity::Create(Scene* pScene, Entity* pParent)
 	//Place player
 	Actor = pScene->CreateSceneObject<SceneActor>("Player");
 	Actor->Scale = Vector3{ 3.0f, 3.0f, 3.0f };
-	Actor->Position.z = 30.0f;
+	Actor->Position = Vector3{ 0, -3, 30.0f };
 	Actor->Rotation.y = 180.0f;
 	ModelComponent* animPlayerComponent = Actor->CreateAndAddComponent<ModelComponent>();
 	animPlayerComponent->Load3DModel("../../resources/models/gltf/robot.glb");
@@ -38,16 +38,22 @@ void PlayerEntity::DrawGUI()
 	if (rate > 1)
 		rate = 1;
 
-	GuiSetStyle(PROGRESSBAR, BASE_COLOR_PRESSED, 0xffff2f2f);
+	if (rate < 1)
+		GuiSetStyle(PROGRESSBAR, TEXT_COLOR_NORMAL, 0xff0000ff);
+	else
+		GuiSetStyle(PROGRESSBAR, TEXT_COLOR_NORMAL, 0x00ff00ff);
 	GuiProgressBar(
-		Rectangle{ 100, 50, 400, 10 },
-		Actor->GetName(), "Ready",
+		Rectangle{ 100, 110, 400, 10 },
+		Actor->GetName(), (rate < 1) ? "Charging" : "Ready",
 		&rate, 0, 1);
-	float health = ((float)HP) / 100.0f;
 
-	GuiSetStyle(PROGRESSBAR, BASE_COLOR_PRESSED, 0xff2fff2f);
+	float health = ((float)HP) / 100.0f;
+	if (health < 0.3f)
+		GuiSetStyle(PROGRESSBAR, TEXT_COLOR_NORMAL, 0xff0000ff);
+	else 
+		GuiSetStyle(PROGRESSBAR, TEXT_COLOR_NORMAL, 0xffffffff);
 	GuiProgressBar(
-		Rectangle{ 100, 30, 400, 20 },
+		Rectangle{ 100, 80, 400, 30 },
 		"0", "100",
 		&health, 0, 1);
 }

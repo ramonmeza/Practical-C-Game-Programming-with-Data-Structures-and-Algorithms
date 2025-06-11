@@ -1,15 +1,5 @@
 #include "HMapTerrainModelComponent.h"
 
-HMapTerrainModelComponent::HMapTerrainModelComponent()
-{
-
-}
-
-HMapTerrainModelComponent::~HMapTerrainModelComponent()
-{
-
-}
-
 bool HMapTerrainModelComponent::CreateFromFile(Vector3 terrainDimension, Vector2 texTileSize, const char* pHightmapFilePath, const char* pTerrainTexurePath)
 {
 	hightMapImage = LoadImage(pHightmapFilePath);     // Load heightmap image (RAM)
@@ -30,14 +20,21 @@ bool HMapTerrainModelComponent::CreateFromFile(Vector3 terrainDimension, Vector2
 	return true;
 }
 
-void HMapTerrainModelComponent::Update(float elapsedTime)
+void HMapTerrainModelComponent::Draw(RenderHints *pRH)
 {
-	
-}
-
-void HMapTerrainModelComponent::Draw()
-{
-	DrawModel(model, this->_SceneActor->Position, 1.0f, tint);
+    if (pRH != nullptr && pRH->pOverrideShader != nullptr) {
+        Shader* pShaders = new Shader[model.materialCount];
+        for (int i = 0; i < model.materialCount; i++) {
+            pShaders[i] = model.materials[i].shader;
+            model.materials[i].shader = *pRH->pOverrideShader;
+        }
+        DrawModel(model, this->_SceneActor->Position, 1.0f, tint);
+        for (int i = 0; i < model.materialCount; i++) {
+            model.materials[i].shader = pShaders[i];
+        }
+    }
+    else
+        DrawModel(model, this->_SceneActor->Position, 1.0f, tint);
 }
 
 Mesh HMapTerrainModelComponent::GenMeshHeightmapEx(Image heightmap, Vector3 size, Vector2 texPatchSize)

@@ -1,7 +1,7 @@
 #include "Knight.h"
 #include "Demo2e.h"
 
-
+//Main entry point for the demo application
 int main(int argc, char* argv[])
 {
 	Demo2e* KnightDemo2e = new Demo2e();
@@ -13,27 +13,21 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
+//Singleton instance of UIPopupManager
 UIPopupManager* UIPopup::mgr = NULL;
 
+//Initialize the demo class
 void Demo2e::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
-
-	ShowFPS = true;
 
 	EnableCursor();
 
 	Manager.Create();
 }
 
-void Demo2e::EndGame()
-{
-	DisableCursor();
-
-	__super::EndGame();
-}
-
+//Check if the demo needs to open menu popup
 void Demo2e::Update(float ElapsedSeconds)
 {
 	//process input
@@ -48,14 +42,24 @@ void Demo2e::Update(float ElapsedSeconds)
 	Manager.Update(ElapsedSeconds);
 }
 
-void Demo2e::DrawFrame()
-{
-	__super::DrawFrame();
-}
-
+//Render help text and UI popups
 void Demo2e::DrawGUI()
 {
+	if (!Manager.IsAnyPopupShown()) {
+		DrawText("Press M to open the in-game menu. Backspace key to go back to previous menu.", 10, 50, 40, WHITE);
+	}
+	else {
+		DrawText("Press Backspace key to go back to previous menu.", 10, 50, 40, WHITE);
+	}
 	Manager.Draw();
 }
 
+//Load the default resources for the demo
+void Demo2e::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+
+	UnloadFont(_Font);
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+}
 

@@ -5,7 +5,7 @@
 SceneTransitionDemo::SceneTransitionDemo()
 {
 	title = "Scene Transition Demo";
-	description = "This demo loads two graphics files as full screen texture and perform fade in/out transition betwwen two images.\nPress Enter to continue.";
+	description = "This demo loads two graphics files as full screen texture\n\n\nand perform fade in/out transition betwwen two images.";
 	currentProgress = 0.0f;
 	elapsed_time = 0.0f;
 }
@@ -38,8 +38,8 @@ void SceneTransitionDemo::Draw2D()
 	c1.a = (int)(currentProgress * 255.9f);
 	Color c2 = WHITE;
 	c2.a = 255 - c1.a;
-	DrawTexture(scene1, position.x, position.y, c1);
-	DrawTexture(scene2, position.x, position.y, c2);
+	DrawTexture(scene1, (int)position.x, (int)position.y, c1);
+	DrawTexture(scene2, (int)position.x, (int)position.y, c2);
 }
 
 void SceneTransitionDemo::Release()

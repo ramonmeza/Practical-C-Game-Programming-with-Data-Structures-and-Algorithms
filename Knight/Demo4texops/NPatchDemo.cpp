@@ -5,7 +5,7 @@
 NPatchDemo::NPatchDemo()
 {
 	title = "N-Patch Demo";
-	description = "This demo draws UI frame with N-patch texture redering.\nPress Enter to continue.";
+	description = "This demo draws UI frame with N-patch texture redering.\n\n\nThe border is not affected by the scaling of the image.";
 	elapsed_time = 0;
 }
 
@@ -15,8 +15,8 @@ void NPatchDemo::Create()
 	_npatchTex = LoadTextureFromImage(art);
 	UnloadImage(art);
 
-	Rectangle r = { 0.0f, 0.0f, 721.0f, 289.0f };
-	_ninePatchInfo = { r, 63, 54, (int)r.width - 665, (int)r.height - 239, NPATCH_NINE_PATCH };
+	Rectangle r = { 0.0f, 0.0f, 2048.0f, 512.0f };
+	_ninePatchInfo = { r, 213, 221, 213, 221, NPATCH_NINE_PATCH };
 
 	isReady = true;
 }
@@ -25,17 +25,17 @@ void NPatchDemo::Update(float elasped)
 {
 	elapsed_time += elasped;
 
-	float scale = (std::sin(2 * 3.14159f * 0.1f * elapsed_time) + 2) * 0.5f;
+	float scale = std::sin(3.14159f * 0.2f* elapsed_time) * 0.1f;
 
-	_dest.x = (SCREEN_WIDTH - _npatchTex.width) * 0.5f;
-	_dest.y = (SCREEN_HEIGHT - _npatchTex.height) * 0.5f;
-	_dest.width = _npatchTex.width * scale;
-	_dest.height = _npatchTex.height * scale;
+	_dest.x = SCREEN_WIDTH * 0.35f;
+	_dest.y = SCREEN_HEIGHT * 0.25f;
+	_dest.width = _npatchTex.width * (scale+0.8f);
+	_dest.height = _npatchTex.height * (scale+1);
 }
 
 void NPatchDemo::Draw2D()
 {
-	Vector2 origin = { _npatchTex.width * 0.5f, _npatchTex.height * 0.5f };
+	Vector2 origin = { _npatchTex.width * 0.25f, _npatchTex.height * 0.25f };
 	DrawTextureNPatch(_npatchTex, _ninePatchInfo, _dest, origin, 0.0f, WHITE);
 }
 

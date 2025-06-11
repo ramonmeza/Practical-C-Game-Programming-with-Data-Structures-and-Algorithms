@@ -6,23 +6,28 @@
 
 class Demo5FPC : public Knight
 {
-public:
-	void Start() override;
+	public:
+		PerspectiveCamera* FPSCamera = nullptr;
 
-	Demo5FPC();
+		SceneActor* pFloor = nullptr;
+		SceneActor* pWall1 = nullptr;
+		SceneActor* pWall2 = nullptr;
+		SceneActor* pWall3 = nullptr;
+		SceneActor* pWall4 = nullptr;
+		SceneActor* pProp1 = nullptr;
+		SceneActor* pProp2 = nullptr;
 
-	PerspectiveCamera* FPSCamera;
+		// Generates some random columns
+		float heights[MAX_COLUMNS] = { 0 };
+		Vector3 positions[MAX_COLUMNS] = { 0 };
+		Color colors[MAX_COLUMNS] = { 0 };
 
-	// Generates some random columns
-	float heights[MAX_COLUMNS] = { 0 };
-	Vector3 positions[MAX_COLUMNS] = { 0 };
-	Color colors[MAX_COLUMNS] = { 0 };
+		void Start() override;
 
-protected:
+	protected:
 
-	void Update(float ElapsedSeconds) override;
-	void DrawFrame() override;
-	void DrawGUI() override;
+		void DrawGUI() override;
+		void OnCreateDefaultResources() override;
 };
 
 

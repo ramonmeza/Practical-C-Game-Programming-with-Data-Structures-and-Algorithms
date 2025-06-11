@@ -6,7 +6,7 @@
 #include <cmath>
 #include <ctime>
 
-
+//Main entry point for the demo application
 int main(int argc, char* argv[])
 {
 	Demo5RTSCam* KnightDemo5RTSCam = new Demo5RTSCam();
@@ -18,20 +18,17 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-Demo5RTSCam::Demo5RTSCam()
-{
-	srand(static_cast<unsigned int>(time(nullptr)));
-}
-
 void Demo5RTSCam::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
 
-	ShowFPS = true;
+	Config.ShowFPS = true;
 
 	//initialize global UI attributes
 	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
+
+	srand(static_cast<unsigned int>(time(nullptr)));
 
 	RTSCamera = _Scene->CreateSceneObject<TopDownCamera>("Chase Camera");
 
@@ -42,11 +39,6 @@ void Demo5RTSCam::Start()
 	}
 
 	RTSCamera->SetUp(Vector3{ 0.0f, 15.0f, 15.0f }, Vector3{ 0.0f, 0.0f, 0.0f }, 45.0f, CAMERA_PERSPECTIVE);
-}
-
-void Demo5RTSCam::EndGame()
-{
-	__super::EndGame();
 }
 
 void Demo5RTSCam::Update(float ElapsedSeconds)
@@ -66,7 +58,7 @@ void Demo5RTSCam::Update(float ElapsedSeconds)
 			RayCollision rc = GetRayCollisionBox(ray, box);
 
 			if (rc.hit) {
-				unit.selected = !unit.selected;  // Toggle selection
+				unit.selected = !unit.selected;  // Toggle unit selection
 			}
 		}
 	}
@@ -74,6 +66,7 @@ void Demo5RTSCam::Update(float ElapsedSeconds)
 	__super::Update(ElapsedSeconds);
 }
 
+//Render all units as cubes in the scene
 void Demo5RTSCam::DrawFrame()
 {
 	__super::DrawFrame();
@@ -88,6 +81,7 @@ void Demo5RTSCam::DrawFrame()
 	}
 }
 
+//Render help text and unit names of all units (represened by cubes)
 void Demo5RTSCam::DrawGUI()
 {
 	__super::DrawGUI();
@@ -105,3 +99,11 @@ void Demo5RTSCam::DrawGUI()
 
 }
 
+// Load default resources for the demo
+void Demo5RTSCam::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+
+	UnloadFont(_Font);
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+}

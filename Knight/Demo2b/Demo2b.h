@@ -11,7 +11,6 @@ class Demo2b : public Knight
 {
 public:
 	void Start() override;
-	void EndGame() override;
 
 protected:
 	PerspectiveCamera* camera;
@@ -21,10 +20,11 @@ protected:
 	TerrainEntity* terrain;
 
 	void Update(float ElapsedSeconds) override;
-	void DrawFrame() override;
+	void DrawGUI() override;
 
 private:
 	void InitEntities();
 	bool CheckDefeatEnemy();
+	void OnCreateDefaultResources() override;
 };
 

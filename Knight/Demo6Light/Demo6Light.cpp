@@ -5,14 +5,7 @@
 #define RLIGHTS_IMPLEMENTATION
 #include "rlights.h"
 
-#if defined(PLATFORM_DESKTOP)
 #define GLSL_VERSION            330
-#else   // PLATFORM_ANDROID, PLATFORM_WEB
-#define GLSL_VERSION            100
-#endif
-
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
 
 #include <cmath>
 
@@ -32,22 +25,21 @@ void Demo6Light::Start()
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
 
-	ShowFPS = true;
-
-	//initialize global UI attributes
-	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
+	Config.ShowFPS = true;
 
 	SetConfigFlags(FLAG_MSAA_4X_HINT);  // Enable Multi Sampling Anti Aliasing 4x (if available)
 
 	shader = LoadShader(TextFormat("../../resources/shaders/glsl%i/lighting.vs", GLSL_VERSION),
 		TextFormat("../../resources/shaders/glsl%i/lighting.fs", GLSL_VERSION));
+
+	_Scene->_CurrentRenderPass->Hints.pOverrideShader = &shader;
+
 	shader.locs[SHADER_LOC_VECTOR_VIEW] = GetShaderLocation(shader, "viewPos");
 	ambientLoc = GetShaderLocation(shader, "ambient");
 	const float ac[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
 	SetShaderValue(shader, ambientLoc, ac , SHADER_UNIFORM_VEC4);
 
-	// Create lights
-	
+	// Create lights	
 	lights[0] = CreateLight(LIGHT_POINT, Vector3 { -2, 1, -2 }, Vector3Zero(), YELLOW, shader);
 	lights[1] = CreateLight(LIGHT_POINT, Vector3 { 2, 1, 2 }, Vector3Zero(), RED, shader);
 	lights[2] = CreateLight(LIGHT_POINT, Vector3 { -2, 1, 2 }, Vector3Zero(), GREEN, shader);
@@ -63,15 +55,23 @@ void Demo6Light::Start()
 	actor->Rotation = Vector3{ 0,0,0 };
 	ModelComponent* animPlayerComponent = actor->CreateAndAddComponent<ModelComponent>();
 	animPlayerComponent->Load3DModel("../../resources/models/gltf/robot.glb");
-	animPlayerComponent->SetShader(&shader, -1);
 	animPlayerComponent->SetAnimation(6);
 	actor->AddComponent(animPlayerComponent);
+	for (int i = 0; i < animPlayerComponent->GetModel()->materialCount; i++) {
+		animPlayerComponent->GetModel()->materials[i].shader = shader;
+	}
 
-}
-
-void Demo6Light::EndGame()
-{
-	__super::EndGame();
+	SceneActor *pTerrain = _Scene->CreateSceneObject<SceneActor>("Terrain");
+	pTerrain->Position = Vector3{ 0, -3.5f, 0 };
+	pTerrain->Scale = Vector3{ 1, 1, 1 };
+	ModelComponent* animEnemyComponent = pTerrain->CreateAndAddComponent<ModelComponent>();
+	animEnemyComponent->Load3DModel("../../resources/models/obj/bridge.obj");
+	Image image = LoadImage("../../resources/models/obj/bridge_diffuse.png");
+	Texture2D tex = LoadTextureFromImage(image);
+	UnloadImage(image);
+	animEnemyComponent->GetModel()->materials[0].maps[0].texture = tex;
+	animEnemyComponent->GetModel()->materials[0].shader = shader;
+	pTerrain->AddComponent(animEnemyComponent);
 }
 
 void Demo6Light::Update(float ElapsedSeconds)
@@ -107,16 +107,10 @@ void Demo6Light::Update(float ElapsedSeconds)
 	__super::Update(ElapsedSeconds);
 }
 
+//Render the frame and light sources as colored spheres
 void Demo6Light::DrawFrame()
 {
 	__super::DrawFrame();
-
-	BeginShaderMode(shader);
-	// Draw grid for better spatial reference
-	DrawGrid(10, 1.0f);
-
-	EndShaderMode();
-
 	// Draw spheres to show where the lights are
 	for (int i = 0; i < MAX_LIGHTS; i++)
 	{
@@ -125,9 +119,17 @@ void Demo6Light::DrawFrame()
 	}
 }
 
+//Render help text on the screen
 void Demo6Light::DrawGUI()
 {
-	__super::DrawGUI();
-
+	DrawText("Press Y/G/R/B to toggle Yellow/Green/Red/Blue light", 10, 50, 40, WHITE);
 }
 
+//Create default resources for the demo
+void Demo6Light::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+
+	UnloadFont(_Font);
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+}

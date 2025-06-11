@@ -25,9 +25,16 @@ void CubeComponent::Update(float ElapsedSeconds)
 }
 
 
-void CubeComponent::Draw()
+void CubeComponent::Draw(RenderHints* pRH)
 {
-	DrawMesh(_Mesh, _Material, *_SceneActor->GetWorldTransformMatrix());
+	if (pRH != nullptr && pRH->pOverrideShader != nullptr) {
+		Shader old = _Material.shader;
+		_Material.shader = *pRH->pOverrideShader;
+		DrawMesh(_Mesh, _Material, *_SceneActor->GetWorldTransformMatrix());
+		_Material.shader = old;
+	}
+	else
+		DrawMesh(_Mesh, _Material, *_SceneActor->GetWorldTransformMatrix());
 }
 
 void CubeComponent::SetColor(Color Color)
@@ -38,9 +45,4 @@ void CubeComponent::SetColor(Color Color)
 Color CubeComponent::GetColor()
 { 
 	return _Material.maps[MATERIAL_MAP_DIFFUSE].color;
-}
-
-void CubeComponent::SetShader(Shader* pNewShader, int idx)
-{
-	_Material.shader = *pNewShader;
 }

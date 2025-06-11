@@ -52,7 +52,7 @@ static Color dayToNightCycle[32] = {
 ColorBlendingDemo::ColorBlendingDemo()
 {
 	title = "Color Blending Demo";
-	description = "This demo loads a png graphics file as texture and draw it with color blending to simulate lighting changes from night to day cycle.\nPress Enter to continue.";
+	description = "This demo loads a png graphics file as texture and draw it with color blending\n\n\nto simulate lighting changes from night to day cycle.";
     timeDiff = 0;
     currentIdx = 0;
 }
@@ -69,7 +69,7 @@ void ColorBlendingDemo::Update(float ellapsed)
 {
 	timeDiff += ellapsed;
 
-    if (timeDiff > 0.5f) {
+    if (timeDiff > 1.0f) {
         currentIdx++;
         timeDiff = 0.0f;
     }
@@ -79,8 +79,8 @@ void ColorBlendingDemo::Update(float ellapsed)
 
 void ColorBlendingDemo::Draw2D()
 {
-	Vector2 position = { (float)(SCREEN_WIDTH - texture.width) / 2.0f, (float)(SCREEN_HEIGHT - texture.height) / 2.0f };
-    DrawTexture(texture, position.x, position.y, dayToNightCycle[currentIdx]);
+	Vector2 position = { 0,0 };
+    DrawTextureEx(texture, position, 0, 1.5f, dayToNightCycle[currentIdx]);
 }
 
 void ColorBlendingDemo::Release()
@@ -92,7 +92,7 @@ void ColorBlendingDemo::Release()
 SmoothColorBlendingDemo::SmoothColorBlendingDemo()
 {
     title = "Smooth Color Blending Demo";
-    description = "This demo enhances previous demo with smooth interpolation between two color changes.\nPress Enter to continue.";
+    description = "This demo enhances previous demo with smooth interpolation between two color changes.";
 }
 
 void SmoothColorBlendingDemo::Draw2D()

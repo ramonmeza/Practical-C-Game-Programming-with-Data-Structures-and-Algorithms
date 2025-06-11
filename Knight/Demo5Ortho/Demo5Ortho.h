@@ -6,7 +6,6 @@ class Demo5Ortho : public Knight
 {
 public:
 	void Start() override;
-	void EndGame() override;
 
 	Demo5Ortho();
 
@@ -14,9 +13,8 @@ public:
 
 protected:
 
-
-	void Update(float ElapsedSeconds) override;
 	void DrawFrame() override;
 	void DrawGUI() override;
+	void OnCreateDefaultResources() override;
 };
 

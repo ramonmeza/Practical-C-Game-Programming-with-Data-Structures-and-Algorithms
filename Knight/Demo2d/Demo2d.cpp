@@ -1,6 +1,7 @@
 #include "Knight.h"
 #include "Demo2d.h"
 
+//Main entry point for the application
 int main(int argc, char* argv[])
 {
 	Demo2d* KnightDemo2d = new Demo2d();
@@ -17,21 +18,14 @@ void Demo2d::Start()
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
 
-	ShowFPS = true;
-
 	//Prepare a camera
 	camera = _Scene->CreateSceneObject<PerspectiveCamera>("Camera");
 	camera->SetPosition(Vector3 { 60, 60, 60 });
-	camera->CameraMode = CameraMode::CAMERA_CUSTOM;
+	camera->CameraMode = CameraMode::CAMERA_THIRD_PERSON;
 	camera->ShowCursor = false;
 	camera->SetLookAtPosition( Vector3{ 0, 10, 0 });
 
 	InitEntities();
-}
-
-void Demo2d::EndGame()
-{
-	__super::EndGame();
 }
 
 void Demo2d::Update(float ElapsedSeconds)
@@ -46,11 +40,7 @@ void Demo2d::Update(float ElapsedSeconds)
 	__super::Update(ElapsedSeconds);
 }
 
-void Demo2d::DrawFrame()
-{
-	__super::DrawFrame();
-}
-
+//Initialize entities in the scene
 void Demo2d::InitEntities()
 {
 	terrain = new TerrainEntity();
@@ -67,6 +57,7 @@ void Demo2d::InitEntities()
 
 }
 
+//Check if the player has defeated an enemy
 void Demo2d::CheckDefeatEnemy()
 {
 	list<EnemyEntity>::iterator it = enemies.begin();	
@@ -80,3 +71,27 @@ void Demo2d::CheckDefeatEnemy()
 		it->Die();	
 }
 
+//Render help and debug text on the screen
+void Demo2d::DrawGUI()
+{
+	DrawText("Press 1 to defeat 1st enemy, 2 to defeat 2nd enemy, 3 to defeat 3rd enemy!", 10, 50, 40, WHITE);
+	DrawText("Rotate camera angle: arrow keys.", 10, 100, 40, WHITE);
+	DrawText("Zoom Camera: mouse wheel.", 10, 150, 40, WHITE);
+
+	list<EnemyEntity>::iterator it = enemies.begin();
+	for (int i = 0; i < enemies.size(); i++) {
+		if (it->respawnInterval > 0)
+			DrawText(TextFormat("Enemy %d will be respawn in %1.2f seconds.", i + 1, it->respawnInterval), 10, 200 + i * 50, 40, WHITE);
+		++it;
+	}
+}
+
+
+//Load the default resources for the demo
+void Demo2d::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+
+	UnloadFont(_Font);
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+}

@@ -11,11 +11,12 @@ void BillboardComponent::Update(float ElapsedSeconds)
 {	
 }
 
-void BillboardComponent::Draw()
+void BillboardComponent::Draw(RenderHints* pRH)
 {
 	Vector3 billUp = { 0, 1, 0 };
 
 	SceneCamera* pSC = this->_SceneActor->GetMainCamera();
+
 	if (pSC != NULL) {
 
 		if (AlignType == SCREEN_ALIGNED) {
@@ -23,7 +24,14 @@ void BillboardComponent::Draw()
 			billUp = { matView.m1, matView.m5, matView.m9 };
 		}
 
-		DrawBillboardPro(*pSC->GetCamera3D(), texture, source, this->_SceneActor->Position, billUp, size, origin, 0, tint);
+		if (pRH != NULL && pRH->pOverrideShader != NULL) {
+			int oldid = rlGetShaderIdDefault();
+			rlEnableShader(pRH->pOverrideShader->id);
+			DrawBillboardPro(*pSC->GetCamera3D(), texture, source, this->_SceneActor->Position, billUp, size, origin, 0, tint);
+			rlEnableShader(oldid);
+		}
+		else
+			DrawBillboardPro(*pSC->GetCamera3D(), texture, source, this->_SceneActor->Position, billUp, size, origin, 0, tint);
 	}
 }
 

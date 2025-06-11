@@ -14,7 +14,7 @@ vector<string> texturePaths = {
 LRUTextureCacheDemo::LRUTextureCacheDemo(int capacity) : textureCache(capacity)
 {
 	title = "LRU Texture Cache Demo";
-	description = "Implement a simple LRU texture cache to avoid loading duplicate textures.\nPress Enter to continue.";
+	description = "Implement a simple LRU texture cache to avoid loading duplicate textures.";
 }
 
 void LRUTextureCacheDemo::Create()
@@ -32,10 +32,10 @@ void LRUTextureCacheDemo::Draw2D()
     DrawTexture(*texture, SCREEN_WIDTH / 2 - texture->width / 2, SCREEN_HEIGHT / 2 - texture->height / 2, WHITE);
 
     // Draw cache info
-    DrawText(TextFormat("Cache Size: %d/%d Hit:%d, Miss:%d", 
+    Knight::Instance->DrawText(TextFormat("Cache Size: %d/%d Hit:%d, Miss:%d", 
         textureCache.Size(), textureCache.MaxSize(), textureCache.NumHit, textureCache.NumMiss), 10, 30, 20, WHITE);
 	for (int i = 0; i < textureCache.Size(); i++) {
-		DrawText(TextFormat("Texture:%s", textureCache.GetTexturePath(i).c_str()), 15, 75 + i * 30, 20, (i == index) ? GREEN : WHITE);
+        Knight::Instance->DrawText(TextFormat("Texture:%s", textureCache.GetTexturePath(i).c_str()), 15, 75 + i * 35, 30, (i == index) ? GREEN : WHITE);
 	}
 }
 

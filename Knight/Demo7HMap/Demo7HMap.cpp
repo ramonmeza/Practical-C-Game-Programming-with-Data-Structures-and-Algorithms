@@ -1,8 +1,5 @@
 #include "Demo7HMap.h"
 
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
-
 #if defined(PLATFORM_DESKTOP)
 #define GLSL_VERSION            330
 #else   // PLATFORM_ANDROID, PLATFORM_WEB
@@ -24,15 +21,20 @@ Demo7HMap::Demo7HMap()
 {
 }
 
+void Demo7HMap::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+
+	UnloadFont(_Font);
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+}
+
 void Demo7HMap::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
 
-	ShowFPS = true;
-
-	//initialize global UI attributes
-	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
+	Config.ShowFPS = true;
 
 	pMainCamera = _Scene->CreateSceneObject<PerspectiveCamera>("Main Camera");
 	pMainCamera->SetFovY(45.0f);
@@ -73,6 +75,5 @@ void Demo7HMap::DrawGUI()
 {
 	__super::DrawGUI();
 	
-	DrawTexture(texture, SCREEN_WIDTH - texture.width - 20, 20, WHITE);
-	DrawRectangleLines(SCREEN_WIDTH - texture.width - 20, 20, texture.width, texture.height, GREEN);
+	DrawText("Use the mouse wheel to zoom camera.", 10, 50, 40, WHITE);
 }

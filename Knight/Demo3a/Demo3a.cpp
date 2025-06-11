@@ -29,7 +29,7 @@ void Demo3a::Start()
 {
 	__super::Start();
 
-	ShowFPS = true;
+	Config.ShowFPS = true;
 
 	camera = _Scene->CreateSceneObject<PerspectiveCamera>("Camera");
 	camera->SetPosition(Vector3{80, 60, 0});

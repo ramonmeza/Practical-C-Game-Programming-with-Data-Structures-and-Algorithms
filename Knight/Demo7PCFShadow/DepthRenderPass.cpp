@@ -15,10 +15,12 @@ bool DepthRenderPass::Create(Scene* sc)
 
 	depthShader = LoadShader(NULL, "../../resources/shaders/glsl330/shadow_depth.fs");
 
+	Hints.pOverrideShader = &depthShader;
+
 	shadowMap = LoadShadowmapRenderTexture(SHADOWMAP_RESOLUTION, SHADOWMAP_RESOLUTION);
 
 	// For the shadowmapping algorithm, we will be rendering everything from the light's point of view
-	lightCam.position = Vector3Scale(pLight->lightDir, -15.0f);
+	lightCam.position = Vector3Scale(pLight->lightDir, -45.0f);
 	lightCam.target = Vector3Zero();
 
 	// Use an orthographic projection for directional lights
@@ -41,13 +43,26 @@ void DepthRenderPass::BeginScene(SceneCamera* pOverrideCamera)
 	pActiveCamera = pScene->GetMainCameraActor();
 	if (pOverrideCamera != nullptr)
 		pActiveCamera = pOverrideCamera;
-	BuildRenderQueue(pScene->SceneRoot, &depthShader);
+	ClearRenderQueue();
+	BuildRenderQueue(pScene->SceneRoot);
+
+	//Override shader 
+	rlSetShader(depthShader.id, depthShader.locs);
+	rlEnableShader(depthShader.id);
 }
 
 void DepthRenderPass::EndScene()
 {
 	pActiveCamera = nullptr;
 	pScene->_CurrentRenderPass = nullptr;
+}
+
+bool DepthRenderPass::OnAddToRender(Component* pSC, SceneObject* pSO)
+{
+	//If this Component do not cast shadow to other objects in the scene, no need to redner in depth render pass
+	if (pSC->castShadow == Component::eShadowCastingType::NoShadow)
+		return false;
+	return __super::OnAddToRender(pSC, pSO);
 }
 
 void DepthRenderPass::BeginShadowMap(Scene* sc, SceneCamera* pOverrideCamera)

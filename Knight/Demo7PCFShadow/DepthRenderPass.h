@@ -17,6 +17,7 @@ public:
 
 	void BeginScene(SceneCamera* cam = NULL) override;
 	void EndScene() override;
+	bool OnAddToRender(Component* pSC, SceneObject* pSO) override;
 
 	void BeginShadowMap(Scene* sc, SceneCamera* cam = NULL);
 	void EndShadowMap();

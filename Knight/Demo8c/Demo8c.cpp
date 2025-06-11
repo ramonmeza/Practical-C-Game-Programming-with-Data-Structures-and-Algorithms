@@ -23,7 +23,7 @@ void Demo8c::Start()
 
 	FrameRate = 60;
 	SetTargetFPS(FrameRate);
-	ShowFPS = true;
+	Config.ShowFPS = true;
 
 	camera = _Scene->CreateSceneObject<PerspectiveCamera>("Camera");
 	camera->SetPosition(Vector3{0.0f, 15.0f, 30.0f});

@@ -16,7 +16,7 @@ public:
 	bool CreateFromFile(const char* pSkyboxTexFilePath, CubemapLayout layout, float skyboxScale, bool useHdr);
 
 	void Update(float ElapsedSeconds) override;
-	void Draw() override;
+	void Draw(RenderHints *pRH = nullptr) override;
 
 	Shader shader = { 0 };
 	Shader shdrCubemap = { 0 };

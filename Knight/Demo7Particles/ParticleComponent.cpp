@@ -44,7 +44,7 @@ void ParticleComponent::Update(float deltaTime)
     EmitParticles(deltaTime);
 }
 
-void ParticleComponent::Draw()
+void ParticleComponent::Draw(RenderHints* pRH)
 {
     Camera3D *pCam = NULL;
     SceneCamera* pMainCam = _SceneActor->GetMainCamera();

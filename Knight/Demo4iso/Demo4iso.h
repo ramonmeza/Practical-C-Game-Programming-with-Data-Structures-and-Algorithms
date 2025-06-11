@@ -11,13 +11,14 @@ public:
 	Demo4iso();
 
 protected:
-	PerspectiveCamera* camera;
-	Texture2D _mapTiles;
+	PerspectiveCamera* camera = nullptr;
+	Texture2D _mapTiles = { 0 };
 
 	int map[10][10];
 
-	void Update(float ElapsedSeconds) override;
-	void DrawFrame() override;
-	void DrawGUI() override;
+	Vector2 mapPos = { -1 };
+	Vector2 mousePos = { -1 };
 
+	void DrawGUI() override;
+	void OnCreateDefaultResources() override;
 };

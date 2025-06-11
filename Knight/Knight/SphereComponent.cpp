@@ -31,9 +31,16 @@ void SphereComponent::Update(float ElapsedSeconds)
 }
 
 
-void SphereComponent::Draw()
+void SphereComponent::Draw(RenderHints* pRH)
 {
-	DrawMesh(_Mesh, _Material, *_SceneActor->GetWorldTransformMatrix());
+	if (pRH != nullptr && pRH->pOverrideShader != nullptr) {
+		Shader old = _Material.shader;
+		_Material.shader = *pRH->pOverrideShader;
+		DrawMesh(_Mesh, _Material, *_SceneActor->GetWorldTransformMatrix());
+		_Material.shader = old;
+	}
+	else
+		DrawMesh(_Mesh, _Material, *_SceneActor->GetWorldTransformMatrix());
 }
 
 void SphereComponent::SetColor(Color Color)

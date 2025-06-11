@@ -110,9 +110,23 @@ void ModelComponent::Update(float ElapsedSeconds)
 	}
 }
 
-void ModelComponent::Draw()
+void ModelComponent::Draw(RenderHints* pRH)
 {
-	DrawModel(_Model, Vector3Zero(), 1.0f, _Color);
+	if (pRH != nullptr && pRH->pOverrideShader != nullptr) {
+
+		Shader* pShaders = new Shader[_Model.materialCount];
+		for (int i=0; i < _Model.materialCount; i++) {
+			pShaders[i] = _Model.materials[i].shader;
+			_Model.materials[i].shader = *pRH->pOverrideShader;
+		}
+		DrawModel(_Model, Vector3Zero(), 1.0f, _Color);
+		for (int i=0; i < _Model.materialCount; i++) {
+			_Model.materials[i].shader = pShaders[i];
+		}
+	}
+	else
+		DrawModel(_Model, Vector3Zero(), 1.0f, _Color);
+
 	if (DrawBoundingBox)
 	{
 		Vector3 pos{ (_BoundingBox.max.x + _BoundingBox.min.x) * 0.5f, 
@@ -123,6 +137,81 @@ void ModelComponent::Draw()
 			(_BoundingBox.max.z - _BoundingBox.min.z) * _SceneActor->Scale.z };
 		DrawCubeWires(pos, size.x, size.y, size.z, GRAY);
 	}
+}
+
+void ModelComponent::LoadMaterialTextures(int idx,
+	const char* DiffuseMapPath,
+	const char* SpecularMapPath,
+	const char* NormalMapPath ,
+	const char* MetalicMapPath,
+	const char* RoughnessMapPath ,
+	const char* HeightMapPath ,
+	const char* CubeMapPath ,
+	const char* EmissionMapPath ,
+	const char* OcclusionMapPath)
+{
+	if (DiffuseMapPath)
+	{
+		_Texture2DMaps[MATERIAL_MAP_DIFFUSE] = LoadTexture(DiffuseMapPath);
+		_LoadState |= DiffuseMap;
+		_Model.materials[idx].maps[MATERIAL_MAP_DIFFUSE].texture = _Texture2DMaps[MATERIAL_MAP_DIFFUSE];
+	}
+	if (SpecularMapPath)
+	{
+		_Texture2DMaps[MATERIAL_MAP_SPECULAR] = LoadTexture(SpecularMapPath);
+		_LoadState |= SpecularMap;
+		_Model.materials[idx].maps[MATERIAL_MAP_SPECULAR].texture = _Texture2DMaps[MATERIAL_MAP_SPECULAR];
+	}
+	if (NormalMapPath)
+	{
+		_Texture2DMaps[MATERIAL_MAP_NORMAL] = LoadTexture(NormalMapPath);
+		_LoadState |= NormalMap;
+		_Model.materials[idx].maps[MATERIAL_MAP_NORMAL].texture = _Texture2DMaps[MATERIAL_MAP_NORMAL];
+	}
+	if (MetalicMapPath)
+	{
+		_Texture2DMaps[MATERIAL_MAP_METALNESS] = LoadTexture(MetalicMapPath);
+		_LoadState |= MetalicMap;
+		_Model.materials[idx].maps[MATERIAL_MAP_SPECULAR].texture = _Texture2DMaps[MATERIAL_MAP_METALNESS];
+	}
+	if (RoughnessMapPath)
+	{
+		_Texture2DMaps[MATERIAL_MAP_ROUGHNESS] = LoadTexture(RoughnessMapPath);
+		_LoadState |= RoughnessMap;
+		_Model.materials[idx].maps[MATERIAL_MAP_SPECULAR].texture = _Texture2DMaps[MATERIAL_MAP_ROUGHNESS];
+	}
+	if (HeightMapPath)
+	{
+		_Texture2DMaps[MATERIAL_MAP_HEIGHT] = LoadTexture(HeightMapPath);
+		_LoadState |= HeightMap;
+		_Model.materials[idx].maps[MATERIAL_MAP_SPECULAR].texture = _Texture2DMaps[MATERIAL_MAP_HEIGHT];
+	}
+}
+
+void ModelComponent::LoadFromMesh(Mesh mesh,
+	const char* DiffuseMapPath,
+	const char* SpecularMapPath,
+	const char* NormalMapPath,
+	const char* MetalicMapPath,
+	const char* RoughnessMapPath,
+	const char* HeightMapPath,
+	const char* CubeMapPath,
+	const char* EmissionMapPath,
+	const char* OcclusionMapPath,
+	Color Color)
+{
+	_Model = LoadModelFromMesh(mesh);
+	_LoadState |= Loaded_Model;
+	LoadMaterialTextures(0, 
+		DiffuseMapPath, 
+		SpecularMapPath, 
+		NormalMapPath, 
+		MetalicMapPath, 
+		RoughnessMapPath, 
+		HeightMapPath, 
+		CubeMapPath, 
+		EmissionMapPath, 
+		OcclusionMapPath);
 }
 
 void ModelComponent::Load3DModel(const char* ModelPath,
@@ -153,77 +242,21 @@ void ModelComponent::Load3DModel(const char* ModelPath,
 		_CurrentFrame[0] = 0;
 	}
 
-	if (DiffuseMapPath)
-	{
-		_Texture2DMaps[MATERIAL_MAP_DIFFUSE] = LoadTexture(DiffuseMapPath);
-		_LoadState |= DiffuseMap;
-		_Model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = _Texture2DMaps[MATERIAL_MAP_DIFFUSE];
-	}
-	if (SpecularMapPath)
-	{
-		_Texture2DMaps[MATERIAL_MAP_SPECULAR] = LoadTexture(SpecularMapPath);
-		_LoadState |= SpecularMap;
-		_Model.materials[0].maps[MATERIAL_MAP_SPECULAR].texture = _Texture2DMaps[MATERIAL_MAP_SPECULAR];
-	}
-	if (NormalMapPath)
-	{
-		_Texture2DMaps[MATERIAL_MAP_NORMAL] = LoadTexture(NormalMapPath);
-		_LoadState |= NormalMap;
-		_Model.materials[0].maps[MATERIAL_MAP_NORMAL].texture = _Texture2DMaps[MATERIAL_MAP_NORMAL];
-	}
-	if (MetalicMapPath)
-	{
-		_Texture2DMaps[MATERIAL_MAP_METALNESS] = LoadTexture(MetalicMapPath);
-		_LoadState |= MetalicMap;
-		_Model.materials[0].maps[MATERIAL_MAP_SPECULAR].texture = _Texture2DMaps[MATERIAL_MAP_METALNESS];
-	}
-	if (RoughnessMapPath)
-	{
-		_Texture2DMaps[MATERIAL_MAP_ROUGHNESS] = LoadTexture(RoughnessMapPath);
-		_LoadState |= RoughnessMap;
-		_Model.materials[0].maps[MATERIAL_MAP_SPECULAR].texture = _Texture2DMaps[MATERIAL_MAP_ROUGHNESS];
-	}
-	if (HeightMapPath)
-	{
-		_Texture2DMaps[MATERIAL_MAP_HEIGHT] = LoadTexture(HeightMapPath);
-		_LoadState |= HeightMap;
-		_Model.materials[0].maps[MATERIAL_MAP_SPECULAR].texture = _Texture2DMaps[MATERIAL_MAP_HEIGHT];
-	}
-	if (EmissionMapPath)
-	{
-		_Texture2DMaps[MATERIAL_MAP_EMISSION] = LoadTexture(EmissionMapPath);
-		_LoadState |= EmmissionMap;
-		_Model.materials[0].maps[MATERIAL_MAP_SPECULAR].texture = _Texture2DMaps[MATERIAL_MAP_EMISSION];
-	}
-	if (OcclusionMapPath)
-	{
-		_Texture2DMaps[MATERIAL_MAP_OCCLUSION] = LoadTexture(OcclusionMapPath);
-		_LoadState |= OcclusionMap;
-		_Model.materials[0].maps[MATERIAL_MAP_SPECULAR].texture = _Texture2DMaps[MATERIAL_MAP_OCCLUSION];
-	}
+	LoadMaterialTextures(0,
+		DiffuseMapPath,
+		SpecularMapPath,
+		NormalMapPath,
+		MetalicMapPath,
+		RoughnessMapPath,
+		HeightMapPath,
+		CubeMapPath,
+		EmissionMapPath,
+		OcclusionMapPath);
 
 	_Color = Color;
 	if (_Model.meshCount > 0)
 	{
 		_BoundingBox = GetMeshBoundingBox(_Model.meshes[0]);
-	}
-}
-
-/// <summary>
-/// SetShader - set new shader for assigned material
-/// </summary>
-/// <param name="pNewShader">pointer to new shader</param>
-/// <param name="idx">index of the material to replace</param>
-void ModelComponent::SetShader(Shader* pNewShader, int idx)
-{
-	if (idx < 0) {
-		for (idx = 0; idx < _Model.materialCount; idx++)
-		{
-			_Model.materials[idx].shader = *pNewShader;
-		}
-	}
-	else {
-		_Model.materials[idx].shader = *pNewShader;
 	}
 }
 

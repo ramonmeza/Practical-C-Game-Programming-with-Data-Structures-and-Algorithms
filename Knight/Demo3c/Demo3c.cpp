@@ -25,7 +25,7 @@ void Demo3c::Start()
 
 	__super::Start();
 
-	ShowFPS = true;
+	Config.ShowFPS = true;
 
 	//Initialize card IDs and load card images
 	for (int i = 0; i < DECK_CARD_COUNT; ++i)

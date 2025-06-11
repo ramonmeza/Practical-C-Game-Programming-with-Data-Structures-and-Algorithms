@@ -76,10 +76,7 @@ void main()
             }
         }
     }
-    finalColor = mix(finalColor, vec4(0, 0, 0, 1), float(shadowCounter) / float(numSamples));
-
-    // Add ambient lighting whether in shadow or not
-    finalColor += texelColor*(ambient/10.0)*colDiffuse;
+    finalColor = mix(finalColor, texelColor*ambient*colDiffuse, float(shadowCounter) / float(numSamples));
 
     // Gamma correction
     finalColor = pow(finalColor, vec4(1.0/2.2));

@@ -30,7 +30,6 @@ public:
 	void Die();
 	void Resurrect();
 	EnemyEntity();
-private:
 	float respawnInterval;
 };
 
