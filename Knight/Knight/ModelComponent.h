@@ -37,7 +37,7 @@ public:
 	{
 		Immediate = 0,
 		Linear,
-		EasyInEasyOut
+		EaseInEaseOut
 	};
 
 public:

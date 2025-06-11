@@ -92,8 +92,8 @@ void Demo8b::Update(float ElapsedSeconds)
 		}
 		else if (animTransitionMode == ModelComponent::eAnimTransitionMode::Linear)
 		{
-			strcpy_s(strBuf1, 100, "Transition Mode: EasyIn/EasyOut");
-			AnimModelComponent->SetTransitionMode(ModelComponent::eAnimTransitionMode::EasyInEasyOut);
+			strcpy_s(strBuf1, 100, "Transition Mode: EaseIn/EaseOut");
+			AnimModelComponent->SetTransitionMode(ModelComponent::eAnimTransitionMode::EaseInEaseOut);
 		}
 		else
 		{
@@ -126,7 +126,7 @@ void Demo8b::DrawGUI()
 	int inputHelpX = 600;
 	DrawText("Left and Right arrows: Rotate", inputHelpX, 10, 30, GREEN);
 	DrawText("A: Toggle between the Idle and Run animations", inputHelpX, 50, 30, GREEN);
-	DrawText("T: Toggle between the Immediate, Linear, and EsayInEasyOut transition modes", inputHelpX, 90, 30, GREEN);
+	DrawText("T: Toggle between the Immediate, Linear, and EaseInEaseOut transition modes", inputHelpX, 90, 30, GREEN);
 	DrawText("Up and Down arrows: Increase/Descrease time scale", inputHelpX, 130, 30, GREEN);
 	
 	DrawText("Animation Mode: Linear", 10, 30, 30, GREEN);

@@ -486,13 +486,13 @@ void ModelComponent::InterpolateAnimation(int ChannelCount)
 					else   //Easy-in/Easy-out tranisiton animation blending
 					{
 						float n = 2.0f;
-						float easyInOut = t < 0.5 ?  (float)(pow(2.0 * t, n) / 2.0) : (float)(1.0 - pow(-2.0 * t + 2.0, n) / 2.0);
+						float easeInOut = t < 0.5 ?  (float)(pow(2.0 * t, n) / 2.0) : (float)(1.0 - pow(-2.0 * t + 2.0, n) / 2.0);
 						outTranslation = Vector3Add(channelOutTranslation[0], 
-							Vector3Scale(Vector3Subtract(channelOutTranslation[1], channelOutTranslation[0]),easyInOut));
+							Vector3Scale(Vector3Subtract(channelOutTranslation[1], channelOutTranslation[0]),easeInOut));
 						outRotation = QuaternionAdd(channelOutRotation[0], 
-							QuaternionScale(QuaternionSubtract(channelOutRotation[1], channelOutRotation[0]), easyInOut));
+							QuaternionScale(QuaternionSubtract(channelOutRotation[1], channelOutRotation[0]), easeInOut));
 						outScale = Vector3Add(channelOutScale[0],
-							Vector3Scale(Vector3Subtract(channelOutScale[1], channelOutScale[0]), easyInOut));
+							Vector3Scale(Vector3Subtract(channelOutScale[1], channelOutScale[0]), easeInOut));
 					}
 				}
 
