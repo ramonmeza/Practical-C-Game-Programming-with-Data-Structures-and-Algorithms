@@ -12,13 +12,11 @@ void InGameDialogue::Create(UIPopupManager* uim)
 
 void InGameDialogue::Update(float interval)
 {
-
-
 	if (IsKeyPressed(KEY_BACKSPACE)) {
-		mgr->Close();
+		ui_manager->Close();
 	}
 	if (IsKeyPressed(KEY_S)) {
-		mgr->Show(mgr->GetPopup("Settings"));
+		ui_manager->Show(ui_manager->GetPopup("Settings"));
 	}
 }
 
@@ -27,12 +25,12 @@ void InGameDialogue::Draw()
 	Rectangle r;
 	if (GuiWindowBox(CenterRectangle(r, 800, 600), "In Game Menu") == 1)
 	{
-		mgr->Close();
+		ui_manager->Close();
 		return;
 	}
 
 	if (GuiButton(CenterRectangle(r, 300, 60), "Settings"))
-		mgr->Show(mgr->GetPopup("Settings"));
+		ui_manager->Show(ui_manager->GetPopup("Settings"));
 }
 
 void SettingsDialogue::Create(UIPopupManager* uim)
@@ -43,10 +41,10 @@ void SettingsDialogue::Create(UIPopupManager* uim)
 void SettingsDialogue::Update(float interval)
 {
 	if (IsKeyPressed(KEY_BACKSPACE)) {
-		mgr->Close();
+		ui_manager->Close();
 	}
 	if (IsKeyPressed(KEY_V)) {
-		mgr->Show(mgr->GetPopup("Volume"));
+		ui_manager->Show(ui_manager->GetPopup("Volume"));
 	}
 }
 
@@ -55,11 +53,11 @@ void SettingsDialogue::Draw()
 	Rectangle r;
 	if (GuiWindowBox(CenterRectangle(r, 700, 400), "Settings") == 1)
 	{
-		mgr->Close();
+		ui_manager->Close();
 		return;
 	}
 	if (GuiButton(CenterRectangle(r, 300, 60), "Sound"))
-		mgr->Show(mgr->GetPopup("Volume"));
+		ui_manager->Show(ui_manager->GetPopup("Volume"));
 }
 
 SoundDialogue::SoundDialogue()
@@ -75,7 +73,7 @@ void SoundDialogue::Create(UIPopupManager* uim)
 void SoundDialogue::Update(float interval)
 {
 	if (IsKeyPressed(KEY_BACKSPACE)) {
-		mgr->Close();
+		ui_manager->Close();
 	}
 }
 
@@ -85,7 +83,7 @@ void SoundDialogue::Draw()
 	
 	if (GuiWindowBox(CenterRectangle(r, 500, 300), "Mute/unmute Sound") == 1)
 	{
-		mgr->Close();
+		ui_manager->Close();
 		return;
 	}
 	GuiCheckBox(CenterRectangle(r, 50, 50), "Mute", &_toggleStatus);
@@ -93,7 +91,7 @@ void SoundDialogue::Draw()
 	r.y += 100;
 	if (GuiButton(r, "Confirm")) 
 	{
-		mgr->Close();
+		ui_manager->Close();
 	}
 }
 

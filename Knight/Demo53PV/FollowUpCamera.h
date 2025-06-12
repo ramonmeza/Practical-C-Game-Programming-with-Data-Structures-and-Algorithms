@@ -22,6 +22,8 @@ public:
 	// Variables to control the camera's distance from the player
 	float cameraDistance = 5.0f;
 
+	bool processMouseInput = true;
+
 private:
 
 	float mCameraHorizontalAngleShift = 0.0f;

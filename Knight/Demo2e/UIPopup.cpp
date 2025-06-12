@@ -2,7 +2,7 @@
 
 void UIPopup::Create(UIPopupManager* uim)
 {
-	mgr = uim;
+	ui_manager = uim;
 }
 
 void UIPopupManager::Show(UIPopup* pp)

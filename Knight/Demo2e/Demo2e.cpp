@@ -1,6 +1,8 @@
 #include "Knight.h"
 #include "Demo2e.h"
 
+#include "raygui.h"
+
 //Main entry point for the demo application
 int main(int argc, char* argv[])
 {
@@ -14,13 +16,14 @@ int main(int argc, char* argv[])
 }
 
 //Singleton instance of UIPopupManager
-UIPopupManager* UIPopup::mgr = NULL;
+UIPopupManager* UIPopup::ui_manager = NULL;
 
 //Initialize the demo class
 void Demo2e::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
+	GuiSetFont(_Font);
 
 	EnableCursor();
 
@@ -62,4 +65,3 @@ void Demo2e::OnCreateDefaultResources()
 	UnloadFont(_Font);
 	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }
-

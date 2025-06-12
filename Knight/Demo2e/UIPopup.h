@@ -13,7 +13,7 @@ public:
 	virtual void Draw() = 0;
 
 protected:
-	static UIPopupManager* mgr;
+	static UIPopupManager* ui_manager;
 };
 
 class UIPopupManager

@@ -15,8 +15,7 @@ bool WaypointsCamera::Update(float ElapsedSeconds)
     // Check if we need to wait at the current waypoint
     if (waypointWaitTimer > 0.0f) {
         waypointWaitTimer -= GetFrameTime();
-    }
-    else {
+    } else {
         // Calculate direction and distance to the next waypoint
         Vector3 direction = Vector3Subtract(waypoints[currentWaypoint].position, _Camera.position);
         float distance = Vector3Length(direction);

@@ -60,13 +60,15 @@ void Demo2a::InitEntities()
 	terrain = new TerrainEntity();
 	terrain->Create(_Scene, NULL);
 
+	//Create a player and an enemy entity on the terrain
+	player = new PlayerEntity();
+	player->Create(_Scene, terrain);
+
 	//Create an prop Eneity 
 	prop = new PropEntity();
 	prop->Create(_Scene, terrain);
 
-	//Create a player and an enemy entity on the terrain
-	player = new PlayerEntity();
-	player->Create(_Scene, terrain);
+	//Create an emeny Entity
 	enemy = new EnemyEntity();
 	enemy->Create(_Scene, terrain);	
 }

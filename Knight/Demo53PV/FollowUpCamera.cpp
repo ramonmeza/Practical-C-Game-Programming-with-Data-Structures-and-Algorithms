@@ -13,7 +13,8 @@ bool FollowUpCamera::Update(float ElapsedSeconds)
         return false;
 
     // Adjust camera distance with mouse wheel
-    cameraDistance -= GetMouseWheelMove();
+    if (processMouseInput)
+        cameraDistance -= GetMouseWheelMove();
     if (cameraDistance < 2.0f) cameraDistance = 2.0f; // Minimum distance
     if (cameraDistance > 10.0f) cameraDistance = 10.0f; // Maximum distance
 
