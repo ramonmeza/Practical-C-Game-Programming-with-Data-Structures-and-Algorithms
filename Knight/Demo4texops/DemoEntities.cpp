@@ -83,9 +83,9 @@ void DrawPartialRotateDemo::Create()
 	isReady = true;
 }
 
-void DrawPartialRotateDemo::Update(float ellapsed)
+void DrawPartialRotateDemo::Update(float elapsed)
 {
-	timeDiff = ellapsed;
+	timeDiff = elapsed;
 }
 
 void DrawPartialRotateDemo::Draw2D()
