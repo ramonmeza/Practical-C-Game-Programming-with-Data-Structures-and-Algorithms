@@ -54,7 +54,7 @@ class DrawPartialRotateDemo : public Entity
 public:
 
 	void Create() override;
-	void Update(float ellapsed) override;
+	void Update(float elapsed) override;
 	void Draw2D() override;
 	void Release() override;
 
@@ -71,7 +71,7 @@ class ColorBlendingDemo : public Entity
 public:
 
 	void Create() override;
-	void Update(float ellapsed) override;
+	void Update(float elapsed) override;
 	void Draw2D() override;
 	void Release() override;
 
@@ -96,7 +96,7 @@ class SceneTransitionDemo : public Entity
 public:
 
 	void Create() override;
-	void Update(float ellapsed) override;
+	void Update(float elapsed) override;
 	void Draw2D() override;
 	void Release() override;
 
@@ -114,7 +114,7 @@ class AnimatedTexDemo : public Entity
 public:
 
 	void Create() override;
-	void Update(float ellapsed) override;
+	void Update(float elapsed) override;
 	void Draw2D() override;
 	void Release() override;
 
@@ -133,7 +133,7 @@ class GlowDemo : public Entity
 public:
 
 	void Create() override;
-	void Update(float ellapsed) override;
+	void Update(float elapsed) override;
 	void Draw2D() override;
 	void Release() override;
 
@@ -150,7 +150,7 @@ class NPatchDemo : public Entity
 public:
 
 	void Create() override;
-	void Update(float ellapsed) override;
+	void Update(float elapsed) override;
 	void Draw2D() override;
 	void Release() override;
 

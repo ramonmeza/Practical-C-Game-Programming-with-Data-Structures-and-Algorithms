@@ -65,9 +65,9 @@ void ColorBlendingDemo::Create()
 	isReady = true;
 }
 
-void ColorBlendingDemo::Update(float ellapsed)
+void ColorBlendingDemo::Update(float elapsed)
 {
-	timeDiff += ellapsed;
+	timeDiff += elapsed;
 
     if (timeDiff > 1.0f) {
         currentIdx++;
