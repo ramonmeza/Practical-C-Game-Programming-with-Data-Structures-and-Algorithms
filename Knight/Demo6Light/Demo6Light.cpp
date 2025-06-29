@@ -9,6 +9,7 @@
 
 #include <cmath>
 
+//main application function
 int main(int argc, char* argv[])
 {
 	Demo6Light* KnightDemo6Billboard = new Demo6Light();
@@ -20,6 +21,7 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
+//create lights and SceneActor
 void Demo6Light::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
@@ -74,6 +76,7 @@ void Demo6Light::Start()
 	pTerrain->AddComponent(animEnemyComponent);
 }
 
+//Process user input to move SceneActor and toggle lights
 void Demo6Light::Update(float ElapsedSeconds)
 {
 	if (IsKeyDown(KEY_W)) {
@@ -129,7 +132,5 @@ void Demo6Light::DrawGUI()
 void Demo6Light::OnCreateDefaultResources()
 {
 	__super::OnCreateDefaultResources();
-
-	UnloadFont(_Font);
 	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }

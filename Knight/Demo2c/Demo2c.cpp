@@ -1,3 +1,4 @@
+//Demo2c - Using std::vector to manage multiple enemies in a scene
 #include "Knight.h"
 #include "Demo2c.h"
 
@@ -23,7 +24,7 @@ void Demo2c::Start()
 
 	//Prepare a camera
 	camera = _Scene->CreateSceneObject<PerspectiveCamera>("Camera");
-	camera->SetPosition(Vector3 { 60, 60, 60 });
+	camera->SetPosition(Vector3 { 60, 30, 60 });
 	camera->CameraMode = CameraMode::CAMERA_THIRD_PERSON;
 	camera->ShowCursor = false;
 	camera->SetLookAtPosition(Vector3{ 0, 10, 0 });
@@ -31,6 +32,7 @@ void Demo2c::Start()
 	InitEntities();
 }
 
+//Update the demo each frame
 void Demo2c::Update(float ElapsedSeconds)
 {
 	//process input
@@ -47,14 +49,14 @@ void Demo2c::Update(float ElapsedSeconds)
 void Demo2c::InitEntities()
 {
 	terrain = new TerrainEntity();
-	terrain->Create(_Scene, NULL);
+	terrain->Create(_Scene, nullptr);
 
 	player = new PlayerEntity();
-	player->Create(_Scene, NULL);
+	player->Create(_Scene, nullptr);
 
 	for (int i = 0; i < 3; i++) {
 		EnemyEntity* ee = new EnemyEntity();
-		ee->Create(_Scene, NULL);
+		ee->Create(_Scene, nullptr);
 		enemies.push_back(*ee);
 	}
 
@@ -75,15 +77,14 @@ void Demo2c::CheckDefeatEnemy()
 void Demo2c::DrawGUI()
 {
 	DrawText("Press 1 to defeat 1st enemy, 2 to defeat 2nd enemy, 3 to defeat 3rd enemy!", 10, 50, 40, WHITE);
-	DrawText("Rotate camera angle: arrow keys.", 10, 100, 40, WHITE);
-	DrawText("Zoom Camera: mouse wheel.", 10, 150, 40, WHITE);
+	DrawText("Rotate camera angle by mouse or arrow keys.", 10, 100, 40, WHITE);
+	DrawText("Move camera by w/s/a/d keys.", 10, 150, 40, WHITE);
+	DrawText("Zoom Camera by mouse wheel.", 10, 200, 40, WHITE);
 }
 
 //Load default resources for the demo
 void Demo2c::OnCreateDefaultResources()
 {
 	__super::OnCreateDefaultResources();
-
-	UnloadFont(_Font);
 	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }

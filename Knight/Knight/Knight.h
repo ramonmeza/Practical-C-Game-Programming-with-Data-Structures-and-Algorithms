@@ -23,6 +23,16 @@ struct KnightConfig
 {
 	bool ShowFPS = false;
 	bool ShowDebugInfo = false;
+	bool EnableDefaultLight = true;
+	bool EnableDefaultRenderPasses = true;
+};
+
+struct ComparePriorityDescending
+{
+	bool operator()(SceneRenderPass* lhs, SceneRenderPass* rhs) const
+	{
+		return lhs->_Priority > rhs->_Priority;
+	}
 };
 
 class Knight
@@ -59,8 +69,21 @@ protected:
 	Font _Font;
 	bool _shouldExitGameLoop;
 
+	// Render passes registered for offscreen rendering
+	multiset<SceneRenderPass*, ComparePriorityDescending> _OffScreenPasses;
+
+	// Render passes registered for frame rendering
+	multiset<SceneRenderPass*, ComparePriorityDescending> _RenderPasses;
+
+	// Default resources, such as shaders, textures, etc.
 	virtual void OnCreateDefaultResources();
+	// Called after the default resources are created, can be used to ensure that all default resources are ready to use.
+	virtual void AfterCreateDefaultResources();
+	// Called when the default resources are released, can be used to clean up any resources that depend on them.
 	virtual void OnReleaseDefaultResources();
+	// Called after the default resources are released, can be used to ensure that all resources are cleaned up properly.
+	virtual void AfterReleaseDefaultResources();
+	// Called to configure the Knight application, such as title, rendering settings.
 	virtual void OnConfigKnightApp();
 };
 

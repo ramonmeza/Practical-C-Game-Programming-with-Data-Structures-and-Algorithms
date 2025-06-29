@@ -1,10 +1,8 @@
 #include "Demo5MultiCams.h"
 
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
-
 #include <cmath>
 
+//Main application function
 int main(int argc, char* argv[])
 {
 	Demo5MultiCams* KnightDemo5MultiCams = new Demo5MultiCams();
@@ -16,19 +14,13 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-Demo5MultiCams::Demo5MultiCams()
-{
-}
-
+//Create cameras for both views and initialize SceneActors
 void Demo5MultiCams::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
 	__super::Start();
 
 	Config.ShowFPS = true;
-
-	//initialize global UI attributes
-	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
 
 	// Create camera for both render targets
 	pChaseCamera = new FollowUpCamera(_Scene, "Chase Camera", false);
@@ -58,11 +50,7 @@ void Demo5MultiCams::Start()
 	splitScreenRect = { 0.0f, 0.0f, (float)ChaseCamRT.texture.width, (float)-ChaseCamRT.texture.height };
 }
 
-void Demo5MultiCams::EndGame()
-{
-	__super::EndGame();
-}
-
+//Process player input and update camera
 void Demo5MultiCams::Update(float ElapsedSeconds)
 {
 	if (IsKeyDown(KEY_W)) {
@@ -90,6 +78,7 @@ void Demo5MultiCams::Update(float ElapsedSeconds)
 	__super::Update(ElapsedSeconds);
 }
 
+//Render both views
 void Demo5MultiCams::DrawOffscreen()
 {
 	// Draw Player1 view to the render texture
@@ -119,6 +108,7 @@ void Demo5MultiCams::DrawOffscreen()
 	EndTextureMode();
 }
 
+//Draw on-screen instructions
 void Demo5MultiCams::DrawGUI()
 {
 	__super::DrawGUI();
@@ -132,6 +122,7 @@ void Demo5MultiCams::DrawGUI()
 	DrawText("Use mouse wheel to zoom and right-click drag to rotate.", 10, 200, 40, WHITE);
 }
 
+//Render scene
 void Demo5MultiCams::DrawGameWorld(SceneCamera *pCam)
 {
 	_Scene->DrawFrame();
@@ -142,8 +133,5 @@ void Demo5MultiCams::DrawGameWorld(SceneCamera *pCam)
 void Demo5MultiCams::OnCreateDefaultResources()
 {
 	__super::OnCreateDefaultResources();
-
-	UnloadFont(_Font);
 	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
-
 }

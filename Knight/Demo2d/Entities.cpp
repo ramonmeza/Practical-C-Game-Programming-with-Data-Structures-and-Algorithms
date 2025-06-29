@@ -1,15 +1,18 @@
 #include "Demo2d.h"
 
+//Constructor of base class Entity
 Entity::Entity()
 {
 	Actor = NULL;
 	HP = 100;
 }
 
+//Update method of base class Entity
 void Entity::Update(float elaspedTime)
 {
 }
 
+//Create player entity with a SceneActor and animations
 void PlayerEntity::Create(Scene* pScene, Entity* pParent)
 {
 	//Place player
@@ -23,11 +26,13 @@ void PlayerEntity::Create(Scene* pScene, Entity* pParent)
 	Actor->AddComponent(animPlayerComponent);
 }
 
+//Constructor of EnemyEntity
 EnemyEntity::EnemyEntity()
 {
 	respawnInterval = -1.0f;  // nagative value means not in respawn countdown
 }
 
+//Create enemy entity with a SceneActor
 void EnemyEntity::Create(Scene* pScene, Entity* pParent)
 {
 	int x = ((rand() % 4) - 2) * 10;
@@ -42,6 +47,7 @@ void EnemyEntity::Create(Scene* pScene, Entity* pParent)
 	Actor->AddComponent(animEnemyComponent);
 }
 
+//Update method of EnemyEntity, handle respawn logic
 void EnemyEntity::Update(float elaspedTime)
 {
 	if (respawnInterval > 0.0f) //Are we in respawn countdown?
@@ -54,6 +60,7 @@ void EnemyEntity::Update(float elaspedTime)
 	}
 }
 
+//Die() function of EnemyEntity, set HP to 0 and deactivate the actor
 void EnemyEntity::Die()
 {
 	HP = 0;
@@ -61,6 +68,7 @@ void EnemyEntity::Die()
 	respawnInterval = 5.0f;
 }
 
+//Resurrect() function of EnemyEntity, set HP to 100 and activate the actor
 void EnemyEntity::Resurrect()
 {
 	HP = 100;
@@ -68,6 +76,7 @@ void EnemyEntity::Resurrect()
 	respawnInterval = -1.0f;
 }
 
+//Create terrain entity with a SceneActor and a model
 void TerrainEntity::Create(Scene* pScene, Entity* pParent)
 {
 	//Create a plan as terrain
@@ -78,3 +87,5 @@ void TerrainEntity::Create(Scene* pScene, Entity* pParent)
 	animEnemyComponent->Load3DModel("../../resources/models/obj/bridge.obj", "../../resources/models/obj/bridge_diffuse.png");
 	Actor->AddComponent(animEnemyComponent);
 }
+
+//End of Entities.cpp

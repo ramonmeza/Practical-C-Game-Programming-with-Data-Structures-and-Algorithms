@@ -10,7 +10,6 @@ class FollowUpCamera : public SceneCamera
 public:
 
 	FollowUpCamera(Scene* Scene, const char* Name = nullptr, bool IsMainCamera = true);
-	virtual ~FollowUpCamera();
 
 	void SetUp(SceneActor* pTarget, float fovY, float defaultDistance, int projType);
 

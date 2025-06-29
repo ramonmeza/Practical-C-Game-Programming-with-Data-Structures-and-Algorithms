@@ -8,25 +8,25 @@ bool ForwardRenderPass::Create(Scene* sc)
 
 	//default forward rendering pipeline use simple lighting model
 	LightShader = LoadShader("../../resources/shaders/glsl330/kn_lit.vs", "../../resources/shaders/glsl330/kn_lit.fs");
+
 	for(int i=0; i < NUM_MAX_LIGHTS; i++)
 	{
-		Lights[i].dirty = true;
-		Lights[i].enabled = false;
-		Lights[i].type = 0;  //default to directional light
-		Lights[i].color = WHITE;
-		Lights[i].position = Vector3{ 0.0f, 0.0f, -10.0f };
-		Lights[i].target = Vector3{ 0.0f, 0.0f, 0.0f };
-		Lights[i].attenuation = 0;
+		LightData* pLightData = &pScene->Lights[i];
 
-		Lights[i].attenuationLoc = GetShaderLocation(LightShader, TextFormat("lights[%i].enabled", i));
-		Lights[i].colorLoc = GetShaderLocation(LightShader, TextFormat("lights[%i].color", i));
-		Lights[i].enabledLoc = GetShaderLocation(LightShader, TextFormat("lights[%i].enabled", i));
-		Lights[i].positionLoc = GetShaderLocation(LightShader, TextFormat("lights[%i].position", i));
-		Lights[i].targetLoc = GetShaderLocation(LightShader, TextFormat("lights[%i].target", i));
-		Lights[i].typeLoc = GetShaderLocation(LightShader, TextFormat("lights[%i].type", i));
+		pLightData->attenuationLoc = GetShaderLocation(LightShader, TextFormat("lights[%i].enabled", i));
+		pLightData->colorLoc = GetShaderLocation(LightShader, TextFormat("lights[%i].color", i));
+		pLightData->enabledLoc = GetShaderLocation(LightShader, TextFormat("lights[%i].enabled", i));
+		pLightData->positionLoc = GetShaderLocation(LightShader, TextFormat("lights[%i].position", i));
+		pLightData->targetLoc = GetShaderLocation(LightShader, TextFormat("lights[%i].target", i));
+		pLightData->typeLoc = GetShaderLocation(LightShader, TextFormat("lights[%i].type", i));
 	}
 
 	ambientLoc = GetShaderLocation(LightShader, "ambient");
+	shinenessLoc = GetShaderLocation(LightShader, "materialShininess");
+
+	//Note: rlight of Raylib use a hardcoded value of 16.0f for shininess in the 
+	//this value should be overridden by the material, if not set, we provided a default value same as Raylib's rlight module 
+	SetShaderValue(LightShader, shinenessLoc, &pScene->DefaultShineness, SHADER_UNIFORM_FLOAT);
 
 	Hints.pOverrideShader = &LightShader;
 
@@ -35,7 +35,6 @@ bool ForwardRenderPass::Create(Scene* sc)
 
 void ForwardRenderPass::Release()
 {
-	ClearRenderQueue();
 }
 
 void ForwardRenderPass::BeginScene(SceneCamera *pOverrideCamera)
@@ -46,8 +45,7 @@ void ForwardRenderPass::BeginScene(SceneCamera *pOverrideCamera)
 	if (pOverrideCamera != NULL)
 		pActiveCamera = pOverrideCamera;
 	pScene->_CurrentRenderPass = this;
-
-	ClearRenderQueue();
+	pScene->ClearRenderQueue();
 	BuildRenderQueue(pScene->SceneRoot);	
 }
 
@@ -60,31 +58,32 @@ void ForwardRenderPass::UpdateLightData()
 {
 	for(int i=0; i< NUM_MAX_LIGHTS; i++)
 	{
-		if (Lights[i].dirty != false)
+		LightData* pLightData = &pScene->Lights[i];
+
+		if (pLightData->dirty != false)
 		{
-			SetShaderValue(LightShader, Lights[i].enabledLoc, &Lights[i].enabled, SHADER_UNIFORM_INT);
-			if (!Lights[i].enabled) 
+			SetShaderValue(LightShader, pLightData->enabledLoc, &pLightData->enabled, SHADER_UNIFORM_INT);
+			if (!pLightData->enabled)
 			{
 				//if the light get disabled, there is no need to update the rest of the light data
 				continue;
 			}
 
 			//Update light data
-			SetShaderValue(LightShader, Lights[i].typeLoc, &Lights[i].type, SHADER_UNIFORM_INT);
-			float position[3] = { Lights[i].position.x, Lights[i].position.y, Lights[i].position.z };
-			SetShaderValue(LightShader, Lights[i].positionLoc, position, SHADER_UNIFORM_VEC3);
-			float target[3] = { Lights[i].target.x, Lights[i].target.y, Lights[i].target.z };
-			SetShaderValue(LightShader, Lights[i].targetLoc, target, SHADER_UNIFORM_VEC3);
-			float color[4] = { (float)Lights[i].color.r / (float)255, (float)Lights[i].color.g / (float)255,
-							   (float)Lights[i].color.b / (float)255, (float)Lights[i].color.a / (float)255 };
-			SetShaderValue(LightShader, Lights[i].colorLoc, color, SHADER_UNIFORM_VEC4);
+			SetShaderValue(LightShader, pLightData->typeLoc, &pLightData->type, SHADER_UNIFORM_INT);
+			float position[3] = { pLightData->position.x, pLightData->position.y, pLightData->position.z };
+			SetShaderValue(LightShader, pLightData->positionLoc, position, SHADER_UNIFORM_VEC3);
+			float target[3] = { pLightData->target.x, pLightData->target.y, pLightData->target.z };
+			SetShaderValue(LightShader, pLightData->targetLoc, target, SHADER_UNIFORM_VEC3);
+			float color[4] = { (float)pLightData->color.r / (float)255, (float)pLightData->color.g / (float)255,
+							   (float)pLightData->color.b / (float)255, (float)pLightData->color.a / (float)255 };
+			SetShaderValue(LightShader, pLightData->colorLoc, color, SHADER_UNIFORM_VEC4);
 			
 			//remove dirty flag
-			Lights[i].dirty = false;
+			pLightData->dirty = false;
 		}
 	}
-
-	float ambient[4] = { 0.15f, 0.15f, 0.15f, 1.0f }; //default ambient light
-	SetShaderValue(LightShader, ambientLoc, ambient, SHADER_UNIFORM_VEC4);
+	// Update ambient light value
+	SetShaderValue(LightShader, ambientLoc, pScene->AmbientColor, SHADER_UNIFORM_VEC4);
 }
 

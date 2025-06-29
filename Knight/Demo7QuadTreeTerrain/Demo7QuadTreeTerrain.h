@@ -16,6 +16,7 @@ class Demo7QuadTreeTerrain : public Knight
 
 		void DrawGUI() override;
 		void OnCreateDefaultResources() override;
+		void OnConfigKnightApp() override;
 };
 
 

@@ -2,6 +2,8 @@
 
 #include "Demo2f.h"
 
+//Constructor of base class AliveEntity
+//All alive entities should have HP, a target to attack and a cooldown time for the next attack
 AliveEntity::AliveEntity()
 {
 	HP = 100;
@@ -10,6 +12,7 @@ AliveEntity::AliveEntity()
 	rechargeTime = 0;
 }
 
+//Execute an attack on the target
 void AliveEntity::DoAttack()
 {
 	char buf[80];
@@ -26,6 +29,7 @@ void AliveEntity::DoAttack()
 	rechargeTime = 0.0f;
 }
 
+//Calculate the damage and trigger the death of the entity if HP is less than zero
 void AliveEntity::DealDamage(int originalValue)
 {
 	char buf[80];

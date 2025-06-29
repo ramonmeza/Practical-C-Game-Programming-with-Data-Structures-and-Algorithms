@@ -15,16 +15,16 @@ bool SceneRenderPass::Create(Scene* sc)
 void SceneRenderPass::Render()
 {
 	//render background first
-	vector<RenderContext>::iterator bk = renderQueue.Background.begin();
-	while (bk != renderQueue.Background.end()) 
+	vector<RenderContext>::iterator bk = pScene->_RenderQueue.Background.begin();
+	while (bk != pScene->_RenderQueue.Background.end())
 	{
 		bk->pComponent->Draw(&Hints);
 		++bk;
 	}
 
 	//render opauqe geometry from nearest to farest
-	multiset<RenderContext, CompareDistanceAscending>::iterator opaque = renderQueue.Geometry.begin();
-	while (opaque != renderQueue.Geometry.end()) 
+	multiset<RenderContext, CompareDistanceAscending>::iterator opaque = pScene->_RenderQueue.Geometry.begin();
+	while (opaque != pScene->_RenderQueue.Geometry.end())
 	{
 		opaque->pComponent->Draw(&Hints);
 		++opaque;
@@ -32,16 +32,16 @@ void SceneRenderPass::Render()
 
 	//render alpha-tested geomtry from back to front
 	rlSetBlendMode(RL_BLEND_ALPHA); 
-	multiset<RenderContext, CompareDistanceAscending>::iterator alphatest = renderQueue.AlphaTest.begin();
-	while (alphatest != renderQueue.AlphaTest.end()) 
+	multiset<RenderContext, CompareDistanceAscending>::iterator alphatest = pScene->_RenderQueue.AlphaTest.begin();
+	while (alphatest != pScene->_RenderQueue.AlphaTest.end())
 	{
 		alphatest->pComponent->Draw(&Hints);
 		++alphatest;
 	}
 
 	//render alpha blend from back to front
-	multiset<RenderContext, CompareDistanceDescending>::iterator alpha = renderQueue.AlphaBlending.begin();
-	while (alpha != renderQueue.AlphaBlending.end()) 
+	multiset<RenderContext, CompareDistanceDescending>::iterator alpha = pScene->_RenderQueue.AlphaBlending.begin();
+	while (alpha != pScene->_RenderQueue.AlphaBlending.end())
 	{
 		rlDisableBackfaceCulling();
 		rlDisableDepthMask();
@@ -53,9 +53,9 @@ void SceneRenderPass::Render()
 		++alpha;
 	}
 
-	//render overlay first
-	vector<RenderContext>::iterator overlay = renderQueue.Overlay.begin();
-	while (overlay != renderQueue.Overlay.end()) 
+	//render overlay at last
+	vector<RenderContext>::iterator overlay = pScene->_RenderQueue.Overlay.begin();
+	while (overlay != pScene->_RenderQueue.Overlay.end())
 	{
 		overlay->pComponent->Draw(&Hints);
 		++overlay;
@@ -84,19 +84,19 @@ bool SceneRenderPass::OnAddToRender(Component* pSC, SceneObject* pSO)
 	switch (pSC->renderQueue)
 	{
 		case Component::eRenderQueueType::Background:
-			renderQueue.Background.push_back(RenderContext{ pSC, dist2 });
+			pScene->_RenderQueue.Background.push_back(RenderContext{ pSC, dist2 });
 			break;
 		case Component::eRenderQueueType::Geometry:
-			renderQueue.Geometry.insert(RenderContext{ pSC, dist2 });
+			pScene->_RenderQueue.Geometry.insert(RenderContext{ pSC, dist2 });
 			break;
 		case Component::eRenderQueueType::AlphaBlend:
-			renderQueue.AlphaBlending.insert(RenderContext{ pSC, dist2 });
+			pScene->_RenderQueue.AlphaBlending.insert(RenderContext{ pSC, dist2 });
 			break;
 		case Component::eRenderQueueType::AlphaTest:
-			renderQueue.AlphaTest.insert(RenderContext{ pSC, dist2 });
+			pScene->_RenderQueue.AlphaTest.insert(RenderContext{ pSC, dist2 });
 			break;
 		case Component::eRenderQueueType::Overlay:
-			renderQueue.Overlay.push_back(RenderContext{ pSC, dist2 });
+			pScene->_RenderQueue.Overlay.push_back(RenderContext{ pSC, dist2 });
 			break;
 	}
 
@@ -137,11 +137,3 @@ void SceneRenderPass::BuildRenderQueue(SceneObject* pRoot)
 	}
 }
 
-void SceneRenderPass::ClearRenderQueue()
-{
-	renderQueue.Background.clear();
-	renderQueue.Geometry.clear();
-	renderQueue.AlphaBlending.clear();
-	renderQueue.AlphaTest.clear();
-	renderQueue.Overlay.clear();
-}

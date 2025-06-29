@@ -52,6 +52,7 @@ void Demo7PCFShadow::Start()
 	animPlayerComponent->SetAnimation(0);
 	animPlayerComponent->castShadow = Component::eShadowCastingType::Shadow;
 	animPlayerComponent->receiveShadow = true;
+
 	pDepthRenderer = new DepthRenderPass(sceneLight);
 	pDepthRenderer->Create(_Scene);
 
@@ -138,7 +139,7 @@ void Demo7PCFShadow::DrawOffscreen()
 void Demo7PCFShadow::DrawFrame()
 {
 	pShadowMapRenderer->BeginScene();
-	__super::DrawFrame();
+	pShadowMapRenderer->Render();
 	pShadowMapRenderer->EndScene();	
 }
 
@@ -155,9 +156,12 @@ void Demo7PCFShadow::DrawGUI()
 
 void Demo7PCFShadow::OnCreateDefaultResources()
 {
-	__super::OnCreateDefaultResources();
-
-	UnloadFont(_Font);
+	//Use a true typeface for the default font
 	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }
 
+void Demo7PCFShadow::OnConfigKnightApp()
+{
+	Config.EnableDefaultLight = false; //Disable default light	
+	Config.EnableDefaultRenderPasses = false; //Disable default render passes, we will use ours.
+}

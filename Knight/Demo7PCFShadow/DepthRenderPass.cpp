@@ -1,6 +1,6 @@
 #include "Knight.h"
 
-#include "rlgl.h"
+#include "raylib.h"
 
 #include "DepthRenderPass.h"
 
@@ -43,16 +43,16 @@ void DepthRenderPass::BeginScene(SceneCamera* pOverrideCamera)
 	pActiveCamera = pScene->GetMainCameraActor();
 	if (pOverrideCamera != nullptr)
 		pActiveCamera = pOverrideCamera;
-	ClearRenderQueue();
+	pScene->ClearRenderQueue();
 	BuildRenderQueue(pScene->SceneRoot);
 
 	//Override shader 
-	rlSetShader(depthShader.id, depthShader.locs);
-	rlEnableShader(depthShader.id);
+	BeginShaderMode(depthShader);
 }
 
 void DepthRenderPass::EndScene()
 {
+	EndShaderMode();
 	pActiveCamera = nullptr;
 	pScene->_CurrentRenderPass = nullptr;
 }
@@ -113,7 +113,7 @@ RenderTexture2D DepthRenderPass::LoadShadowmapRenderTexture(int width, int heigh
 		target.depth.id = rlLoadTextureDepth(width, height, false);
 		target.depth.width = width;
 		target.depth.height = height;
-		target.depth.format = 19;       //DEPTH_COMPONENT_24BIT?
+		target.depth.format = 19;       //DEPTH_COMPONENT_24BIT
 		target.depth.mipmaps = 1;
 
 		// Attach depth texture to FBO

@@ -24,11 +24,11 @@ void Demo7Skybox::Start()
 	pMainCamera->SetFovY(45.0f);
 	pMainCamera->SetPosition(Vector3{ 4, 1, 4 });
 	pMainCamera->SetLookAtPosition(Vector3{ 0, 0.0f, 0 });
-	pMainCamera->CameraMode = CAMERA_THIRD_PERSON;
+	pMainCamera->CameraMode = CAMERA_FIRST_PERSON;
 
 	//pSkyBox = new SkyboxComponent();
 	pSkyBox = pMainCamera->CreateAndAddComponent<SkyboxComponent>();
-	pSkyBox->CreateFromFile("../../resources/textures/skybox2.png", CUBEMAP_LAYOUT_CROSS_FOUR_BY_THREE, 5.0f, false);
+	pSkyBox->CreateFromFile("../../resources/textures/skybox2.png", CUBEMAP_LAYOUT_CROSS_FOUR_BY_THREE, 20.0f, false);
 
 	//Place player
 	Actor = _Scene->CreateSceneObject<SceneActor>("Player");

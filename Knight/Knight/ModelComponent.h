@@ -118,12 +118,12 @@ protected:
 	ModelAnimation* _Animations = nullptr;
 	int _AnimationsCount;
 	int _AnimationIndex;
-	int _CurrentFrame[2];			//Current frame indices for the current and next animations
+	int _CurrentFrame[2] = { 0 };			//Current frame indices for the current and next animations
 
 	eAnimMode _AnimationMode = eAnimMode::Default;
-	int _PrevFrame[2];				//Previous frame indices for the current and next animations
+	int _PrevFrame[2] = { 0 };				//Previous frame indices for the current and next animations
 	float _FrameDuration;			//Seconds from prev frame to current frame
-	float _InterpolationTime[2];	//Interpolation times for the current and next animations
+	float _InterpolationTime[2] = { 0 };	//Interpolation times for the current and next animations
 
 	eAnimTransitionMode _AnimTranistionMode;
 	float _TransitionDuration;
@@ -138,4 +138,6 @@ protected:
 	int GetNextFrame(float InterpolationTime = 0.0f, int Channel = 0);
 	void UpdateModelAnimationWithInterpolation(float ElapsedSeconds);
 	void InterpolateAnimation(int ChannelCount);
+
+	void RecalculateSmoothNormals();
 };

@@ -1,6 +1,8 @@
 #include "Knight.h"
 #include "Demo2e.h"
 
+// Include the necessary headers for the UI functions of raylib
+// Check https://github.com/raysan5/raygui for more details
 #include "raygui.h"
 
 //Main entry point for the demo application
@@ -61,7 +63,5 @@ void Demo2e::DrawGUI()
 void Demo2e::OnCreateDefaultResources()
 {
 	__super::OnCreateDefaultResources();
-
-	UnloadFont(_Font);
 	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }

@@ -32,6 +32,8 @@ protected:
 
 	void DrawGUI() override;
 
+protected:
+	void OnCreateDefaultResources() override;
 
 private:
 	void InitEntities();

@@ -5,32 +5,6 @@
 
 #include "Scene.h"
 
-struct RenderContext
-{
-	Component* pComponent = NULL;
-	float distance2 = 0;
-};
-
-struct CompareDistanceAscending {
-	bool operator()(const RenderContext& a, const RenderContext& b) const {
-		return a.distance2 < b.distance2;
-	}
-};
-
-struct CompareDistanceDescending {
-	bool operator()(const RenderContext& a, const RenderContext& b) const {
-		return a.distance2 > b.distance2;
-	}
-};
-
-struct RenderQueues {
-	vector<RenderContext> Background;
-	multiset<RenderContext, CompareDistanceAscending> Geometry;
-	multiset<RenderContext, CompareDistanceDescending> AlphaTest;
-	multiset<RenderContext, CompareDistanceDescending> AlphaBlending;
-	vector<RenderContext> Overlay;
-};
-
 class SceneRenderPass
 {
 	public:
@@ -44,13 +18,14 @@ class SceneRenderPass
 
 		virtual void BuildRenderQueue(SceneObject *pR);
 		virtual bool OnAddToRender(Component* pSC, SceneObject* pSO);
-		virtual void ClearRenderQueue();
 
 		RenderHints Hints = { 0 };
 
+		// _RenderOrder controls the order in which render passes are executed.
+		int _Priority = 0;
+
 	protected:
 
-		RenderQueues renderQueue;
 		Scene* pScene = nullptr;
 		SceneCamera* pActiveCamera = nullptr;
 };

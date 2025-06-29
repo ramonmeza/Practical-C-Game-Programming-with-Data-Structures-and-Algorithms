@@ -43,7 +43,7 @@ void PlayerEntity::DrawGUI()
 	else
 		GuiSetStyle(PROGRESSBAR, TEXT_COLOR_NORMAL, 0x00ff00ff);
 	GuiProgressBar(
-		Rectangle{ 100, 110, 400, 10 },
+		Rectangle{ 100, 130, 400, 15 },
 		Actor->GetName(), (rate < 1) ? "Charging" : "Ready",
 		&rate, 0, 1);
 

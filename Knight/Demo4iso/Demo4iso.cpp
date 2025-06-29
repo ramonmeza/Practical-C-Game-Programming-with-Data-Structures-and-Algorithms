@@ -64,7 +64,5 @@ void Demo4iso::DrawGUI()
 void Demo4iso::OnCreateDefaultResources()
 {
 	__super::OnCreateDefaultResources();
-
-	UnloadFont(_Font);
 	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }

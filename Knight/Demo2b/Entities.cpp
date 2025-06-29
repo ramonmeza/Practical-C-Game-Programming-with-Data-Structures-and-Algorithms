@@ -2,18 +2,21 @@
 
 #include "Demo2b.h"
 
+// Base class for all entities with health point in the game
 Entity::Entity()
 {
 	Actor = NULL;
 	HP = 100;
 }
 
+// Update() function of base class Entity
+// If all entities share some common logic, you can put it here
+//We do not need to call Actor->Update() here because the Scene will automatically call it for us
 void Entity::Update(float elaspedTime)
 {
-	//We do not need to call Actor->Update() here, because the Scene will automatically call it for us
-	//If you have common logic shared by all kinds of inherited class of Entity, you can put it here
 }
 
+//Create player entity and its SceneActor
 void PlayerEntity::Create(Scene* pScene, Entity* pParent)
 {
 	//Place player
@@ -27,11 +30,13 @@ void PlayerEntity::Create(Scene* pScene, Entity* pParent)
 	Actor->AddComponent(animPlayerComponent);
 }
 
+//Constructor of EnemyEntity, set respawnInterval to -1.0f when it's alive (HP>0).
 EnemyEntity::EnemyEntity()
 {
 	respawnInterval = -1.0f;  // nagative value means not in respawn countdown
 }
 
+//Create enemy entity and its SceneActor
 void EnemyEntity::Create(Scene* pScene, Entity* pParent)
 {
 	int x = ((rand() % 4)-2)*10;
@@ -46,6 +51,8 @@ void EnemyEntity::Create(Scene* pScene, Entity* pParent)
 	Actor->AddComponent(animEnemyComponent);
 }
 
+//Process gameplay logic of EnemyEntity.
+//If the enemy is dead, it will start a respawn countdown.
 void EnemyEntity::Update(float elaspedTime)
 {
 	if (respawnInterval > 0.0f) //Are we in respawn countdown?
@@ -58,6 +65,7 @@ void EnemyEntity::Update(float elaspedTime)
 	}
 }
 
+//This function implement death of enemy entity. Set HP to 0 and Actor->IsActive to false
 void EnemyEntity::Die()
 {
 	HP = 0;
@@ -65,6 +73,7 @@ void EnemyEntity::Die()
 	respawnInterval = 5.0f;
 }
 
+//This function implement resurrection of enemy entity. Set HP to 100 and Actor->IsActive to true
 void EnemyEntity::Resurrect()
 {
 	HP = 100;
@@ -72,6 +81,7 @@ void EnemyEntity::Resurrect()
 	respawnInterval = -1.0f;
 }
 
+//Create terrain entity and its SceneActor
 void TerrainEntity::Create(Scene* pScene, Entity* pParent)
 {
 	//Create a plan as terrain

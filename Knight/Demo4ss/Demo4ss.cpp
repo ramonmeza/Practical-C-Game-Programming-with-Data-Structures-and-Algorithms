@@ -22,14 +22,7 @@ Demo4ss::Demo4ss()
 	scrollingFore = 0;
 }
 
-void Demo4ss::OnCreateDefaultResources()
-{
-	__super::OnCreateDefaultResources();
-
-	UnloadFont(_Font);
-	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
-}
-
+//Create the game scene and camera
 void Demo4ss::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
@@ -42,6 +35,7 @@ void Demo4ss::Start()
 	foreground = LoadTexture("../../resources/textures/p12.png");
 }
 
+// Unload resources used by the game
 void Demo4ss::EndGame()
 {
 	UnloadTexture(background);  // Unload background texture
@@ -51,23 +45,19 @@ void Demo4ss::EndGame()
 	__super::EndGame();
 }
 
+// Update the scrolling positions of the layers
 void Demo4ss::Update(float ElapsedSeconds)
 {
 	__super::Update(ElapsedSeconds);
 
-	scrollingBack -= 0.1f;
-	scrollingMid -= 0.5f;
-	scrollingFore -= 1.2f;
+	scrollingBack -= 0.2f;
+	scrollingMid -= 0.8f;
+	scrollingFore -= 1.6f;
 
 	// NOTE: Texture is scaled twice its size, so it sould be considered on scrolling
 	if (scrollingBack <= -background.width * 2) scrollingBack = 0;
 	if (scrollingMid <= -midground.width * 2) scrollingMid = 0;
 	if (scrollingFore <= -foreground.width * 2) scrollingFore = 0;
-}
-
-void Demo4ss::DrawFrame()
-{
-	__super::DrawFrame();
 }
 
 void Demo4ss::DrawGUI()
@@ -96,5 +86,9 @@ void Demo4ss::DrawGUI()
 	DrawText("Parallax scrolling rendering 3 layer maps", 10, 60, 40, DARKBROWN);
 }
 
-
-
+//Create resources such as fonts, shaders, etc.
+void Demo4ss::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+}

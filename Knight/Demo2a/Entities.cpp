@@ -2,12 +2,14 @@
 
 #include "Demo2a.h"
 
+//Update() function of base class Entity is called by Scene::Update() function
 void Entity::Update(float elapsedTime)
 {
 	//We do not need to call Actor->Update() here, because the Scene will automatically call it for us
 	//If you have common logic shared by all kinds of inherited class of Entity, you can put it here
 }
 
+//Initialize a Player entity with its SceneActor
 void PlayerEntity::Create(Scene * pScene, Entity* pParent)
 {
 	//Place player
@@ -21,6 +23,7 @@ void PlayerEntity::Create(Scene * pScene, Entity* pParent)
 	Actor->AddComponent(animPlayerComponent);
 }
 
+//Create an Enemy entity with its SceneActor
 void EnemyEntity::Create(Scene* pScene, Entity* pParent)
 {
 	//Place enemy
@@ -33,6 +36,7 @@ void EnemyEntity::Create(Scene* pScene, Entity* pParent)
 	Actor->AddComponent(animEnemyComponent);
 }
 
+//Create a Prop entity with its SceneActor
 void PropEntity::Create(Scene* pScene, Entity *pParent)
 {
 	//Place a cube as prop on the terrain
@@ -46,6 +50,8 @@ void PropEntity::Create(Scene* pScene, Entity *pParent)
 	Actor->AddComponent(animEnemyComponent);
 }
 
+//Create a Terrain entity with its SceneActor
+//In this demo terrain (a bridge) is also a 3D model
 void TerrainEntity::Create(Scene* pScene, Entity* pParent)
 {
 	//Create a plan as terrain

@@ -1,11 +1,6 @@
 #include "Demo7HMap.h"
 
-#if defined(PLATFORM_DESKTOP)
-#define GLSL_VERSION            330
-#else   // PLATFORM_ANDROID, PLATFORM_WEB
-#define GLSL_VERSION            100
-#endif
-
+//Main entry point for the demo
 int main(int argc, char* argv[])
 {
 	Demo7HMap* KnightDemo7Billboard = new Demo7HMap();
@@ -17,18 +12,7 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-Demo7HMap::Demo7HMap()
-{
-}
-
-void Demo7HMap::OnCreateDefaultResources()
-{
-	__super::OnCreateDefaultResources();
-
-	UnloadFont(_Font);
-	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
-}
-
+// Initialize demo with a default scene, camera, and heightmap terrain
 void Demo7HMap::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
@@ -53,16 +37,12 @@ void Demo7HMap::Start()
 	UnloadImage(image);             // Unload heightmap image from RAM, already uploaded to VRAM
 }
 
+// Release resources and end the game
 void Demo7HMap::EndGame()
 {
 	UnloadTexture(texture);     // Unload texture
 
 	__super::EndGame();
-}
-
-void Demo7HMap::Update(float ElapsedSeconds)
-{
-	__super::Update(ElapsedSeconds);
 }
 
 void Demo7HMap::DrawFrame()
@@ -76,4 +56,11 @@ void Demo7HMap::DrawGUI()
 	__super::DrawGUI();
 	
 	DrawText("Use the mouse wheel to zoom camera.", 10, 50, 40, WHITE);
+}
+
+
+void Demo7HMap::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }

@@ -7,6 +7,7 @@
 const char* HEIGHTMAP_FILENAME = "../../resources/textures/heightmap.png"; // heightmap
 const char* TERRAIN_TEXTURE_FILENAME = "../../resources/textures/terrain_map.png"; // terrain texture
 
+//Main entry point for the demo
 int main(int argc, char* argv[])
 {
     Demo7QuadTreeTerrain* KnightDemo7QuadTreeTerrain = new Demo7QuadTreeTerrain();
@@ -16,21 +17,22 @@ int main(int argc, char* argv[])
     return 0;
 }
 
+//Initialize Knight Engine with a default scene and camera
 void Demo7QuadTreeTerrain::Start()
 {
-    //Initialize Knight Engine with a default scene and camera
     __super::Start();
 
     pTerrain = _Scene->CreateSceneObject<SceneActor>("Terrain");
     pTerrain->Position = Vector3{ 0.0f, 0.0f, 0.0f };           // Define model position
     pTerrain->Scale = Vector3{ 1,1,1 };
     pQuadTreeTerrain = pTerrain->CreateAndAddComponent<QuadTreeTerrainComponent>();
-    pQuadTreeTerrain->CreateFromFile(Vector3{ 64, 13, 64 }, Vector2{ 8.0f, 8.0f }, HEIGHTMAP_FILENAME, TERRAIN_TEXTURE_FILENAME);
+    pQuadTreeTerrain->CreateFromFile(Vector3{ 32, 8, 32 }, Vector2{ 8.0f, 8.0f }, HEIGHTMAP_FILENAME, TERRAIN_TEXTURE_FILENAME);
 
     pMainCamera = _Scene->CreateSceneObject<FlyThroughCamera>("Main Camera");
     pMainCamera->SetUp(pTerrain->Position, 30, 20, 20, 45, CAMERA_PERSPECTIVE);
 }
 
+// Draw the GUI elements for the demo
 void Demo7QuadTreeTerrain::DrawGUI()
 {
     // Draw UI
@@ -44,7 +46,11 @@ void Demo7QuadTreeTerrain::DrawGUI()
 void Demo7QuadTreeTerrain::OnCreateDefaultResources()
 {
     __super::OnCreateDefaultResources();
-
-    UnloadFont(_Font);
     _Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }
+
+void Demo7QuadTreeTerrain::OnConfigKnightApp()
+{
+	Config.EnableDefaultLight = true; // Enable default light
+}
+

@@ -1,7 +1,7 @@
 #include "Knight.h"
 
 #include "BillboardComponent.h"
-#include <rlgl.h>
+#include "rlgl.h"
 
 BillboardComponent::BillboardComponent()
 {

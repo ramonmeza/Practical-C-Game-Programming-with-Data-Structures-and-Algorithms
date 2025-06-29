@@ -6,29 +6,26 @@
 
 class Demo5MultiCams : public Knight
 {
-public:
-	void Start() override;
-	void EndGame() override;
+	public:
+		void Start() override;
 
-	Demo5MultiCams();
+		SceneActor* Actor = NULL;
 
-	SceneActor* Actor = NULL;
+		FollowUpCamera* pChaseCamera = nullptr;
+		TopDownCamera* pTopDownCamera = nullptr;
 
-	FollowUpCamera* pChaseCamera = nullptr;
-	TopDownCamera* pTopDownCamera = nullptr;
+		Rectangle splitScreenRect = { 0 };
+		RenderTexture ChaseCamRT = { 0 };
+		RenderTexture TopDownCamRT = { 0 };
 
-	Rectangle splitScreenRect = { 0 };
-	RenderTexture ChaseCamRT = { 0 };
-	RenderTexture TopDownCamRT = { 0 };
+	protected:
 
-protected:
+		void Update(float ElapsedSeconds) override;
+		void DrawOffscreen() override;
+		void DrawGUI() override;
+		void OnCreateDefaultResources() override;
 
-	void Update(float ElapsedSeconds) override;
-	void DrawOffscreen() override;
-	void DrawGUI() override;
-	void OnCreateDefaultResources() override;
-
-	void DrawGameWorld(SceneCamera* pCam);
+		void DrawGameWorld(SceneCamera* pCam);
 };
 
 

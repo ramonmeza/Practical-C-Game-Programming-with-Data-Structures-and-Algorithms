@@ -1,9 +1,11 @@
 #include "Knight.h"
 
+// Include the necessary headers for the UI functions of raylib
+// Check https://github.com/raysan5/raygui for more details
 #define RAYGUI_IMPLEMENTATION
-
 #include "Demo4texops.h"
 
+//The main application function
 int main(int argc, char* argv[])
 {
 	Demo4TexOps* KnightDemo4TexOps = new Demo4TexOps();
@@ -15,15 +17,7 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-void Demo4TexOps::OnCreateDefaultResources()
-{
-	__super::OnCreateDefaultResources();
-
-	UnloadFont(_Font);
-	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
-	GuiSetFont(_Font);
-}
-
+//Create necessary reosurces
 void Demo4TexOps::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
@@ -34,6 +28,7 @@ void Demo4TexOps::Start()
 	InitEntities();
 }
 
+//Update with current demo entity
 void Demo4TexOps::Update(float ElapsedSeconds)
 {
 	__super::Update(ElapsedSeconds);
@@ -48,6 +43,7 @@ void Demo4TexOps::Update(float ElapsedSeconds)
 		(*it)->Update(ElapsedSeconds);
 }
 
+//Draw the GUI for the current demo
 void Demo4TexOps::DrawGUI()
 {
 	Rectangle r = {200,800,1520,250};
@@ -74,6 +70,7 @@ void Demo4TexOps::DrawGUI()
 	GuiDrawText("Press 'Enter' or click mouse left button to continue...", r2, TEXT_ALIGN_CENTER, RED);
 }
 
+//Initialize all the demoscene entities
 void Demo4TexOps::InitEntities()
 {	
 	demos.push_back(new SimpleDrawTextureDemo());
@@ -88,4 +85,12 @@ void Demo4TexOps::InitEntities()
 	demos.push_back(new NPatchDemo());
 
 	it = demos.begin();
+}
+
+//Create default resources, such as fonts, shaders, etc.
+void Demo4TexOps::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+	GuiSetFont(_Font);
 }

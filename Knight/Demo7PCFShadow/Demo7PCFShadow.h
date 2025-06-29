@@ -37,5 +37,6 @@ protected:
 	void DrawGUI() override;
 
 	void OnCreateDefaultResources() override;
+	void OnConfigKnightApp() override;
 };
 

@@ -2,16 +2,19 @@
 
 #include "Demo2c.h"
 
+// Base Entity class
 Entity::Entity()
 {
 	Actor = NULL;
 	HP = 100;
 }
 
+//Update method for Entity, can be overridden by derived classes
 void Entity::Update(float elaspedTime)
 {
 }
 
+//Create player entity and its SceneActor
 void PlayerEntity::Create(Scene* pScene, Entity* pParent)
 {
 	//Place player
@@ -25,11 +28,13 @@ void PlayerEntity::Create(Scene* pScene, Entity* pParent)
 	Actor->AddComponent(animPlayerComponent);
 }
 
+//Constructor for EnemyEntity
 EnemyEntity::EnemyEntity()
 {
 	respawnInterval = -1.0f;  // nagative value means not in respawn countdown
 }
 
+// Create enemy entity and its SceneActor
 void EnemyEntity::Create(Scene* pScene, Entity* pParent)
 {
 	int x = ((rand() % 4) - 2) * 10;
@@ -44,6 +49,7 @@ void EnemyEntity::Create(Scene* pScene, Entity* pParent)
 	Actor->AddComponent(animEnemyComponent);
 }
 
+//Update method for EnemyEntity, handles respawn countdown
 void EnemyEntity::Update(float elaspedTime)
 {
 	if (respawnInterval > 0.0f) //Are we in respawn countdown?
@@ -56,6 +62,7 @@ void EnemyEntity::Update(float elaspedTime)
 	}
 }
 
+//Handling death of enemy entity
 void EnemyEntity::Die()
 {
 	HP = 0;
@@ -63,6 +70,7 @@ void EnemyEntity::Die()
 	respawnInterval = 5.0f;
 }
 
+//Handling resurrection of enemy entity
 void EnemyEntity::Resurrect()
 {
 	HP = 100;
@@ -70,6 +78,7 @@ void EnemyEntity::Resurrect()
 	respawnInterval = -1.0f;
 }
 
+//Create terrain entity and its SceneActor
 void TerrainEntity::Create(Scene* pScene, Entity* pParent)
 {
 	//Create a plan as terrain

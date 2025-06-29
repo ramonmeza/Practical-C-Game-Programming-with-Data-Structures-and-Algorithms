@@ -2,11 +2,7 @@
 
 #include "raymath.h"
 
-#define GLSL_VERSION            330
-
 #include <cmath>
-
-#include "rlgl.h"
 
 //Main entry point for the application
 int main(int argc, char* argv[])
@@ -20,6 +16,7 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
+// Start the demo, initializing the scene, camera, and loading textures and shaders
 void Demo6NormalMap::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
@@ -80,15 +77,16 @@ void Demo6NormalMap::Start()
 	SetShaderValue(shader, lightColorLoc, &lightColor, SHADER_UNIFORM_VEC3);
 }
 
+// Unload resources
 void Demo6NormalMap::EndGame()
 {
-	// Unload resources
 	UnloadTexture(diffuse);
 	UnloadTexture(normalMap);
 	UnloadShader(shader);
 	__super::EndGame();
 }
 
+// Update light position and character rotation based on input
 void Demo6NormalMap::Update(float ElapsedSeconds)
 {
 	if (IsKeyDown(KEY_W)) {
@@ -149,7 +147,5 @@ void Demo6NormalMap::DrawGUI()
 void Demo6NormalMap::OnCreateDefaultResources()
 {
 	__super::OnCreateDefaultResources();
-
-	UnloadFont(_Font);
 	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }

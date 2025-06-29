@@ -28,8 +28,8 @@ void Demo1::Start()
 	Config.ShowFPS = true;
 
 	camera = _Scene->CreateSceneObject<PerspectiveCamera>("Camera");
-	camera->SetPosition(Vector3{60, 60, 60});
-	camera->CameraMode = CameraMode::CAMERA_THIRD_PERSON;
+	camera->SetPosition(Vector3{60, 30, 60});
+	camera->CameraMode = CameraMode::CAMERA_CUSTOM;
 	camera->ShowCursor = false;
 	camera->SetLookAtPosition(Vector3 { 0, 10, 0 });
 

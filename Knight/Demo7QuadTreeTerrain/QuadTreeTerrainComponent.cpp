@@ -4,6 +4,7 @@ QuadTreeTerrainComponent::QuadTreeTerrainComponent()
 {
     Type = Component::Model3D; // Set component type
 	castShadow = Component::eShadowCastingType::NoShadow; // Default shadow casting type
+
 }
 
 QuadTreeTerrainComponent::~QuadTreeTerrainComponent()
@@ -167,81 +168,57 @@ bool QuadTreeTerrainComponent::LoadHeightmapFromImage(const char* fileName)
         }
     }
 
-    const float scale = 1.0f;
+    // To achieve smooth lighting for height - mapped terrain, the key concept is: using vertex normals. 
+    // Instead of calculating normals per face(or per pixel), you calculate per - vertex normals by averaging normals of adjacent faces.
+    // This ensures gradual lighting transitions, removing harsh shading.
+    for (int z = 0; z < HeightMapDepth; ++z) {
+        for (int x = 0; x < HeightMapWidth; ++x) {
+            Vector3 normal = { 0, 0, 0 };
 
-    for (int z = 0; z < HeightMapDepth; z++) {
-        for (int x = 0; x < HeightMapWidth; x++) {
-            // Get heights of neighboring points
-            float hL = GetHeightmapValue(std::max(x - 1, 0), z);
-            float hR = GetHeightmapValue(std::min(x + 1, HeightMapWidth - 1), z);
-            float hD = GetHeightmapValue(x, std::max(z - 1, 0));
-            float hU = GetHeightmapValue(x, std::min(z + 1, HeightMapDepth - 1));
+            Vector3 currentPos = {
+                (x - HeightMapWidth / 2) * terrainScale.x,
+                GetHeightmapValue(x, z) * terrainScale.y,
+                (z - HeightMapDepth / 2) * terrainScale.z
+            };
 
-            // Calculate normal using Sobel filter
-            Vector3 normal;
-            normal.x = (hL - hR) / (2.0f * scale);
-            normal.z = (hD - hU) / (2.0f * scale);
-            normal.y = 1.0f;
+            // Check and average normals of surrounding triangles
+            const int offsets[4][2] = { {-1,0}, {1,0}, {0,-1}, {0,1} };
+            for (auto& offset : offsets) {
+                int nx = x + offset[0];
+                int nz = z + offset[1];
 
-            // Normalize and store
-            normal = Vector3Normalize(normal);
-            heightMapNormals[z * HeightMapWidth + x] = normal;
+                if (nx < 0 || nz < 0 || nx >= HeightMapWidth || nz >= HeightMapDepth)
+                    continue;
+
+                Vector3 neighborPos = {
+                    (nx - HeightMapWidth / 2) * terrainScale.x,
+                    GetHeightmapValue(nx, nz) * terrainScale.y,
+                    (nz - HeightMapDepth / 2) * terrainScale.z
+                };
+
+                Vector3 edge = Vector3Subtract(neighborPos, currentPos);
+
+                int nx2 = x + offset[1];
+                int nz2 = z - offset[0];
+
+                if (nx2 < 0 || nz2 < 0 || nx2 >= HeightMapWidth || nz2 >= HeightMapDepth)
+                    continue;
+
+                Vector3 neighborPos2 = {
+                    (nx2 - HeightMapWidth / 2) * terrainScale.x,
+                    GetHeightmapValue(nx2, nz2) * terrainScale.y,
+                    (nz2 - HeightMapDepth / 2) * terrainScale.z
+                };
+
+                Vector3 edge2 = Vector3Subtract(neighborPos2, currentPos);
+
+                normal = Vector3Add(normal, Vector3CrossProduct(edge, edge2));
+            }
+
+            heightMapNormals[z * HeightMapWidth + x] = Vector3Normalize(normal);
         }
     }
-
-
-    /*
-    // Build indices (two triangles per quad)
-    for (int z = 0; z < HeightMapDepth - 1; ++z) {
-        for (int x = 0; x < HeightMapWidth - 1; ++x) {
-            int i0 = z * HeightMapWidth + x;
-            int i1 = z * HeightMapWidth + (x + 1);
-            int i2 = (z + 1) * HeightMapWidth + x;
-            int i3 = (z + 1) * HeightMapWidth + (x + 1);
-
-            // Calculate normal using Sobel filter
-            Vector3 normal;
-            normal.x = (hL - hR) / (2.0f * scale);
-            normal.z = (hD - hU) / (2.0f * scale);
-            normal.y = 1.0f;
-
-            //Triangle 1 (i0, i2, i1)
-            outIndices.push_back(i0);
-            outIndices.push_back(i2);
-            outIndices.push_back(i1);
-
-            // Triangle 2 (i1, i2, i3)
-            outIndices.push_back(i1);
-            outIndices.push_back(i2);
-            outIndices.push_back(i3);
-        }
-    }
-
-    // Calculate normals for each triangle and accumulate per vertex
-    for (size_t i = 0; i < outIndices.size(); i += 3) {
-        int ia = outIndices[i];
-        int ib = outIndices[i + 1];
-        int ic = outIndices[i + 2];
-
-        Vector3 va = outVertices[ia];
-        Vector3 vb = outVertices[ib];
-        Vector3 vc = outVertices[ic];
-
-        Vector3 edge1 = Vector3Subtract(vb, va);
-        Vector3 edge2 = Vector3Subtract(vc, va);
-        Vector3 normal = Vector3Normalize(Vector3CrossProduct(edge1, edge2));
-
-        heightMapNormals[ia] = Vector3Add(heightMapNormals[ia], normal);
-        heightMapNormals[ib] = Vector3Add(heightMapNormals[ib], normal);
-        heightMapNormals[ic] = Vector3Add(heightMapNormals[ic], normal);
-    }
-
-    // Normalize all vertex normals
-    for (auto& n : heightMapNormals) {
-        n = Vector3Normalize(n);
-    } */
-
-
+    
     UnloadImage(image); // Free image data from RAM
     return true;
 }
@@ -303,11 +280,14 @@ Vector3 QuadTreeTerrainComponent::GetHeightmapNormal(int x, int y)
     return heightMapNormals[y * HeightMapWidth + x];
 }
 
-Vector3 QuadTreeTerrainComponent::GetSmoothedNormal(float x, float z)
+Vector3 QuadTreeTerrainComponent::GetSmoothedNormal(float fx, float fz)
 {
+	int x = fx / terrainScale.x; // Convert world X to heightmap grid X
+	int z = fz / terrainScale.z; // Convert world Z to heightmap grid Z
+
     // Bilinear interpolation for normals
-    int x0 = std::min((int)x, HeightMapWidth - 1);
-    int z0 = std::min((int)z, HeightMapDepth - 1);
+    int x0 = std::min(x, HeightMapWidth - 1);
+    int z0 = std::min(z, HeightMapDepth - 1);
     int x1 = std::min(x0 + 1, HeightMapWidth - 1);
     int z1 = std::min(z0 + 1, HeightMapDepth - 1);
 
@@ -361,8 +341,6 @@ void QuadTreeTerrainComponent::DrawTerrainChunk(QuadTreeNode* node)
 
     rlSetTexture(terrainTexture.id); // Bind the texture for drawing
 
-	//rlEnableShader(materials[0].shader.id); // Enable the shader if it exists   
-
     for (int z = mapStartZ; z < mapEndZ - step; z += step) { // Iterate through Z, stopping one step early for quad formation
         for (int x = mapStartX; x < mapEndX - step; x += step) { // Iterate through X, stopping one step early
             // Get normalized height values for the four corners of the current quad
@@ -371,14 +349,10 @@ void QuadTreeTerrainComponent::DrawTerrainChunk(QuadTreeNode* node)
             float h3 = GetHeightmapValue(x, z + step);     // Bottom-left
             float h4 = GetHeightmapValue(x + step, z + step); // Bottom-right
 
-            //Vector3 n0 = GetHeightmapNormal(x, z);
-            //Vector3 n1 = GetHeightmapNormal(x + step, z);
-            //Vector3 n2 = GetHeightmapNormal(x, z + step);
-            //Vector3 n3 = GetHeightmapNormal(x + step, z + step);
-            Vector3 n0 = GetSmoothedNormal(x, z);
-            Vector3 n1 = GetSmoothedNormal(x + step, z);
-            Vector3 n2 = GetSmoothedNormal(x, z + step);
-            Vector3 n3 = GetSmoothedNormal(x + step, z + step);
+            Vector3 n1 = GetHeightmapNormal(x, z);             // Top-left
+            Vector3 n2 = GetHeightmapNormal(x + step, z);     // Top-right
+            Vector3 n3 = GetHeightmapNormal(x, z + step);     // Bottom-left
+            Vector3 n4 = GetHeightmapNormal(x + step, z + step); // Bottom-right
 
             // Calculate world coordinates for the four corners, applying scaling
             Vector3 p1 = { worldOriginX + x * terrainScale.x ,             h1 * terrainScale.y, worldOriginZ + z * terrainScale.z };
@@ -400,28 +374,43 @@ void QuadTreeTerrainComponent::DrawTerrainChunk(QuadTreeNode* node)
             float u4 = u2; // (float)(x + step) / (HeightMapWidth - 1.0f) * tilingFactor.x;
             float v4 = v3; // (float)(z + step) / (HeightMapDepth - 1.0f) * tilingFactor.z;
 
-            // Triangle 1: p1, p3, p4
-            //Vector3 nn1 = Vector3Normalize(Vector3CrossProduct(Vector3Subtract(p3, p1), Vector3Subtract(p4, p1)));
-            //rlNormal3f(nn1.x, nn1.y, nn1.z);
+			//New algorithm improvement: Use pre-calculated veretx normals for smooth lighting
 
-            rlTexCoord2f(u1, v1); rlVertex3f(p1.x, p1.y, p1.z); rlNormal3f(n0.x, n0.y, n0.z);// p1
-            rlTexCoord2f(u3, v3); rlVertex3f(p3.x, p3.y, p3.z); rlNormal3f(n2.x, n2.y, n2.z);// p3
-            rlTexCoord2f(u4, v4); rlVertex3f(p4.x, p4.y, p4.z); rlNormal3f(n3.x, n3.y, n3.z);// p4
+            rlNormal3f(n1.x, n1.y, n1.z);  rlTexCoord2f(u1, v1); rlVertex3f(p1.x, p1.y, p1.z);  // p1
+            rlNormal3f(n3.x, n3.y, n3.z);  rlTexCoord2f(u3, v3); rlVertex3f(p3.x, p3.y, p3.z); // p3
+            rlNormal3f(n4.x, n4.y, n4.z);  rlTexCoord2f(u4, v4); rlVertex3f(p4.x, p4.y, p4.z); // p4
 
-            // Triangle 2: p1, p4, p2
-            //Vector3 nn2 = Vector3Normalize(Vector3CrossProduct(Vector3Subtract(p4, p1), Vector3Subtract(p2, p1)));
-            //rlNormal3f(nn2.x, nn2.y, nn2.z);
+            rlNormal3f(n1.x, n1.y, n1.z);  rlTexCoord2f(u1, v1); rlVertex3f(p1.x, p1.y, p1.z); // p1
+            rlNormal3f(n4.x, n4.y, n4.z);  rlTexCoord2f(u4, v4); rlVertex3f(p4.x, p4.y, p4.z); // p4
+            rlNormal3f(n2.x, n2.y, n2.z);  rlTexCoord2f(u2, v2); rlVertex3f(p2.x, p2.y, p2.z); // p2
 
-            rlTexCoord2f(u1, v1); rlVertex3f(p1.x, p1.y, p1.z); rlNormal3f(n0.x, n0.y, n0.z);// p1
-            rlTexCoord2f(u4, v4); rlVertex3f(p4.x, p4.y, p4.z); rlNormal3f(n3.x, n3.y, n3.z);// p4
-            rlTexCoord2f(u2, v2); rlVertex3f(p2.x, p2.y, p2.z); rlNormal3f(n1.x, n1.y, n1.z);// p2
+            /*
+				//This is older version of the code that uses face normals for lighting
+				//This sometimes is resulting inconsistent shaing result, not smooth lighting
+
+                // Triangle 1: p1, p3, p4
+                Vector3 nn1 = Vector3Normalize(Vector3CrossProduct(Vector3Subtract(p3, p1), Vector3Subtract(p4, p1)));
+                rlNormal3f(nn1.x, nn1.y, nn1.z);
+
+                rlTexCoord2f(u1, v1); rlVertex3f(p1.x, p1.y, p1.z); // p1
+                rlTexCoord2f(u3, v3); rlVertex3f(p3.x, p3.y, p3.z); // p3
+                rlTexCoord2f(u4, v4); rlVertex3f(p4.x, p4.y, p4.z); // p4
+
+                // Triangle 2: p1, p4, p2
+                Vector3 nn2 = Vector3Normalize(Vector3CrossProduct(Vector3Subtract(p4, p1), Vector3Subtract(p2, p1)));
+                rlNormal3f(nn2.x, nn2.y, nn2.z);
+
+                rlTexCoord2f(u1, v1); rlVertex3f(p1.x, p1.y, p1.z); // p1
+                rlTexCoord2f(u4, v4); rlVertex3f(p4.x, p4.y, p4.z); // p4
+                rlTexCoord2f(u2, v2); rlVertex3f(p2.x, p2.y, p2.z); // p2
+
+            */
 
             NumTriangles += 2; // Increment triangle count (2 triangles per quad)
         }
     }
     rlEnd(); // Finish drawing triangles
     rlDisableTexture(); // Disable texturing
-    //rlDisableShader();
 }
 
 // Traverse the Quadtree and draw appropriate nodes/chunks

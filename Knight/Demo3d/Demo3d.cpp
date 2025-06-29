@@ -74,8 +74,8 @@ void Demo3d::Update(float ElapsedSeconds)
 
 void Demo3d::DrawGUI()
 {
-	DrawText("Left Click: Shuffle the deck of cards.", 100, 10, 30, GREEN);
-	DrawText("Right Click: Sort the dealt cards.", 100, 50, 30, GREEN);
+	DrawText("Left Click: Shuffle the deck of cards.", 100, 50, 30, GREEN);
+	DrawText("Right Click: Sort the dealt cards.", 100, 100, 30, GREEN);
 
 
 	int x = 15;

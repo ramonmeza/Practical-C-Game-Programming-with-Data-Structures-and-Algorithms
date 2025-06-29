@@ -2,25 +2,7 @@
 
 #include "SceneRenderPass.h"
 
-#define NUM_MAX_LIGHTS  4
 
-typedef struct {
-    bool enabled;
-    int type;
-    Vector3 position;
-    Vector3 target;
-    Color color;
-    float attenuation;
-
-    // Shader locations
-    bool dirty;
-    int enabledLoc;
-    int typeLoc;
-    int positionLoc;
-    int targetLoc;
-    int colorLoc;
-    int attenuationLoc;
-} LightData;
 
 class ForwardRenderPass : public SceneRenderPass
 {
@@ -34,7 +16,9 @@ class ForwardRenderPass : public SceneRenderPass
 
 		Shader LightShader = { 0 };
 		int ambientLoc = -1;
-		LightData Lights[NUM_MAX_LIGHTS] = { 0 };
+
+		int shinenessLoc = -1;
+
 
     protected:
 

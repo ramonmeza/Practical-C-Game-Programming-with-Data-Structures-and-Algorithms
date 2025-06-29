@@ -134,3 +134,17 @@ void Demo8b::DrawGUI()
 	sprintf_s(strBuf2, 100, "Time Scale: %.1f", TimeScale);
 	DrawText(strBuf2, 10, 90, 30, GREEN);
 }
+
+// Load default resources for the demo
+void Demo8b::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+
+	//Set the default light data
+	_Scene->Lights[0].enabled = true;
+	_Scene->Lights[0].color = WHITE;
+	_Scene->Lights[0].position = Vector3{ 20.0f, 20.0f, -50.0f };
+	_Scene->Lights[0].target = Vector3{ 0.0f, 0.0f, 0.0f };
+	_Scene->Lights[0].dirty = true;
+}

@@ -103,7 +103,5 @@ void Demo7Billboard::DrawGUI()
 void Demo7Billboard::OnCreateDefaultResources()
 {
 	__super::OnCreateDefaultResources();
-
-	UnloadFont(_Font);
 	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }

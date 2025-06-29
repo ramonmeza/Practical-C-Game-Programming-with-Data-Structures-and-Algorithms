@@ -112,6 +112,8 @@ void Scene::Update(float ElapsedSeconds)
 
 void Scene::DrawFrame(SceneCamera *pCamOverride)
 {
+	ClearRenderQueue();
+
 	if (_CurrentRenderPass != NULL)
 	{
 		_CurrentRenderPass->BeginScene(pCamOverride);
@@ -123,4 +125,26 @@ void Scene::DrawFrame(SceneCamera *pCamOverride)
 SceneCamera* Scene::GetMainCameraActor()
 {
 	return _MainCamera;
+}
+
+void Scene::ClearRenderQueue()
+{
+	_RenderQueue.Background.clear();
+	_RenderQueue.Geometry.clear();
+	_RenderQueue.AlphaBlending.clear();
+	_RenderQueue.AlphaTest.clear();
+	_RenderQueue.Overlay.clear();
+}
+
+int Scene::EnabledLights()
+{
+	int count = 0;
+	for (auto& light : Lights)
+	{
+		if (light.enabled)
+		{
+			count++;
+		}
+	}
+	return count;
 }

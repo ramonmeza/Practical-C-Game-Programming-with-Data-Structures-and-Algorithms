@@ -1,5 +1,6 @@
 #include "Demo5TrkCam.h"
 
+//Main application
 int main(int argc, char* argv[])
 {
 	Demo5TrkCam* KnightDemo5TrkCam = new Demo5TrkCam();
@@ -11,6 +12,7 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
+//Create camera and SceneActors
 void Demo5TrkCam::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
@@ -36,6 +38,7 @@ void Demo5TrkCam::Start()
 	DisableCursor();
 }
 
+//Update new position based on way points 
 void Demo5TrkCam::Update(float ElapsedSeconds)
 {
 	float actorSpeed = 10.0f;
@@ -61,6 +64,7 @@ void Demo5TrkCam::Update(float ElapsedSeconds)
 
 }
 
+//Render the scene 
 void Demo5TrkCam::DrawFrame()
 {
 	OnRailCamera->Draw(); //render waypoint as cube
@@ -83,7 +87,5 @@ void Demo5TrkCam::DrawGUI()
 void Demo5TrkCam::OnCreateDefaultResources()
 {
 	__super::OnCreateDefaultResources();
-
-	UnloadFont(_Font);
 	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }

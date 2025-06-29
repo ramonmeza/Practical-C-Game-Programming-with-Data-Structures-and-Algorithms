@@ -81,7 +81,7 @@ void Demo3e::DrawFrame()
 
 void Demo3e::DrawGUI()
 {
-	DrawText("Left Click: Generate a new maze.", 100, 10, 30, GREEN);
+	DrawText("Left Click: Generate a new maze.", 100, 50, 30, GREEN);
 }
 
 void Demo3e::DrawMazeBoundaryWalls(Vector3 startPos, int row, int col)

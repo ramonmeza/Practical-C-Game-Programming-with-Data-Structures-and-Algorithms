@@ -10,8 +10,6 @@ public:
 	void Start() override;
 	void EndGame() override;
 
-	Demo7HMap();
-
 	PerspectiveCamera* pMainCamera = NULL;
 	SceneActor* pTerrain = NULL;
 
@@ -20,7 +18,6 @@ public:
 
 protected:
 
-	void Update(float ElapsedSeconds) override;
 	void DrawFrame() override;
 	void DrawGUI() override;
 	void OnCreateDefaultResources() override;

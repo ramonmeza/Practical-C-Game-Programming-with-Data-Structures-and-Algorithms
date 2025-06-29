@@ -10,7 +10,6 @@ class Demo7Particle : public Knight
 {
 public:
 	void Start() override;
-	void EndGame() override;
 
 	FlyThroughCamera* pMainCamera;
 	SceneActor* Actor = NULL;

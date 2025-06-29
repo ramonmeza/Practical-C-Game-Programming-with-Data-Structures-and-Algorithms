@@ -48,7 +48,7 @@ void EnemyEntity::DrawGUI()
 	else
 		GuiSetStyle(PROGRESSBAR, TEXT_COLOR_NORMAL, 0x00ff00ff);
 	GuiProgressBar(
-		Rectangle{ 1300, 110, 400, 10 },
+		Rectangle{ 1300, 130, 400, 15 },
 		Actor->GetName(), (rate < 1)?"Charging":"Ready",
 		&rate, 0, 1);
 

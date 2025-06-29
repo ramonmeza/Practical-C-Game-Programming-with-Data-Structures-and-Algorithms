@@ -43,9 +43,9 @@ void Demo2f::Start()
 
 	//Prepare a camera
 	camera = _Scene->CreateSceneObject<PerspectiveCamera>("Camera");
-	camera->CameraMode = CameraMode::CAMERA_FIRST_PERSON;
+	camera->CameraMode = CameraMode::CAMERA_CUSTOM;
 	camera->ShowCursor = false;
-	camera->SetPosition(Vector3{ 60, 60, 60 });
+	camera->SetPosition(Vector3{ 60, 30, 60 });
 	camera->SetLookAtPosition(Vector3{0, 3, 0});
 
 	InitEntities();
@@ -129,3 +129,9 @@ void Demo2f::Log(const std::string& message) {
 	messages.push_back(message);  // Add the new message
 }
 
+//Load the default resources for the demo
+void Demo2f::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+}

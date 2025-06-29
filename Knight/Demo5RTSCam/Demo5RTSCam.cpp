@@ -1,8 +1,5 @@
 #include "Demo5RTSCam.h"
 
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
-
 #include <cmath>
 #include <ctime>
 
@@ -24,9 +21,6 @@ void Demo5RTSCam::Start()
 	__super::Start();
 
 	Config.ShowFPS = true;
-
-	//initialize global UI attributes
-	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
 
 	srand(static_cast<unsigned int>(time(nullptr)));
 
@@ -90,7 +84,7 @@ void Demo5RTSCam::DrawGUI()
 		BoundingRect rect = Get2DBoundingRectOfCube(unit.position, 1.0f, *RTSCamera->GetCamera3D());
 		unit.LabelPos.x = rect.min.x;
 		unit.LabelPos.y = rect.min.y-20;  //on top of the bounding rect
-		DrawText(unit.Name, unit.LabelPos.x, unit.LabelPos.y, 30, YELLOW);
+		DrawText(unit.Name, (int)unit.LabelPos.x, (int)unit.LabelPos.y, 30, YELLOW);
 
 	}
 
@@ -103,7 +97,5 @@ void Demo5RTSCam::DrawGUI()
 void Demo5RTSCam::OnCreateDefaultResources()
 {
 	__super::OnCreateDefaultResources();
-
-	UnloadFont(_Font);
 	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }

@@ -69,7 +69,7 @@ void Demo3c::Update(float ElapsedSeconds)
 
 void Demo3c::DrawGUI()
 {
-	DrawText("Left Click: Shuffle the deck of cards.", 100, 10, 30, GREEN);
+	DrawText("Left Click: Shuffle the deck of cards.", 100, 50, 30, GREEN);
 
 	int x = 15;
 	for (int i = 0; i < PICK_CARDS_COUNT; ++i)

@@ -6,6 +6,7 @@
 // Define particle count
 #define PARTICLE_COUNT 500
 
+//main particle origin position
 int main(int argc, char* argv[])
 {
 	Demo7Particle* KnightDemo7Particle = new Demo7Particle();
@@ -17,6 +18,7 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
+// Initialize Knight Engine with a default scene, camera, and particle system
 void Demo7Particle::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
@@ -45,11 +47,7 @@ void Demo7Particle::Start()
 
 }
 
-void Demo7Particle::EndGame()
-{
-	__super::EndGame();
-}
-
+// Update the scene
 void Demo7Particle::Update(float ElapsedSeconds)
 {
 	if (IsKeyDown(KEY_W)) {
@@ -72,10 +70,10 @@ void Demo7Particle::Update(float ElapsedSeconds)
 	__super::Update(ElapsedSeconds);
 }
 
+// Draw the frame
 void Demo7Particle::DrawFrame()
 {
 	DrawGrid(10, 1);
-
 	__super::DrawFrame();
 }
 
@@ -83,7 +81,5 @@ void Demo7Particle::DrawFrame()
 void Demo7Particle::OnCreateDefaultResources()
 {
 	__super::OnCreateDefaultResources();
-
-	UnloadFont(_Font);
 	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }

@@ -1,5 +1,7 @@
 #include "Demo2eUI.h"
 
+// Include the necessary headers for the UI functions of raylib
+// Check https://github.com/raysan5/raygui for more details
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
 

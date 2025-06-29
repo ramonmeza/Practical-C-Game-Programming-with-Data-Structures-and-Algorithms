@@ -62,5 +62,5 @@ void Demo3f::DrawFrame()
 
 void Demo3f::DrawGUI()
 {
-	DrawText("Left Click: Fire bullets.", 100, 10, 30, GREEN);
+	DrawText("Left Click: Fire bullets.", 100, 50, 30, GREEN);
 }

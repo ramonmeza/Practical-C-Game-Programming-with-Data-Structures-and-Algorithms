@@ -1,12 +1,14 @@
 #include "Knight.h"
 #include "FollowUpCamera.h"
 
+//Constructor for the FollowUpCamera class
 FollowUpCamera::FollowUpCamera(Scene* Scene, const char* Name, bool IsMainCamera)
 	: SceneCamera(Scene, Name, IsMainCamera)
 {
 	_Camera.projection = CAMERA_PERSPECTIVE;
 }
 
+// Update the camera position and target based on the player's position and rotation
 bool FollowUpCamera::Update(float ElapsedSeconds)
 {
     if (!IsActive)
@@ -33,6 +35,7 @@ bool FollowUpCamera::Update(float ElapsedSeconds)
     return true;
 }
 
+// Set up the camera with a third-person perspective
 void FollowUpCamera::SetUp(SceneActor* pTarget, float fovY,  float defaultDistance, int projType)
 {
     // Set up the camera with a third-person perspective	
@@ -44,6 +47,4 @@ void FollowUpCamera::SetUp(SceneActor* pTarget, float fovY,  float defaultDistan
     _Camera.projection = projType;
 }
 
-FollowUpCamera::~FollowUpCamera()
-{
-}
+//End of FollowUpCamera.cpp

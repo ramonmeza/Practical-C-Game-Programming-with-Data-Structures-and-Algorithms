@@ -55,16 +55,16 @@ bool ShadowMapRenderPass::OnAddToRender(Component* pSC, SceneObject* pSO)
 	switch (pSC->renderQueue)
 	{
 		case Component::eRenderQueueType::Background:
-			renderQueue.Background.push_back(RenderContext{ pSC, dist2 });
+			pScene->_RenderQueue.Background.push_back(RenderContext{ pSC, dist2 });
 			break;
 		case Component::eRenderQueueType::Geometry:
-			renderQueue.Geometry.insert(RenderContext{ pSC, dist2 });
+			pScene->_RenderQueue.Geometry.insert(RenderContext{ pSC, dist2 });
 			break;
 		case Component::eRenderQueueType::AlphaBlend:
-			renderQueue.AlphaBlending.insert(RenderContext{ pSC, dist2 });
+			pScene->_RenderQueue.AlphaBlending.insert(RenderContext{ pSC, dist2 });
 			break;
 		case Component::eRenderQueueType::Overlay:
-			renderQueue.Overlay.push_back(RenderContext{ pSC, dist2 });
+			pScene->_RenderQueue.Overlay.push_back(RenderContext{ pSC, dist2 });
 			break;
 	}
 
@@ -86,7 +86,7 @@ void ShadowMapRenderPass::BeginScene(SceneCamera* pOverrideCamera)
 	pActiveCamera = pScene->GetMainCameraActor();
 	if (pOverrideCamera != nullptr)
 		pActiveCamera = pOverrideCamera;
-	ClearRenderQueue();
+	pScene->ClearRenderQueue();
 	BuildRenderQueue(pScene->SceneRoot);
 }
 
@@ -100,22 +100,22 @@ void ShadowMapRenderPass::EndScene()
 void ShadowMapRenderPass::Render()
 {
 	//render background first
-	vector<RenderContext>::iterator bk = renderQueue.Background.begin();
-	while (bk != renderQueue.Background.end()) {
+	vector<RenderContext>::iterator bk = pScene->_RenderQueue.Background.begin();
+	while (bk != pScene->_RenderQueue.Background.end()) {
 		bk->pComponent->Draw(&Hints);
 		++bk;
 	}
 
 	//render opauqe geometry from nearest to farest
-	multiset<RenderContext, CompareDistanceAscending>::iterator opaque = renderQueue.Geometry.begin();
-	while (opaque != renderQueue.Geometry.end()) {
+	multiset<RenderContext, CompareDistanceAscending>::iterator opaque = pScene->_RenderQueue.Geometry.begin();
+	while (opaque != pScene->_RenderQueue.Geometry.end()) {
 		opaque->pComponent->Draw(&Hints);
 		++opaque;
 	}
 	
 	//render alpha blend
-	multiset<RenderContext, CompareDistanceDescending>::iterator alpha = renderQueue.AlphaBlending.begin();
-	while (alpha != renderQueue.AlphaBlending.end()) {
+	multiset<RenderContext, CompareDistanceDescending>::iterator alpha = pScene->_RenderQueue.AlphaBlending.begin();
+	while (alpha != pScene->_RenderQueue.AlphaBlending.end()) {
 		rlDisableDepthMask();
 		rlDisableBackfaceCulling();
 		BeginBlendMode(alpha->pComponent->blendingMode);
@@ -127,8 +127,8 @@ void ShadowMapRenderPass::Render()
 	}
 	
 	//render overlay first
-	vector<RenderContext>::iterator overlay = renderQueue.Overlay.begin();
-	while (overlay != renderQueue.Overlay.end()) {
+	vector<RenderContext>::iterator overlay = pScene->_RenderQueue.Overlay.begin();
+	while (overlay != pScene->_RenderQueue.Overlay.end()) {
 		overlay->pComponent->Draw(&Hints);
 		++overlay;
 	}	

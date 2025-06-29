@@ -4,9 +4,32 @@
 #include <list>
 
 #include "SceneObject.h"
+#include "RenderQueues.h"
+
+#define NUM_MAX_LIGHTS  4
 
 class SceneCamera;
-class SceneRenderer;
+class SceneRenderPass;
+
+typedef struct {
+	bool enabled;
+	int type;
+	Vector3 position;
+	Vector3 target;
+	Color color;
+	float attenuation;
+
+	bool dirty;
+
+
+	// Shader locations
+	int enabledLoc;
+	int typeLoc;
+	int positionLoc;
+	int targetLoc;
+	int colorLoc;
+	int attenuationLoc;
+} LightData;
 
 class Scene
 {
@@ -34,7 +57,7 @@ public:
 	void DestroySceneObjectByName(const char* Name, bool CaseSensitive = false);
 
 	void Update(float ElapsedSeconds);
-	void DrawFrame(SceneCamera* pCamOverride = NULL);
+	void DrawFrame(SceneCamera* pCam = nullptr);
 
 	SceneCamera* GetMainCameraActor();
 
@@ -52,7 +75,17 @@ public:
 
 	inline void AssignMainCamera(SceneCamera* cam) { _MainCamera = cam; }
 
+	RenderQueues _RenderQueue;
+
+	void ClearRenderQueue();
+
 	SceneRenderPass* _CurrentRenderPass;
+
+	LightData Lights[NUM_MAX_LIGHTS] = { 0 };
+	float AmbientColor[4] = { 0.1f, 0.1f, 0.1f, 1.0f }; //default ambient light
+	float DefaultShineness = 16.0f;
+
+	int EnabledLights(); // Number of enabled lights in the scene
 
 protected:
 	friend class SceneCamera;

@@ -4,7 +4,6 @@
 #include "pch.h"
 #include "raylib.h"
 #include "Knight.h"
-
 #include "rlgl.h"
 
 Knight* Knight::Instance = nullptr;
@@ -23,25 +22,89 @@ Knight::~Knight()
 
 void Knight::OnCreateDefaultResources()
 {
-	_Font = LoadFont("../../resources/fonts/mecha.png");
-
-	ForwardRenderPass* pLightPass = nullptr;
-
-	pLightPass = new ForwardRenderPass();
-	pLightPass->Create(_Scene);
-
-	_Scene->_CurrentRenderPass = pLightPass;
-
-	//Set the default light data
-	pLightPass->Lights[0].enabled = true;
-	pLightPass->Lights[0].color = WHITE;
-	pLightPass->Lights[0].position = Vector3{ 20.0f, 50.0f, 50.0f };
-	pLightPass->Lights[0].target = Vector3{ 0.0f, 0.0f, 0.0f };
-	pLightPass->Lights[0].dirty = true;
 }
+
 
 void Knight::OnReleaseDefaultResources()
 {
+}
+
+void Knight::AfterCreateDefaultResources()
+{
+	//This is called after the default resources are created
+	//It perform a check to ensure we have some default resources created
+
+	//Check if user has registered any render passes
+	if (_RenderPasses.empty() && Config.EnableDefaultRenderPasses == true)
+	{
+		TRACELOG(LOG_WARNING, "Knight: No render passes registered, using default ForwardRenderPass");
+	
+		ForwardRenderPass* pLightPass = nullptr;
+
+		pLightPass = new ForwardRenderPass();
+		pLightPass->Create(_Scene);
+		_RenderPasses.insert(pLightPass);
+
+		_Scene->_CurrentRenderPass = pLightPass;
+	}
+
+	//Make sure we have a default font loaded
+	if (_Font.texture.id == 0 || _Font.glyphCount == 0)
+	{
+		TRACELOG(LOG_WARNING, "Knight: No default font loaded, using default font");
+		_Font = LoadFontEx("../../resources/fonts/mecha.png", 40, nullptr, 0);
+		if (_Font.texture.id == 0 || _Font.glyphCount == 0)
+		{
+			TRACELOG(LOG_ERROR, "SYSTEM: Failed to load default font");
+			exit(EXIT_FAILURE);
+		}
+		else {
+			TRACELOG(LOG_INFO, "SYSTEM: Default font loaded successfully");
+		}
+	}
+	
+	if (Config.EnableDefaultLight == true && _Scene->EnabledLights() == 0)
+	{
+		TRACELOG(LOG_INFO, "Knight: No light(s) enabled while EnableDefaultLight in configuration file is set to true. Enable a default light");
+		//Set the default light data
+		_Scene->Lights[0].enabled = true;
+		_Scene->Lights[0].color = WHITE;
+		_Scene->Lights[0].position = Vector3{ 20.0f, 50.0f, 50.0f };
+		_Scene->Lights[0].target = Vector3{ 0.0f, 0.0f, 0.0f };
+		_Scene->Lights[0].dirty = true;
+	}
+}
+
+void Knight::AfterReleaseDefaultResources()
+{
+	if (_Font.texture.id != 0 && _Font.glyphCount != 0)
+	{
+		UnloadFont(_Font);
+	}
+
+	//release resources used by render passes
+	if (!_RenderPasses.empty())
+	{
+		multiset<SceneRenderPass*, ComparePriorityDescending>::iterator it = _RenderPasses.begin();
+		while (it != _RenderPasses.end())
+		{
+			SceneRenderPass* renderPass = *it;
+			renderPass->Release();
+			it++;
+		}
+	}
+
+	//release resources used by off-screen render passes
+	if (!_OffScreenPasses.empty())
+	{
+		multiset<SceneRenderPass*, ComparePriorityDescending>::iterator it = _OffScreenPasses.begin();
+		while (it != _OffScreenPasses.end())
+		{
+			SceneRenderPass* renderPass = *it;
+			renderPass->Release();
+			it++;
+		}
+	}
 }
 
 void Knight::Start()
@@ -54,6 +117,8 @@ void Knight::Start()
 	_Scene = new Scene();
 
 	OnCreateDefaultResources();
+
+	AfterCreateDefaultResources();
 }
 
 void Knight::EndGame()
@@ -109,12 +174,30 @@ void Knight::Update(float ElapsedSeconds)
 
 void Knight::DrawFrame()
 {
-	_Scene->DrawFrame();
+	multiset<SceneRenderPass*, ComparePriorityDescending>::iterator it = _RenderPasses.begin();
+	while (it != _RenderPasses.end())
+	{
+		SceneRenderPass* renderPass = *it;
+
+		renderPass->BeginScene();
+		renderPass->Render();
+		renderPass->EndScene();
+		it++;
+	}
 }
 
 void Knight::DrawOffscreen()
 {
+	multiset<SceneRenderPass*, ComparePriorityDescending>::iterator it = _OffScreenPasses.begin();
+	while (it != _OffScreenPasses.end())
+	{
+		SceneRenderPass* renderPass = *it;
 
+		renderPass->BeginScene();
+		renderPass->Render();
+		renderPass->EndScene();
+		it++;
+	}
 }
 
 void Knight::DrawGUI()
@@ -136,7 +219,7 @@ void Knight::DrawFPS(int x, int y)
 
 void Knight::DrawText(const char* text, int x, int y, int size, const Color& color)
 {
-	DrawTextEx(_Font, text, Vector2{ (float)x, (float)y }, size, 3, color);
+	DrawTextEx(_Font, text, Vector2{ (float)x, (float)y }, (float)size, 3, color);
 }
 
 void Knight::OnConfigKnightApp()
@@ -159,11 +242,9 @@ void Knight::SaveScreenshot(const char* fileName)
 	char path[512] = { 0 };
 	strcpy_s(path, TextFormat("%s/%s", "./", GetFileName(fileName)));
 
-	ExportImage(image, path);           // WARNING: Module required: rtextures
+	ExportImage(image, path);
 	RL_FREE(imgData);
 
-	if (FileExists(path)) 
-		TRACELOG(LOG_INFO, "SYSTEM: [%s] Screenshot taken successfully", path);
-	else 
-		TRACELOG(LOG_WARNING, "SYSTEM: [%s] Screenshot could not be saved", path);
+	if (!FileExists(path)) 
+		TRACELOG(LOG_WARNING, "Knight: Screenshot could not be saved to [%s]", path);
 }

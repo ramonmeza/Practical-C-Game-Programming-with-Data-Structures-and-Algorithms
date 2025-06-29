@@ -2,13 +2,9 @@
 
 #include "raymath.h"
 
-#define GLSL_VERSION            330
-
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
-
 #include <cmath>
 
+//main application entry point
 int main(int argc, char* argv[])
 {
 	Demo6LightShader* KnightDemo6Billboard = new Demo6LightShader();
@@ -20,18 +16,7 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-Demo6LightShader::Demo6LightShader()
-{
-}
-
-void Demo6LightShader::OnCreateDefaultResources()
-{
-	__super::OnCreateDefaultResources();
-
-	UnloadFont(_Font);
-	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
-}
-
+// Start the demo, initializing the scene, camera, player, and light
 void Demo6LightShader::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
@@ -40,7 +25,7 @@ void Demo6LightShader::Start()
 	Config.ShowFPS = true;
 
 	// Create lights
-	pMainCamera = _Scene->CreateSceneObject<FlyThroughCamera>("Main Camera");
+	FlyThroughCamera* pMainCamera = _Scene->CreateSceneObject<FlyThroughCamera>("Main Camera");
 	pMainCamera->SetUp(Vector3{ 0, 0.5, 0 }, 20.0f, 0, 40.0f, 45.0f, CAMERA_PERSPECTIVE);
 
 	pLight = _Scene->CreateSceneObject<SceneLight>("Light");
@@ -50,33 +35,34 @@ void Demo6LightShader::Start()
 	pLight->Create();
 
 	//Place player
-	player = _Scene->CreateSceneObject<SceneActor>("player");
-	player->Scale = Vector3{ 1,1,1 };
-	player->Position = Vector3{ 0.f,0.5f,0.f };
-	player->Rotation = Vector3{ 0,0,0 };
-	ModelComponent* animPlayerComponent = player->CreateAndAddComponent<ModelComponent>();
+	pPlayer = _Scene->CreateSceneObject<SceneActor>("player");
+	pPlayer->Scale = Vector3{ 1,1,1 };
+	pPlayer->Position = Vector3{ 0.f,0.5f,0.f };
+	pPlayer->Rotation = Vector3{ 0,0,0 };
+	ModelComponent* animPlayerComponent = pPlayer->CreateAndAddComponent<ModelComponent>();
 	animPlayerComponent->Load3DModel("../../resources/models/gltf/robot.glb");
 	animPlayerComponent->SetAnimation(6);
-	player->AddComponent(animPlayerComponent);	
+	pPlayer->AddComponent(animPlayerComponent);	
 }
 
+// Update player position and light position based on input
 void Demo6LightShader::Update(float ElapsedSeconds)
 {
 	if (IsKeyDown(KEY_W)) {
 		// Move player forward based on their rotation
-		player->Position.x += sin(DegreesToRadians(player->Rotation.y)) * 0.1f;
-		player->Position.z += cos(DegreesToRadians(player->Rotation.y)) * 0.1f;
+		pPlayer->Position.x += sin(DegreesToRadians(pPlayer->Rotation.y)) * 0.1f;
+		pPlayer->Position.z += cos(DegreesToRadians(pPlayer->Rotation.y)) * 0.1f;
 	}
 	if (IsKeyDown(KEY_S)) {
 		// Move player backward based on their rotation
-		player->Position.x -= sin(DegreesToRadians(player->Rotation.y)) * 0.1f;
-		player->Position.z -= cos(DegreesToRadians(player->Rotation.y)) * 0.1f;
+		pPlayer->Position.x -= sin(DegreesToRadians(pPlayer->Rotation.y)) * 0.1f;
+		pPlayer->Position.z -= cos(DegreesToRadians(pPlayer->Rotation.y)) * 0.1f;
 	}
 	if (IsKeyDown(KEY_A)) {
-		player->Rotation.y += 1;  // Rotate left
+		pPlayer->Rotation.y += 1;  // Rotate left
 	}
 	if (IsKeyDown(KEY_D)) {
-		player->Rotation.y -= 1;  // Rotate right
+		pPlayer->Rotation.y -= 1;  // Rotate right
 	}
 
 	// Update light position for animation (simple circular motion)
@@ -86,6 +72,7 @@ void Demo6LightShader::Update(float ElapsedSeconds)
 	__super::Update(ElapsedSeconds);
 }
 
+// Draw the frame, including the player and light
 void Demo6LightShader::DrawFrame()
 {
 	__super::DrawFrame();
@@ -96,9 +83,9 @@ void Demo6LightShader::DrawFrame()
 	DrawGrid(10, 1.0f);
 }
 
-void Demo6LightShader::DrawGUI()
+// Load default resources like fonts, textures, etc.
+void Demo6LightShader::OnCreateDefaultResources()
 {
-	__super::DrawGUI();
-
+	__super::OnCreateDefaultResources();
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }
-

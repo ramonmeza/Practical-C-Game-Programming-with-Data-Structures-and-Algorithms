@@ -1,3 +1,4 @@
+//Demo2b - Use array of entities
 #include "Knight.h"
 #include "Demo2b.h"
 
@@ -13,16 +14,7 @@ int main(int argc, char* argv[])
 	return 0;
 }
 
-//Initialize default resources for the demo, like fonts, textures, etc.
-void Demo2b::OnCreateDefaultResources()
-{
-	__super::OnCreateDefaultResources();
-
-	//Replace defaut low resolution font with a TrueType font for the demo
-	UnloadFont(_Font);
-	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
-}
-
+//Initialize the demo, create scene and camera
 void Demo2b::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
@@ -33,7 +25,7 @@ void Demo2b::Start()
 
 	//Prepare a camera
 	camera = _Scene->CreateSceneObject<PerspectiveCamera>("Camera");
-	camera->SetPosition(Vector3{ 60, 60, 60 });
+	camera->SetPosition(Vector3{ 60, 30, 60 });
 	camera->CameraMode = CameraMode::CAMERA_THIRD_PERSON;
 	camera->ShowCursor = false;
 	camera->SetLookAtPosition(Vector3{0, 3, 0});
@@ -41,6 +33,7 @@ void Demo2b::Start()
 	InitEntities();
 }
 
+//Update the demo, process input and update entities
 void Demo2b::Update(float ElapsedSeconds)
 {
 	//process input and update Entitie objects
@@ -86,6 +79,16 @@ bool Demo2b::CheckDefeatEnemy()
 void Demo2b::DrawGUI()
 {
 	DrawText("Press 1 to defeat 1st enemy, 2 to defeat 2nd enemy, 3 to defeat 3rd enemy!", 10, 50, 40, WHITE);
-	DrawText("Rotate camera angle: arrow keys.", 10, 100, 40, WHITE);
-	DrawText("Zoom Camera: mouse wheel.", 10, 150, 40, WHITE);
+	DrawText("Rotate camera angle by mouse or arrow keys.", 10, 100, 40, WHITE);
+	DrawText("Move camera by w/s/a/d keys.", 10, 150, 40, WHITE);
+	DrawText("Zoom Camera by mouse wheel.", 10, 200, 40, WHITE);
+}
+
+//Initialize default resources for the demo, like fonts, textures, etc.
+void Demo2b::OnCreateDefaultResources()
+{
+	__super::OnCreateDefaultResources();
+
+	//Replace defaut low resolution font with a TrueType font for the demo
+	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
 }
