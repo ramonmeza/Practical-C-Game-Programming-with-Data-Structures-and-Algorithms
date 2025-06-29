@@ -90,7 +90,7 @@ The following table outlines the software and hardware requirements for this boo
 
 | Software/Hardware Covered in the Book | Operating System Requirements         |
 |---------------------------------------|---------------------------------------|
-| Microsoft Visual Studio 2002 with the C++ compiler | Microsoft Windows 10 and up         |
+| Microsoft Visual Studio 2022 with the C++ compiler | Microsoft Windows 10 and up         |
 
 If you run the samples on systems other than Windows, such as macOS, you will need to manually set up the project and copy the source code into the project.
 

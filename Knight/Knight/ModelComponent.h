@@ -111,6 +111,9 @@ public:
 
 	bool DrawBoundingBox = false;
 	BoundingBox GetBoundingBox();
+
+	void RecalculateSmoothNormals();
+
 protected:
 	unsigned char _LoadState;
 
@@ -138,6 +141,4 @@ protected:
 	int GetNextFrame(float InterpolationTime = 0.0f, int Channel = 0);
 	void UpdateModelAnimationWithInterpolation(float ElapsedSeconds);
 	void InterpolateAnimation(int ChannelCount);
-
-	void RecalculateSmoothNormals();
 };

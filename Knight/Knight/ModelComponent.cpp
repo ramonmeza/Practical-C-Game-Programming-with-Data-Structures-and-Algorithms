@@ -214,6 +214,8 @@ void ModelComponent::LoadFromMesh(Mesh mesh,
 		CubeMapPath, 
 		EmissionMapPath, 
 		OcclusionMapPath);
+
+	RecalculateSmoothNormals();
 }
 
 void ModelComponent::Load3DModel(const char* ModelPath,
