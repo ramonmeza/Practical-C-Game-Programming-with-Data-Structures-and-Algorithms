@@ -641,8 +641,8 @@ void ModelComponent::RecalculateSmoothNormals()
 			mesh.normals[i * 3 + 2] = normal.z;
 		}
 
-		// Update mesh GPU data
-		UpdateMeshBuffer(mesh, midx+1, mesh.normals, mesh.vertexCount * 3 * sizeof(float), 0);
+		// Update modified normals to GPU
+		UpdateMeshBuffer(mesh, 1, mesh.normals, mesh.vertexCount * 3 * sizeof(float), 0);
 
 	}
 }
