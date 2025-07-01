@@ -88,8 +88,8 @@ void Demo5RTSCam::DrawGUI()
 
 	}
 
-	DrawText("Use mouse to select cubes", 10, 10, 20, DARKGRAY);
-	DrawText("Arrow keys to pan, mouse wheel to zoom", 10, 40, 20, DARKGRAY);
+	DrawText("Use mouse to select/unselect cubes", 10, 50, 40, YELLOW);
+	DrawText("Arrow keys to pan, mouse wheel to zoom", 10, 100, 40, YELLOW);
 
 }
 

@@ -1,4 +1,5 @@
 #include "HMapTerrainModelComponent.h"
+#include "KnightUtils.h"
 
 bool HMapTerrainModelComponent::CreateFromFile(Vector3 terrainDimension, Vector2 texTileSize, const char* pHightmapFilePath, const char* pTerrainTexurePath)
 {
@@ -9,8 +10,11 @@ bool HMapTerrainModelComponent::CreateFromFile(Vector3 terrainDimension, Vector2
 		return false;
 	}
 
-    mesh = GenMeshHeightmapEx(hightMapImage, terrainDimension, texTileSize); // Generate heightmap mesh (RAM and VRAM)
-	model = LoadModelFromMesh(mesh);                  // Load model from generated mesh
+    mesh = GenMeshHeightmapEx(hightMapImage, terrainDimension, texTileSize); // Generate heightmap mesh (RAM and VRAM)    
+    ConvertMeshToIndexed(&mesh); 
+
+    model = LoadModelFromMesh(mesh);                  // Load model from generated mesh
+	RecalculateSmoothNormals(model);        // Recalculate smooth normals for the model    
 
 	if (pTerrainTexurePath == NULL)
 		model.materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture; // Set map diffuse texture

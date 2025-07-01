@@ -112,8 +112,6 @@ public:
 	bool DrawBoundingBox = false;
 	BoundingBox GetBoundingBox();
 
-	void RecalculateSmoothNormals();
-
 protected:
 	unsigned char _LoadState;
 

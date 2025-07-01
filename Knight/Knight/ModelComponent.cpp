@@ -1,5 +1,6 @@
 #include "ModelComponent.h"
 #include "SceneActor.h"
+#include "KnightUtils.h"
 #include "rlgl.h"
 
 #include <map>
@@ -215,7 +216,7 @@ void ModelComponent::LoadFromMesh(Mesh mesh,
 		EmissionMapPath, 
 		OcclusionMapPath);
 
-	RecalculateSmoothNormals();
+	RecalculateSmoothNormals(_Model);
 }
 
 void ModelComponent::Load3DModel(const char* ModelPath,
@@ -262,7 +263,7 @@ void ModelComponent::Load3DModel(const char* ModelPath,
 	{
 		_BoundingBox = GetMeshBoundingBox(_Model.meshes[0]);
 
-		RecalculateSmoothNormals();
+		RecalculateSmoothNormals(_Model);
 	}
 }
 
@@ -543,106 +544,4 @@ void ModelComponent::InterpolateAnimation(int ChannelCount)
 	}
 }
 
-struct Vector3Compare {
-	bool operator()(const Vector3& a, const Vector3& b) const 
-	{
-		if (a.x != b.x) return a.x < b.x;
-		if (a.y != b.y) return a.y < b.y;
-		return a.z < b.z;
-	}
-};
-
-void ModelComponent::RecalculateSmoothNormals()
-{
-	for (int midx = 0; midx < _Model.meshCount; ++midx) 
-	{
-		std::map<Vector3, Vector3, Vector3Compare> accumulatedNormals;
-
-		Mesh& mesh = _Model.meshes[midx];
-
-		// Ensure mesh data is present
-		if (mesh.normals == nullptr)
-		{
-			mesh.normals = (float*)MemAlloc(mesh.vertexCount * 3 * sizeof(float));
-			if (mesh.normals == nullptr) 
-			{
-				TraceLog(LOG_ERROR, "Failed to allocate memory for mesh normals");
-				return; // Memory allocation failed
-			}
-		}
-
-		memset(mesh.normals, 0, mesh.vertexCount * 3 * sizeof(float));
-
-		if (mesh.indices != nullptr)
-		{
-			// Accumulate normals per vertex
-			for (int i = 0; i < mesh.triangleCount; ++i) {
-				// Retrieve vertex indices
-				unsigned short idx0 = mesh.indices[i * 3];
-				unsigned short idx1 = mesh.indices[i * 3 + 1];
-				unsigned short idx2 = mesh.indices[i * 3 + 2];
-
-				// Retrieve vertex positions
-				Vector3 v0 = {
-					mesh.vertices[idx0 * 3],
-					mesh.vertices[idx0 * 3 + 1],
-					mesh.vertices[idx0 * 3 + 2]
-				};
-				Vector3 v1 = {
-					mesh.vertices[idx1 * 3],
-					mesh.vertices[idx1 * 3 + 1],
-					mesh.vertices[idx1 * 3 + 2]
-				};
-				Vector3 v2 = {
-					mesh.vertices[idx2 * 3],
-					mesh.vertices[idx2 * 3 + 1],
-					mesh.vertices[idx2 * 3 + 2]
-				};
-
-				// Compute face normal
-				Vector3 edge1 = Vector3Subtract(v1, v0);
-				Vector3 edge2 = Vector3Subtract(v2, v0);
-				Vector3 faceNormal = Vector3Normalize(Vector3CrossProduct(edge1, edge2));
-
-				/* Accumulate normals for smoothing
-				for (auto idx : { idx0, idx1, idx2 }) {
-					mesh.normals[idx * 3] += faceNormal.x;
-					mesh.normals[idx * 3 + 1] += faceNormal.y;
-					mesh.normals[idx * 3 + 2] += faceNormal.z;
-				}*/
-
-				accumulatedNormals[v0] = Vector3Add(accumulatedNormals[v0], faceNormal);
-				accumulatedNormals[v1] = Vector3Add(accumulatedNormals[v1], faceNormal);
-				accumulatedNormals[v2] = Vector3Add(accumulatedNormals[v2], faceNormal);
-			}
-		}
-		else 
-		{
-			for (int i = 0; i < mesh.vertexCount; i += 3) {
-				Vector3 v0 = { mesh.vertices[i * 3], mesh.vertices[i * 3 + 1], mesh.vertices[i * 3 + 2] };
-				Vector3 v1 = { mesh.vertices[(i + 1) * 3], mesh.vertices[(i + 1) * 3 + 1], mesh.vertices[(i + 1) * 3 + 2] };
-				Vector3 v2 = { mesh.vertices[(i + 2) * 3], mesh.vertices[(i + 2) * 3 + 1], mesh.vertices[(i + 2) * 3 + 2] };
-
-				Vector3 faceNormal = Vector3Normalize(Vector3CrossProduct(
-					Vector3Subtract(v1, v0), Vector3Subtract(v2, v0)));
-
-				accumulatedNormals[v0] = Vector3Add(accumulatedNormals[v0], faceNormal);
-				accumulatedNormals[v1] = Vector3Add(accumulatedNormals[v1], faceNormal);
-				accumulatedNormals[v2] = Vector3Add(accumulatedNormals[v2], faceNormal);
-			}
-		}
-
-		for (int i = 0; i < mesh.vertexCount; ++i) 
-		{
-			Vector3 pos = { mesh.vertices[i * 3], mesh.vertices[i * 3 + 1], mesh.vertices[i * 3 + 2] };
-			Vector3 normal = Vector3Normalize(accumulatedNormals[pos]);
-			mesh.normals[i * 3] = normal.x;
-			mesh.normals[i * 3 + 1] = normal.y;
-			mesh.normals[i * 3 + 2] = normal.z;
-		}
-
-		// Update modified normals to GPU
-		UpdateMeshBuffer(mesh, 1, mesh.normals, mesh.vertexCount * 3 * sizeof(float), 0);
-
-	}
-}
+//End of ModelComponent.cpp
