@@ -17,15 +17,35 @@ Zhenyu George Li, Charles Shih-I Yeh</p>
    <a href="https://www.amazon.com/Practical-Game-Programming-Structures-Algorithms-ebook/dp/B0DZDBVF2T"><img width="32px" alt="Amazon" title="Get your copy" src="https://cdn-icons-png.flaticon.com/512/15466/15466027.png"/></a>
   &#8287;&#8287;&#8287;&#8287;&#8287;
 </p>
+
+<details open> 
+  <summary><h2>Latest Major Update - New Game World Demo Project</summary>
+<p>
+  We have updated the Git repository with one more bonus demo project for our readers. The primary purpose is to demonstrate how we can combine the features we learned throughout the book:
+</p>    
+<ul>
+  <li>The overall Knight application architecture — explained in Chapter 2</li>
+  <li>Simulation of daylight changes — explained in Chapter 4</li>
+  <li>BillboardComponent — explained in Chapter 7</li>
+  <li>FollowUpCamera — explained in Chapter 5</li>
+  <li>ParticleComponent — explained in Chapter 7</li>
+  <li>QuadTreeTerrainComponent — explained in Chapter 7</li>
+  <li>SkyboxComponent — explained in Chapter 7</li>
+  <li>Model and animation control - explained in Chapter 8</li>
+</ul>
+<p>Make sure to rebuild the whole project solution before running any demo project.</p>
+</details>
+    
 <details open> 
   <summary><h2>About the book</summary>
-<a href="https://www.packtpub.com/product/unity-cookbook-fifth-edition/9781805123026">
-<img src="https://content.packt.com/B22253/cover_image_small.jpg" alt="Unity Cookbook, Fifth Edition" height="256px" align="right">
+<a href="https://www.packtpub.com/en-us/product/practical-c-game-programming-with-data-structures-and-algorithms-9781835889879">
+<img src="https://content.packt.com/_/image/original/B22253/cover_image.jpg" alt="Practical C++ Game Development" height="256px" align="right">
 </a>
 
 Game development demands performance-driven solutions—from rendering complex 3D scenes to managing AI behavior and handling animations. This hands-on book guides you in solving these challenges using high-performance C++ data structures and algorithms. The authors distill their decades of combined industry experience to help you apply practical C++ techniques to create smooth, scalable, and intelligent games. Instead of pseudocode or abstract theory, you’ll work with real, executable examples that translate directly to your projects. Demos in this book have been developed based on raylib library, providing accessible and efficient foundations for learning.
 Opening with a structured overview of algorithmic thinking in C++ game development, the book covers advanced algorithms and their applications in real-world game scenarios. You’ll implement data structures that optimize game functionality, solve algorithmic problems efficiently, and enhance gameplay with robust AI and rendering techniques. In addition, the key focus is collision detection, 2D/3D rendering, animation, camera controls, and machine learning-driven AI, all through practical, executable C++ code.
-By the end of this book, you’ll be able to confidently apply advanced C++ techniques to develop efficient, scalable, and feature-rich gameplay systems for modern games.</details>
+By the end of this book, you’ll be able to confidently apply advanced C++ techniques to develop efficient, scalable, and feature-rich gameplay systems for modern games.
+</details>
 <details open> 
   <summary><h2>Key Learnings</summary>
 <ul>
