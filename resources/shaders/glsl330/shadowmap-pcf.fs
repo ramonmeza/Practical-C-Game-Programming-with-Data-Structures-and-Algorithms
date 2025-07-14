@@ -76,7 +76,7 @@ void main()
             }
         }
     }
-    finalColor = mix(finalColor, texelColor*ambient*colDiffuse, float(shadowCounter) / float(numSamples));
+    finalColor = mix(finalColor, finalColor*ambient, float(shadowCounter) / float(numSamples));
 
     // Gamma correction
     finalColor = pow(finalColor, vec4(1.0/2.2));

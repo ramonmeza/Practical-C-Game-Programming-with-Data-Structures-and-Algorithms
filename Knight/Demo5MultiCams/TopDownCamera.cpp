@@ -34,6 +34,8 @@ bool TopDownCamera::Update(float ElapsedSeconds)
         mCameraVerticalOffset += GetMouseDelta().y * 0.01f;
     }
 
+	__super::Update(ElapsedSeconds);
+
     return true;
 }
 

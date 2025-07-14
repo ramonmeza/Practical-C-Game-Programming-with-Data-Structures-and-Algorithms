@@ -50,9 +50,9 @@ void Demo4iso::DrawGUI()
 			int screenX = (x - y) * 128 / 2+ SCREEN_WIDTH/2;
 			int screenY = (x + y) * 64 / 2+ SCREEN_HEIGHT/4;
 
-			Rectangle r = {(map[x][y] % 8)*128,(map[x][y]/12)*64, 128, 64};
+			Rectangle r = {(float)(map[x][y] % 8)*128,(float)(map[x][y]/12)*64, 128.0f, 64.0f};
 			Vector2 v2;
-			v2.x = screenX; v2.y = screenY;
+			v2.x = (float)screenX; v2.y = (float)screenY;
 			DrawTextureRec(_mapTiles, r, v2, WHITE);
 		}
 	}

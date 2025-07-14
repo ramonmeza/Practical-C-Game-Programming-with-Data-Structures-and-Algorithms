@@ -30,36 +30,30 @@ void SceneRenderPass::Render()
 		++opaque;
 	}
 
-	//render alpha-tested geomtry from back to front
-	rlSetBlendMode(RL_BLEND_ALPHA); 
-	multiset<RenderContext, CompareDistanceAscending>::iterator alphatest = pScene->_RenderQueue.AlphaTest.begin();
-	while (alphatest != pScene->_RenderQueue.AlphaTest.end())
-	{
-		alphatest->pComponent->Draw(&Hints);
-		++alphatest;
-	}
-
+	rlDisableDepthMask(); //disable depth mask to avoid writing depth for alpha blend image
 	//render alpha blend from back to front
 	multiset<RenderContext, CompareDistanceDescending>::iterator alpha = pScene->_RenderQueue.AlphaBlending.begin();
 	while (alpha != pScene->_RenderQueue.AlphaBlending.end())
 	{
-		rlDisableBackfaceCulling();
-		rlDisableDepthMask();
 		BeginBlendMode(alpha->pComponent->blendingMode);
 		alpha->pComponent->Draw(&Hints);
 		EndBlendMode();
-		rlEnableDepthMask();
-		rlEnableBackfaceCulling();
 		++alpha;
 	}
+
+	rlDisableDepthTest();
 
 	//render overlay at last
 	vector<RenderContext>::iterator overlay = pScene->_RenderQueue.Overlay.begin();
 	while (overlay != pScene->_RenderQueue.Overlay.end())
 	{
+		BeginBlendMode(alpha->pComponent->blendingMode);
 		overlay->pComponent->Draw(&Hints);
+		EndBlendMode();
 		++overlay;
 	}
+	rlEnableDepthTest();
+	rlEnableDepthMask();
 }
 
 /// <summary>
@@ -77,7 +71,7 @@ bool SceneRenderPass::OnAddToRender(Component* pSC, SceneObject* pSO)
 	if (pActor != nullptr) 
 	{
 		Vector3 pos = pActor->Position;
-		if (pActiveCamera != NULL)
+		if (pActiveCamera != nullptr)
 			dist2 = Vector3DistanceSqr(pos, pActiveCamera->GetPosition());
 	}
 
@@ -92,9 +86,6 @@ bool SceneRenderPass::OnAddToRender(Component* pSC, SceneObject* pSO)
 		case Component::eRenderQueueType::AlphaBlend:
 			pScene->_RenderQueue.AlphaBlending.insert(RenderContext{ pSC, dist2 });
 			break;
-		case Component::eRenderQueueType::AlphaTest:
-			pScene->_RenderQueue.AlphaTest.insert(RenderContext{ pSC, dist2 });
-			break;
 		case Component::eRenderQueueType::Overlay:
 			pScene->_RenderQueue.Overlay.push_back(RenderContext{ pSC, dist2 });
 			break;
@@ -105,35 +96,71 @@ bool SceneRenderPass::OnAddToRender(Component* pSC, SceneObject* pSO)
 
 void SceneRenderPass::BuildRenderQueue(SceneObject* pRoot)
 {
-	if (pRoot) 
-	{
-		if (pRoot == nullptr)
-			return;
+	if (pRoot == nullptr)
+		return;
 
-		map<Component::eComponentType, Component*>::iterator it = pRoot->_Components.begin();
+	map<Component::eComponentType, Component*>::iterator it = pRoot->_Components.begin();
 		
-		if (pRoot->IsActive == false)
-			goto _continue;
+	if (pRoot->IsActive == false)
+		return;
 					
-		while (it != pRoot->_Components.end())
-		{
-			if (it->second == nullptr)
-				continue;
-			OnAddToRender(it->second, pRoot);
-			++it;
-		}
-
-    _continue:
-
-		if (pRoot->NextSibling)
-		{
-			BuildRenderQueue(pRoot->NextSibling);
-		}
-
-		if (pRoot->IsActive && pRoot->FirstChild)
-		{
-			BuildRenderQueue(pRoot->FirstChild);
-		}
+	while (it != pRoot->_Components.end())
+	{
+		if (it->second == nullptr)
+			continue;
+		OnAddToRender(it->second, pRoot);
+		++it;
 	}
+
+	for (int i = 0; i < pRoot->_Children.size(); i++)
+		BuildRenderQueue(pRoot->_Children[i]);
+
 }
 
+void SceneRenderPass::InitLightUniforms(Shader& shader)
+{
+	for (int i = 0; i < NUM_MAX_LIGHTS; i++)
+	{
+		_SceneLightData[i].attenuationLoc = GetShaderLocation(shader, TextFormat("lights[%i].enabled", i));
+		_SceneLightData[i].colorLoc = GetShaderLocation(shader, TextFormat("lights[%i].color", i));
+		_SceneLightData[i].enabledLoc = GetShaderLocation(shader, TextFormat("lights[%i].enabled", i));
+		_SceneLightData[i].positionLoc = GetShaderLocation(shader, TextFormat("lights[%i].position", i));
+		_SceneLightData[i].targetLoc = GetShaderLocation(shader, TextFormat("lights[%i].target", i));
+		_SceneLightData[i].typeLoc = GetShaderLocation(shader, TextFormat("lights[%i].type", i));
+	}
+	ambientLoc = GetShaderLocation(shader, "ambient");
+	shinenessLoc = GetShaderLocation(shader, "materialShininess");
+}
+
+void SceneRenderPass::UpdateLightData(const Shader& shader)
+{
+	for (int i = 0; i < NUM_MAX_LIGHTS; i++)
+	{
+		LightData* pLightData = &pScene->Lights[i];
+
+		if (pLightData->dirty != false)
+		{
+			SetShaderValue(shader, _SceneLightData[i].enabledLoc, &pLightData->enabled, SHADER_UNIFORM_INT);
+			if (!pLightData->enabled)
+			{
+				//if the light get disabled, there is no need to update the rest of the light data
+				continue;
+			}
+
+			//Update light data
+			SetShaderValue(shader, _SceneLightData[i].typeLoc, &pLightData->type, SHADER_UNIFORM_INT);
+			float position[3] = { pLightData->position.x, pLightData->position.y, pLightData->position.z };
+			SetShaderValue(shader, _SceneLightData[i].positionLoc, position, SHADER_UNIFORM_VEC3);
+			float target[3] = { pLightData->target.x, pLightData->target.y, pLightData->target.z };
+			SetShaderValue(shader, _SceneLightData[i].targetLoc, target, SHADER_UNIFORM_VEC3);
+			float color[4] = { (float)pLightData->color.r / (float)255, (float)pLightData->color.g / (float)255,
+							   (float)pLightData->color.b / (float)255, (float)pLightData->color.a / (float)255 };
+			SetShaderValue(shader, _SceneLightData[i].colorLoc, color, SHADER_UNIFORM_VEC4);
+
+			//remove dirty flag
+			pLightData->dirty = false;
+		}
+	}
+	// Update ambient light value
+	SetShaderValue(shader, ambientLoc, pScene->AmbientColor, SHADER_UNIFORM_VEC4);
+}

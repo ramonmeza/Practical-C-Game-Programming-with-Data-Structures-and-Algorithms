@@ -26,14 +26,12 @@ struct CompareDistanceDescending {
 struct RenderQueues {
 	vector<RenderContext> Background;
 	multiset<RenderContext, CompareDistanceAscending> Geometry;
-	multiset<RenderContext, CompareDistanceDescending> AlphaTest;
 	multiset<RenderContext, CompareDistanceDescending> AlphaBlending;
 	vector<RenderContext> Overlay;
 
 	void Clear() {
 		Background.clear();
 		Geometry.clear();
-		AlphaTest.clear();
 		AlphaBlending.clear();
 		Overlay.clear();
 	}

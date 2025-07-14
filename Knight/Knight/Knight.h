@@ -17,6 +17,8 @@
 #include "ConeComponent.h"
 #include "SceneRenderPass.h"
 #include "ForwardRenderPass.h"
+#include "LitDepthRenderPass.h"
+#include "LitShadowRenderPass.h"
 #include "KnightUtils.h"
 
 struct KnightConfig

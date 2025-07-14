@@ -95,3 +95,34 @@ Vector3 SceneActor::GetWorldScale()
 {
 	return Vector3{ _MatWorldTransform.m0, _MatWorldTransform.m5, _MatWorldTransform.m10 };
 }
+
+void SceneActor::Translate(float x, float y, float z)
+{
+	Vector3 targetWorldPosition = { x, y, z };
+	Vector3 newLocalPosition = targetWorldPosition; // Start with the target world position
+
+	SceneObject* currentParent = Parent;
+	while (currentParent)
+	{
+		SceneActor* parentActor = dynamic_cast<SceneActor*>(currentParent);
+		if (parentActor != nullptr)
+		{
+			// Get the inverse of the parent's world transform
+			Matrix parentWorldTransformInverse = MatrixInvert(*parentActor->GetWorldTransformMatrix());
+
+			// Transform the target world position by the inverse parent matrix
+			// This effectively converts the world position into the parent's local space
+			newLocalPosition = Vector3Transform(targetWorldPosition, parentWorldTransformInverse);
+			break; // Found an actor parent, so we have the local position
+		}
+		else
+		{
+			currentParent = currentParent->Parent; // Continue up the hierarchy
+		}
+	}
+
+	// Set the actor's local position to the calculated value
+	Position = newLocalPosition;
+	// The _MatTranslation and _MatTransform will be recalculated in the next Update call.
+}
+

@@ -18,7 +18,7 @@ public:
 
 	Shader shader = { 0 };
 
-	Vector3 lightPos = { -0.33, 0, 4.14f };
+	Vector3 lightPos = { -0.33f, 0.0f, 4.14f };
 	int lightPosLoc = -1;
 	int lightPowerLoc = -1;
 	int lightColorLoc = -1;

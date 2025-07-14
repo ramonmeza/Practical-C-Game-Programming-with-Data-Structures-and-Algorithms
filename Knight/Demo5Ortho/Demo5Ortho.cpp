@@ -55,7 +55,7 @@ void Demo5Ortho::DrawGUI()
 {
 	__super::DrawGUI();
 	DrawText("Rotate camera angle: move mouse.", 10, 100, 40, WHITE);
-	DrawText("Move camera: Use W/S/A/D.", 10, 150, 40, WHITE);
+	DrawText("Move camera: Use arrow keys.", 10, 150, 40, WHITE);
 }
 
 // Load default resources for the demo

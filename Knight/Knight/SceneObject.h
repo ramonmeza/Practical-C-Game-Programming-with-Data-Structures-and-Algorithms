@@ -2,6 +2,7 @@
 
 #include "Component.h"
 #include "Defs.h"
+#include <vector>
 #include <map>
 using namespace std;
 
@@ -60,9 +61,11 @@ public:
 
 public:
 	SceneObject* Parent;
-	SceneObject* FirstChild;
-	SceneObject* NextSibling;
-	SceneObject* PrevSibling;
+	//SceneObject* FirstChild;
+	//SceneObject* NextSibling;
+	//SceneObject* PrevSibling;
+
+	vector<SceneObject*> _Children;
 
 protected:
 	Scene* _Scene;

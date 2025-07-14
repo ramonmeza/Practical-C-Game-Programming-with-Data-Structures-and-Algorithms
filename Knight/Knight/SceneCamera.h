@@ -42,6 +42,7 @@ public:
 
 	Camera3D* GetCamera3D();
 
+	bool _ProcessInput = true; // Process input events
 
 protected:
 	friend class Knight;

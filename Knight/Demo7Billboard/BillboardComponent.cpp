@@ -5,6 +5,9 @@
 
 BillboardComponent::BillboardComponent()
 {
+		renderQueue = Component::eRenderQueueType::Geometry;
+	blendingMode = BLEND_ALPHA;
+	EnableAlphaTest = true;
 }
 
 void BillboardComponent::Update(float ElapsedSeconds)

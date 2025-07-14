@@ -21,3 +21,13 @@ extern float DegreesToRadians(float degrees);
 extern BoundingRect Get2DBoundingRectOfCube(const Vector3& cubePosition, float cubeSize, const Camera3D& camera);
 extern void RecalculateSmoothNormals(const Model& model);
 extern void ConvertMeshToIndexed(Mesh* mesh);
+extern bool IsPointInTriangle2D(Vector2 p, Vector2 v0, Vector2 v1, Vector2 v2);
+
+// Structure to hold the result of the check
+struct PointInTriangleResult {
+	bool isInTriangle;
+	float calculatedPy;
+};
+
+extern PointInTriangleResult DetectPointInTriangleAndCalcY(Vector3 v0, Vector3 v1, Vector3 v2,
+	Vector3 testPoint);

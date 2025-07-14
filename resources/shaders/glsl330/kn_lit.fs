@@ -10,6 +10,7 @@ in vec3 vtxNormal;  //assume the normal is already normalized
 // These are default uniforms provided by Raylib shader system
 uniform sampler2D texture0;    //texture sampler unit 0
 uniform vec4 colDiffuse;    // color diffuse (base tint color, multiplied by texture color)
+uniform int alphaTest;    // alpha test value (0 = disabled, 1 = enabled)
 
 // Output fragment color
 out vec4 outColor;
@@ -34,8 +35,13 @@ uniform float materialShininess; // Material shininess factor
 
 void main()
 {
-    vec3 viewD = normalize(viewPos - worldPos);
+
     vec4 texel = texture(texture0, texUV) * vtxColor;
+
+    if (alphaTest == 1 && texel.a < 0.5)
+        discard; // Apply alpha test if enabled    
+
+    vec3 viewD = normalize(viewPos - worldPos);
     vec3 lightSum = vec3(0.0);
     vec3 specularSum = vec3(0.0);
 
@@ -81,4 +87,5 @@ void main()
     
     outColor = (texel*((colDiffuse + vec4(specularSum, 1.0))*vec4(lightSum, 1.0))) + ambient*colDiffuse;
     outColor = pow(outColor, vec4(1.0/1.2));      // Gamma correction
+
 }

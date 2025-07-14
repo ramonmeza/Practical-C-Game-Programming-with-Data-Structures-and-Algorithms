@@ -2,8 +2,6 @@
 
 #include "SceneRenderPass.h"
 
-
-
 class ForwardRenderPass : public SceneRenderPass
 {
 	public:
@@ -15,12 +13,6 @@ class ForwardRenderPass : public SceneRenderPass
 		void EndScene() override;
 
 		Shader LightShader = { 0 };
-		int ambientLoc = -1;
 
-		int shinenessLoc = -1;
-
-
-    protected:
-
-        void UpdateLightData();
+        
 };

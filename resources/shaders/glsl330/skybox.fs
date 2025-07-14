@@ -3,6 +3,8 @@
 // Input vertex attributes (from vertex shader)
 in vec3 fragPosition;
 
+uniform vec4 colDiffuse;
+
 // Input uniform values
 uniform samplerCube environmentMap;
 uniform bool vflipped;
@@ -18,6 +20,8 @@ void main()
 
     if (vflipped) color = texture(environmentMap, vec3(fragPosition.x, -fragPosition.y, fragPosition.z)).rgb;
     else color = texture(environmentMap, fragPosition).rgb;
+
+    color *= colDiffuse.rgb;
 
     if (doGamma)// Apply gamma correction
     {

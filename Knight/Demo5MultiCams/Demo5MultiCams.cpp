@@ -64,17 +64,20 @@ void Demo5MultiCams::Update(float ElapsedSeconds)
 		Actor->Position.z -= cos(DegreesToRadians(Actor->Rotation.y)) * 0.1f;
 	}
 	if (IsKeyDown(KEY_A)) {
-		Actor->Rotation.y += 1;  // Rotate left
+		// Rotate left
+		Actor->Rotation.y += 1;  
 	}
 	if (IsKeyDown(KEY_D)) {
-		Actor->Rotation.y -= 1;  // Rotate right
+		// Rotate right
+		Actor->Rotation.y -= 1;  
 	}
 
+	//Update cameras
 	pChaseCamera->Update(ElapsedSeconds);
-
 	pTopDownCamera->SetLookAtPosition(Actor->Position);
 	pTopDownCamera->Update(ElapsedSeconds);
 
+	//Update the scene
 	__super::Update(ElapsedSeconds);
 }
 
@@ -108,6 +111,13 @@ void Demo5MultiCams::DrawOffscreen()
 	EndTextureMode();
 }
 
+void Demo5MultiCams::DrawFrame()
+{
+	//All the rendering is done in the offscreen render targets
+	//So here we do not need to draw anything
+	//We will render the offscreen textures in DrawGUI()
+}
+
 //Draw on-screen instructions
 void Demo5MultiCams::DrawGUI()
 {
@@ -125,7 +135,9 @@ void Demo5MultiCams::DrawGUI()
 //Render scene
 void Demo5MultiCams::DrawGameWorld(SceneCamera *pCam)
 {
-	_Scene->DrawFrame();
+	//allow Knight to draw the scene graph, now contains the player actor
+	Knight::DrawFrame();   
+	//Also draw a grid for reference
 	DrawGrid(10, 1);
 }
 
@@ -134,4 +146,5 @@ void Demo5MultiCams::OnCreateDefaultResources()
 {
 	__super::OnCreateDefaultResources();
 	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+
 }

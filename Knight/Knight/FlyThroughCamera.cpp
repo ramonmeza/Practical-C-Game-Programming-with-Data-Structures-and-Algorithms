@@ -23,7 +23,7 @@ bool FlyThroughCamera::Update(float ElapsedSeconds)
         pitch -= delta.x * sensitivity;
 
         // Clamp pitch to avoid flipping
-        const float pitchLimit = PI / 2 - 0.1f; // Just below 90 degrees
+        const float pitchLimit = DEG2RAD*45; // Just below 90 degrees
         if (pitch > pitchLimit) pitch = pitchLimit;
         if (pitch < -pitchLimit) pitch = -pitchLimit;
     }

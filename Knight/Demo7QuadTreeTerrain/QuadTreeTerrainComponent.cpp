@@ -119,8 +119,8 @@ float QuadTreeTerrainComponent::GetTerrainY(float x, float z)
 	float worldOriginX = -worldTotalWidth / 2.0f;
 	float worldOriginZ = -worldTotalDepth / 2.0f;
 	// Convert to heightmap grid coordinates
-	int mapX = Clamp((int)roundf((x - worldOriginX) / terrainScale.x), 0, HeightMapWidth - 1);
-	int mapZ = Clamp((int)roundf((z - worldOriginZ) / terrainScale.z), 0, HeightMapDepth - 1);
+	int mapX = (int)Clamp(roundf((x - worldOriginX) / terrainScale.x), 0.0f, (float)HeightMapWidth - 1);
+	int mapZ = (int)Clamp(roundf((z - worldOriginZ) / terrainScale.z), 0.0f, (float)HeightMapDepth - 1);
 	// Get the height value from the heightmap
 	return GetHeightmapValue(mapX, mapZ) * terrainScale.y; // Scale by Y-axis terrain scale
 }
@@ -282,8 +282,8 @@ Vector3 QuadTreeTerrainComponent::GetHeightmapNormal(int x, int y)
 
 Vector3 QuadTreeTerrainComponent::GetSmoothedNormal(float fx, float fz)
 {
-	int x = fx / terrainScale.x; // Convert world X to heightmap grid X
-	int z = fz / terrainScale.z; // Convert world Z to heightmap grid Z
+	int x = (int)(fx / terrainScale.x); // Convert world X to heightmap grid X
+	int z = (int)(fz / terrainScale.z); // Convert world Z to heightmap grid Z
 
     // Bilinear interpolation for normals
     int x0 = std::min(x, HeightMapWidth - 1);
@@ -291,8 +291,8 @@ Vector3 QuadTreeTerrainComponent::GetSmoothedNormal(float fx, float fz)
     int x1 = std::min(x0 + 1, HeightMapWidth - 1);
     int z1 = std::min(z0 + 1, HeightMapDepth - 1);
 
-    float tx = x - x0;
-    float tz = z - z0;
+    float tx = float(x - x0);
+    float tz = float(z - z0);
 
     // Get normals at four surrounding points
     Vector3 n00 = heightMapNormals[z0* HeightMapWidth + x0];
@@ -322,10 +322,10 @@ void QuadTreeTerrainComponent::DrawTerrainChunk(QuadTreeNode* node)
 
     // Convert node's world bounds to heightmap grid coordinates
     // Ensure we don't go outside the heightmap array
-    int mapStartX = Clamp((int)roundf((node->bounds.min.x - worldOriginX) / terrainScale.x), 0, HeightMapWidth - 1);
-    int mapStartZ = Clamp((int)roundf((node->bounds.min.z - worldOriginZ) / terrainScale.z), 0, HeightMapDepth - 1);
-    int mapEndX = Clamp((int)roundf((node->bounds.max.x - worldOriginX) / terrainScale.x), 0, HeightMapWidth) +1;
-    int mapEndZ = Clamp((int)roundf((node->bounds.max.z - worldOriginZ) / terrainScale.z), 0, HeightMapDepth) +1;
+    int mapStartX = (int)Clamp(roundf((node->bounds.min.x - worldOriginX) / terrainScale.x), 0.0f, (float)HeightMapWidth - 1);
+    int mapStartZ = (int)Clamp(roundf((node->bounds.min.z - worldOriginZ) / terrainScale.z), 0.0f, (float)HeightMapDepth - 1);
+    int mapEndX = (int)Clamp(roundf((node->bounds.max.x - worldOriginX) / terrainScale.x), 0.0f, (float)HeightMapWidth) +1;
+    int mapEndZ = (int)Clamp(roundf((node->bounds.max.z - worldOriginZ) / terrainScale.z), 0.0f, (float)HeightMapDepth) +1;
 
     // Ensure there's at least one quad to draw within the calculated range
     if (mapEndX <= mapStartX || mapEndZ <= mapStartZ)

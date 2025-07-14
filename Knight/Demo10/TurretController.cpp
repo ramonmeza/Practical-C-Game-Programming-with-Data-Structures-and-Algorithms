@@ -29,7 +29,7 @@ TurretController::~TurretController()
 
 void TurretController::InitANN(int Method)
 {
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 	if (Method == 1)
 	{
 		vector<size_t> layerSizes;

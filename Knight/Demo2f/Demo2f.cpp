@@ -39,7 +39,7 @@ void Demo2f::Start()
 	GuiSetStyle(PROGRESSBAR, TEXT_COLOR_NORMAL, 0xffffffff);
 	GuiSetStyle(DEFAULT, TEXT_SIZE, 24);
 
-	srand(time(NULL));
+	srand((unsigned int) time(NULL));
 
 	//Prepare a camera
 	camera = _Scene->CreateSceneObject<PerspectiveCamera>("Camera");

@@ -18,17 +18,7 @@ typedef struct {
 	Vector3 target;
 	Color color;
 	float attenuation;
-
 	bool dirty;
-
-
-	// Shader locations
-	int enabledLoc;
-	int typeLoc;
-	int positionLoc;
-	int targetLoc;
-	int colorLoc;
-	int attenuationLoc;
 } LightData;
 
 class Scene
@@ -83,6 +73,7 @@ public:
 
 	LightData Lights[NUM_MAX_LIGHTS] = { 0 };
 	float AmbientColor[4] = { 0.1f, 0.1f, 0.1f, 1.0f }; //default ambient light
+	float SpecularColor[4] = { 1.0f, 1.0f, 1.0f, 1.0f }; //default specular color
 	float DefaultShineness = 16.0f;
 
 	int EnabledLights(); // Number of enabled lights in the scene

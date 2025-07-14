@@ -111,13 +111,13 @@ public:
 
 	bool DrawBoundingBox = false;
 	BoundingBox GetBoundingBox();
+	ModelAnimation* _Animations = nullptr;
+	int _AnimationsCount;
 
 protected:
 	unsigned char _LoadState;
 
 	Model _Model = { 0 };
-	ModelAnimation* _Animations = nullptr;
-	int _AnimationsCount;
 	int _AnimationIndex;
 	int _CurrentFrame[2] = { 0 };			//Current frame indices for the current and next animations
 

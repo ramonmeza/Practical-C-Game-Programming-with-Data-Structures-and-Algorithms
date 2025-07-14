@@ -27,7 +27,7 @@ void AnimatedTexDemo::Update(float elapsed)
 void AnimatedTexDemo::Draw2D()
 {
 	int idx = (int)(_anim_time / _anim_length * 11.0f);
-	Rectangle src = {0, idx * 128, 1024, 128};
+	Rectangle src = {0.0f, idx * 128.0f, 1024.0f, 128.0f};
 	Vector2 pos = { 300,300 };
 
 	BeginBlendMode(BLEND_ADDITIVE);

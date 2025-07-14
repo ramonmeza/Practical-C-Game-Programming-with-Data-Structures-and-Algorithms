@@ -19,8 +19,8 @@ bool FollowUpCamera::Update(float ElapsedSeconds)
     if (cameraDistance > 10.0f) cameraDistance = 10.0f; // Maximum distance
 
     //Calculate the camera's position based on player's rotation and distance
-    _Camera.position.x = TargetActor->Position.x - sin(mCameraHorizontalAngleShift + DegreesToRadians(TargetActor->Rotation.y)) * cameraDistance;
-    _Camera.position.z = TargetActor->Position.z - cos(mCameraHorizontalAngleShift + DegreesToRadians(TargetActor->Rotation.y)) * cameraDistance;
+    _Camera.position.x = TargetActor->Position.x - sinf(mCameraHorizontalAngleShift + DegreesToRadians(TargetActor->Rotation.y)) * cameraDistance;
+    _Camera.position.z = TargetActor->Position.z - cosf(mCameraHorizontalAngleShift + DegreesToRadians(TargetActor->Rotation.y)) * cameraDistance;
     _Camera.position.y = TargetActor->Position.y + 2.0f + mCameraVerticalOffset; // Keep camera above the player
     _Camera.target = TargetActor->Position; // Always focus on the player
 
@@ -29,6 +29,8 @@ bool FollowUpCamera::Update(float ElapsedSeconds)
         mCameraHorizontalAngleShift += GetMouseDelta().x * 0.01f;
         mCameraVerticalOffset += GetMouseDelta().y * 0.01f;
     }
+
+	__super::Update(ElapsedSeconds);
 
     return true;
 }

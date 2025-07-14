@@ -30,6 +30,8 @@ public:
 	Quaternion GetWorldRotation();
 	Vector3 GetWorldScale();
 
+	void Translate(float x, float y, float z);
+
 	inline SceneCamera* GetMainCamera() { return (_Scene != NULL) ? _Scene->GetMainCameraActor() : NULL; };
 
 protected:

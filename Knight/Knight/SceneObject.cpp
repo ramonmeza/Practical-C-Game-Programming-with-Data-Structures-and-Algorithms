@@ -6,9 +6,6 @@ SceneObject::SceneObject(Scene* Scene, const char* Name)
 	, IsActive(true)
 	, _Scene(Scene)
 	, Parent(nullptr)
-	, FirstChild(nullptr)
-	, NextSibling(nullptr)
-	, PrevSibling(nullptr)
 {
 	if (Name)
 	{
@@ -20,6 +17,7 @@ SceneObject::SceneObject(Scene* Scene, const char* Name)
 	}
 
 	_Components.clear();
+	_Children.clear();
 	_Scene->AddSceneObject(this);
 }
 
@@ -32,12 +30,14 @@ SceneObject::~SceneObject()
 		++it;
 	}
 	_Components.clear();
-	
-	while (FirstChild)
+
+	for(int i = 0; i < _Children.size(); i++)
 	{
-		SceneObject* child = FirstChild->NextSibling;
-		delete FirstChild;
-		FirstChild = child;
+		if (_Children[i])
+		{
+			delete _Children[i];
+			_Children[i] = nullptr;
+		}
 	}
 }
 
@@ -61,30 +61,15 @@ void SceneObject::SetParent(SceneObject* parent)
 		return;
 	}
 
-	if (Parent && Parent->FirstChild == this)
+	//Remove from current parent
+	if (Parent != nullptr) 
 	{
-		Parent->FirstChild = NextSibling;
+		Parent->_Children.erase(remove(Parent->_Children.begin(), Parent->_Children.end(), this), Parent->_Children.end());
 	}
-	if (PrevSibling)
-	{
-		PrevSibling->NextSibling = NextSibling;
-	}
-	if (NextSibling)
-	{
-		NextSibling->PrevSibling = PrevSibling;
-	}
-	PrevSibling = NextSibling = nullptr;
+
+	//add into parent's children
+	parent->_Children.push_back(this);
 	Parent = parent;
-	if (Parent->FirstChild)
-	{
-		Parent->FirstChild->PrevSibling = this;
-		NextSibling = Parent->FirstChild;
-		Parent->FirstChild = this;
-	}
-	else
-	{
-		Parent->FirstChild = this;
-	}
 }
 
 Component* SceneObject::GetComponent(Component::eComponentType ComponentType)
@@ -142,16 +127,15 @@ bool SceneObject::Update(float ElapsedSeconds)
 			++it;
 		}
 
-		if (FirstChild)
+		for(int i=0; i < _Children.size(); i++)
 		{
-			FirstChild->Update(ElapsedSeconds);
+			if (_Children[i])
+			{
+				_Children[i]->Update(ElapsedSeconds);
+			}
 		}
 	}
 
-	if (NextSibling)
-	{
-		NextSibling->Update(ElapsedSeconds);
-	}
 	return IsActive;
 }
 
@@ -165,16 +149,14 @@ bool SceneObject::Draw()
 			it->second->Draw();
 			++it;
 		}
-	}
 
-	if (NextSibling)
-	{
-		NextSibling->Draw();
-	}
-
-	if (IsActive && FirstChild)
-	{
-		FirstChild->Draw();
+		for (int i = 0; i < _Children.size(); i++)
+		{
+			if (_Children[i])
+			{
+				_Children[i]->Draw();
+			}
+		}
 	}
 
 	return IsActive;

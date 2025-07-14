@@ -15,6 +15,7 @@ Scene::Scene()
 {
 	SceneRoot = new SceneObject(this);
 	SceneRoot->SetName(SCENE_ROOT_NAME);
+	_CurrentRenderPass = nullptr;
 }
 
 Scene::~Scene()
@@ -33,23 +34,29 @@ SceneObject* Scene::FindObjectByName(const char* Name, bool CaseSensitive)
 
 SceneObject* Scene::FindObjectByName(SceneObject* RootObject, const char* Name, bool CaseSensitive)
 {
-	SceneObject* obj = RootObject->FirstChild;
-	while (obj)
+	if (RootObject == nullptr)
+		RootObject = SceneRoot;
+
+	int cmp = CaseSensitive ? strcmp(RootObject->GetName(), Name) : _strcmpi(RootObject->GetName(), Name);
+	if (cmp == 0)
 	{
-		int cmp = CaseSensitive ? strcmp(obj->GetName(), Name) : _strcmpi(obj->GetName(), Name);
-		if (cmp == 0)
-		{
-			return obj;
-		}
-		else
-		{
-			if (auto foundObj = FindObjectByName(obj, Name, CaseSensitive))
-			{
-				return foundObj;
-			}
-		}
-		obj = obj->NextSibling;
+		return RootObject;
 	}
+
+	for (int i = 0; i < RootObject->_Children.size(); i++)
+	{
+		SceneObject* child = RootObject->_Children[i];
+		if (child == nullptr)
+			continue;
+
+		auto foundObj = FindObjectByName(child, Name, CaseSensitive);
+		// If we found the object in the child, return it
+		if (foundObj != nullptr)
+		{
+			return foundObj;
+		}		
+	}
+
 	return nullptr;
 }
 
@@ -70,23 +77,38 @@ bool Scene::AddSceneObject(SceneObject* Object, SceneObject* ParentObject)
 	return true;
 }
 
+/// <summary>
+/// DestroySceneObject - recursively destroys a SceneObject and all its children.
+/// </summary>
+/// <param name="Object">The object to be destroyed</param>
 void Scene::DestroySceneObject(SceneObject* Object)
 {
-	if (Object->Parent && Object->Parent->FirstChild == Object)
+	if (Object == nullptr)
 	{
-		Object->Parent->FirstChild = nullptr;
+		return;
 	}
 
-	Object->Parent = nullptr;
-
-	if (Object->PrevSibling)
+	if (Object->_Children.size() > 0)
 	{
-		Object->PrevSibling->NextSibling = Object->NextSibling;
+		// Recursively destroy all children first
+		for (auto& child : Object->_Children)
+		{
+			if (child != nullptr)
+			{
+				DestroySceneObject(child);
+			}
+		}
+		//Object->_Children.clear(); // Clear the children list after destroying them
 	}
 
-	if (Object->NextSibling)
+	if (Object->Parent != nullptr)
 	{
-		Object->NextSibling->PrevSibling = Object->PrevSibling;
+		// Remove from parent's children list
+		auto it = std::find(Object->Parent->_Children.begin(), Object->Parent->_Children.end(), Object);
+		if (it != Object->Parent->_Children.end())
+		{
+			Object->Parent->_Children.erase(it);
+		}
 	}
 
 	delete Object;
@@ -132,7 +154,6 @@ void Scene::ClearRenderQueue()
 	_RenderQueue.Background.clear();
 	_RenderQueue.Geometry.clear();
 	_RenderQueue.AlphaBlending.clear();
-	_RenderQueue.AlphaTest.clear();
 	_RenderQueue.Overlay.clear();
 }
 

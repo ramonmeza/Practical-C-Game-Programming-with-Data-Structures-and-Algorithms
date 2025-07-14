@@ -7,6 +7,8 @@ typedef struct _RenderHints {
 	// If not null, this shader will be used to render this component
 	Shader* pOverrideShader = nullptr;  
 
+	Camera3D* pOverrideCamera = nullptr; // If not null, this camera will be used to render this component
+
 } RenderHints;
 
 class Component
@@ -52,6 +54,8 @@ public:
 	};
 
 	eRenderQueueType renderQueue = Geometry;
+
+	bool EnableAlphaTest = false; // If true, this component will use alpha test when rendering
 
 public:
 	Component() 

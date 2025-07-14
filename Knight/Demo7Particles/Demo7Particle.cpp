@@ -52,13 +52,13 @@ void Demo7Particle::Update(float ElapsedSeconds)
 {
 	if (IsKeyDown(KEY_W)) {
 		// Move player forward based on their rotation
-		Actor->Position.x += sin(DegreesToRadians(Actor->Rotation.y)) * 0.1f;
-		Actor->Position.z += cos(DegreesToRadians(Actor->Rotation.y)) * 0.1f;
+		Actor->Position.x += sinf(DegreesToRadians(Actor->Rotation.y)) * 0.1f;
+		Actor->Position.z += cosf(DegreesToRadians(Actor->Rotation.y)) * 0.1f;
 	}
 	if (IsKeyDown(KEY_S)) {
 		// Move player backward based on their rotation
-		Actor->Position.x -= sin(DegreesToRadians(Actor->Rotation.y)) * 0.1f;
-		Actor->Position.z -= cos(DegreesToRadians(Actor->Rotation.y)) * 0.1f;
+		Actor->Position.x -= sinf(DegreesToRadians(Actor->Rotation.y)) * 0.1f;
+		Actor->Position.z -= cosf(DegreesToRadians(Actor->Rotation.y)) * 0.1f;
 	}
 	if (IsKeyDown(KEY_A)) {
 		Actor->Rotation.y += 1;  // Rotate left

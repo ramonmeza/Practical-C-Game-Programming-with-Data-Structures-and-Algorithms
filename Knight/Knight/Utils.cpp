@@ -243,13 +243,13 @@ extern void ConvertMeshToIndexed(Mesh* mesh)
     if (mesh->indices) MemFree(mesh->indices);
 
     // Allocate new arrays
-    mesh->vertexCount = uniqueVertices.size();
-    mesh->triangleCount = indices.size() / 3;
+    mesh->vertexCount = (int)uniqueVertices.size();
+    mesh->triangleCount = (int)indices.size() / 3;
 
     mesh->vertices = (float*)MemAlloc(mesh->vertexCount * 3 * sizeof(float));
     mesh->normals = (float*)MemAlloc(mesh->vertexCount * 3 * sizeof(float));
     mesh->texcoords = (float*)MemAlloc(mesh->vertexCount * 2 * sizeof(float));
-    mesh->indices = (unsigned short*)MemAlloc(indices.size() * sizeof(unsigned short));
+    mesh->indices = (unsigned short*)MemAlloc((unsigned) indices.size() * sizeof(unsigned short));
 
     for (int i = 0; i < uniqueVertices.size(); i++) {
         mesh->vertices[i * 3 + 0] = uniqueVertices[i].position.x;
@@ -269,7 +269,7 @@ extern void ConvertMeshToIndexed(Mesh* mesh)
     }
 
     // Update counts
-    mesh->triangleCount = indices.size() / 3;
+    mesh->triangleCount = (int)indices.size() / 3;
 
 	//Check if the mesh has been uploaded to GPU
 	//If Yes, we need to unload the mesh buffers and re-upload the mesh with new data
@@ -294,6 +294,99 @@ extern void ConvertMeshToIndexed(Mesh* mesh)
         UploadMesh(mesh, true);
 
     }
+}
+
+
+
+// Function to check if a point (px, pz) is within the 2D projection of the triangle
+// using barycentric coordinates (after projection).
+// This is a common and robust 2D point-in-triangle test.
+// We'll project to the XZ plane for this example.
+bool IsPointInTriangle2D(Vector2 p, Vector2 v0, Vector2 v1, Vector2 v2) 
+{
+    // Vectors from v0 to other vertices
+    Vector2 e1 = Vector2Subtract(v1, v0);
+    Vector2 e2 = Vector2Subtract(v2, v0);
+
+    // Vector from v0 to point p
+    Vector2 p_minus_v0 = Vector2Subtract(p, v0);
+
+    // Calculate dot products
+    float dot00 = Vector2DotProduct(e1, e1);
+    float dot01 = Vector2DotProduct(e1, e2);
+    float dot02 = Vector2DotProduct(e1, p_minus_v0);
+    float dot11 = Vector2DotProduct(e2, e2);
+    float dot12 = Vector2DotProduct(e2, p_minus_v0);
+
+    // Calculate barycentric coordinates
+    float invDenom = 1.0f / (dot00 * dot11 - dot01 * dot01);
+    float u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+    float v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+
+    // Check if point is in triangle
+    return (u >= -EPSILON && v >= -EPSILON && (u + v) <= (1.0f + EPSILON));
+}
+
+
+PointInTriangleResult DetectPointInTriangleAndCalcY(
+    Vector3 v0, Vector3 v1, Vector3 v2,
+    Vector3 testPoint
+) 
+{
+    PointInTriangleResult result = { false, std::numeric_limits<float>::quiet_NaN() };
+
+    // 1. Calculate the plane equation (normal vector and D)
+    Vector3 edge1 = Vector3Subtract(v1, v0);
+    Vector3 edge2 = Vector3Subtract(v2, v0);
+
+    Vector3 normal = Vector3Normalize(Vector3CrossProduct(edge1, edge2)); // Normalized normal vector
+
+    // Equation of the plane: Ax + By + Cz + D = 0
+    // D = -(normal.x * v0.x + normal.y * v0.y + normal.z * v0.z)
+    float D = -Vector3DotProduct(normal, v0);
+
+    // Check if the plane is degenerate (e.g., collinear vertices)
+    if (Vector3LengthSqr(normal) < EPSILON * EPSILON) {
+        TraceLog(LOG_WARNING, "Triangle is degenerate (collinear vertices). Cannot define plane.");
+        return result;
+    }
+
+    // 2. Check if testPoint.xz lies within the 2D projection of the triangle
+    // Project all points to 2D (XZ plane)
+    Vector2 pv0 = { v0.x, v0.z };
+    Vector2 pv1 = { v1.x, v1.z };
+    Vector2 pv2 = { v2.x, v2.z };
+    Vector2 p_xz = { testPoint.x, testPoint.z };
+
+    if (!IsPointInTriangle2D(p_xz, pv0, pv1, pv2)) {
+        // The 2D projection is not in the triangle, so the 3D point isn't either.
+        return result;
+    }
+
+    // 3. Now that we know the projected point is inside the 2D triangle,
+    //    calculate the Y value on the plane for the given (px, pz)
+    // From Ax + By + Cz + D = 0, we solve for y:
+    // By = -Ax - Cz - D
+    // y = (-Ax - Cz - D) / B
+
+    // Handle cases where B (normal.y) is very close to zero (triangle is vertical or near vertical)
+    if (fabs(normal.y) < EPSILON) {
+        // The plane is nearly vertical.
+        // The point (px, pz) might be in the 2D projection, but there's no unique 'y' value for it on the plane,
+        // or the triangle effectively has infinite height along Y at this XZ.
+        // For game purposes, you might want to return false here, or handle it specifically.
+        // E.g., if the triangle is perfectly vertical (normal.y == 0), then a line from (px, pz) upwards
+        // will intersect the triangle, but there's no single y, rather a range of y values.
+        TraceLog(LOG_INFO, "Triangle plane is vertical or near vertical (normal.y close to zero). Cannot determine unique Y.");
+        // We still return true for 'isInTriangle' if it passed the 2D test, but 'calculatedPy' will be NaN
+        result.isInTriangle = true; // It's on the plane, and XZ is within bounds
+        return result;
+    }
+
+    result.calculatedPy = (-normal.x * testPoint.x - normal.z * testPoint.z - D) / normal.y;
+    result.isInTriangle = true;
+
+    return result;
 }
 
 //end of Utils.cpp

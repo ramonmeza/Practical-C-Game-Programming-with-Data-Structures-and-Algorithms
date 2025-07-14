@@ -18,8 +18,8 @@ bool TopDownCamera::Update(float ElapsedSeconds)
     if (cameraZoom > 25.0f) cameraZoom = 25.0f;
 
     //Calculate the camera's position 
-    _Camera.position.x = _Camera.target.x - sin(mCameraHorizontalAngleShift)* cameraZoom;
-    _Camera.position.z = _Camera.target.z - cos(mCameraHorizontalAngleShift)* cameraZoom;
+    _Camera.position.x = _Camera.target.x - sinf(mCameraHorizontalAngleShift)* cameraZoom;
+    _Camera.position.z = _Camera.target.z - cosf(mCameraHorizontalAngleShift)* cameraZoom;
     _Camera.position.y = cameraZoom + mCameraVerticalOffset ;
 
     // Pan camera with arrow keys

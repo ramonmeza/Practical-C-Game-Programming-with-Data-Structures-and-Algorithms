@@ -109,9 +109,9 @@ void SmoothColorBlendingDemo::Draw2D()
     float t = timeDiff / 0.5f;
 
     Color c = WHITE;
-    c.r = (1 - t)* c1.r + t * c2.r;
-    c.g = (1 - t) * c1.g + t * c2.g;
-    c.b = (1 - t) * c1.b + t * c2.b;
+    c.r = (unsigned char)((1 - t)* c1.r + t * c2.r);
+    c.g = (unsigned char)((1 - t) * c1.g + t * c2.g);
+    c.b = (unsigned char)((1 - t) * c1.b + t * c2.b);
 
-    DrawTexture(texture, position.x, position.y, c);
+    DrawTexture(texture, (int)position.x, (int)position.y, c);
 }

@@ -66,8 +66,8 @@ void Demo6LightShader::Update(float ElapsedSeconds)
 	}
 
 	// Update light position for animation (simple circular motion)
-	pLight->Position.x = 4.0f * cos(GetTime());
-	pLight->Position.z = 4.0f * sin(GetTime());
+	pLight->Position.x = 4.0f * cosf((float)GetTime());
+	pLight->Position.z = 4.0f * sinf((float)GetTime());
 	pLight->lightDirection = Vector3Normalize(Vector3Subtract(Vector3{ 0,0,0 }, pLight->Position));
 	__super::Update(ElapsedSeconds);
 }

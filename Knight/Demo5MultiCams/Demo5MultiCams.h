@@ -22,6 +22,7 @@ class Demo5MultiCams : public Knight
 
 		void Update(float ElapsedSeconds) override;
 		void DrawOffscreen() override;
+		void DrawFrame() override;
 		void DrawGUI() override;
 		void OnCreateDefaultResources() override;
 

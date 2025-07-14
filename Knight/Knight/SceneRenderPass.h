@@ -5,6 +5,16 @@
 
 #include "Scene.h"
 
+typedef struct 
+{
+	int enabledLoc;
+	int typeLoc;
+	int positionLoc;
+	int targetLoc;
+	int colorLoc;
+	int attenuationLoc;
+} SceneLightShaderData;
+
 class SceneRenderPass
 {
 	public:
@@ -24,8 +34,27 @@ class SceneRenderPass
 		// _RenderOrder controls the order in which render passes are executed.
 		int _Priority = 0;
 
+		//CPU-side shader data for lights of the scene
+		SceneLightShaderData _SceneLightData[NUM_MAX_LIGHTS] = {0};
+		int ambientLoc = -1;
+		int shinenessLoc = -1;
+		int alphaTestLoc = -1;
+
 	protected:
 
 		Scene* pScene = nullptr;
 		SceneCamera* pActiveCamera = nullptr;
+
+		//Get uniform location for scene light data
+		virtual void InitLightUniforms(Shader &);
+		virtual void UpdateLightData(const Shader&);
+
+		virtual void EnableAlphaTest(bool enable)
+		{
+			if (Hints.pOverrideShader != nullptr && alphaTestLoc >= 0)
+			{
+				int alphaTestValue = enable ? 1 : 0;
+				SetShaderValue(*Hints.pOverrideShader, alphaTestLoc, &alphaTestValue, SHADER_UNIFORM_INT);
+			}
+		}
 };

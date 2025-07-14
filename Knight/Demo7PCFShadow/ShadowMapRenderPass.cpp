@@ -88,6 +88,12 @@ void ShadowMapRenderPass::BeginScene(SceneCamera* pOverrideCamera)
 		pActiveCamera = pOverrideCamera;
 	pScene->ClearRenderQueue();
 	BuildRenderQueue(pScene->SceneRoot);
+
+	//update lighting changes (if any)
+	Vector4 lightColorNormalized = ColorNormalize(pLight->lightColor);
+	Vector4 ambientColorNormalized = ColorNormalize(pLight->lightAmbient);
+	SetShaderValue(shadowShader, lightColLoc, &lightColorNormalized, SHADER_UNIFORM_VEC4);
+	SetShaderValue(shadowShader, ambientLoc, &ambientColorNormalized, SHADER_UNIFORM_VEC4);
 }
 
 void ShadowMapRenderPass::EndScene()
