@@ -34,7 +34,7 @@ void Demo3f::Start()
 	Character->Position = Vector3 { 0.0f, 0.0f, -60.0f };
 	Character->Rotation.y = 0.0f;
 	ModelComponent* animModelComponent = Character->CreateAndAddComponent<ModelComponent>();
-	animModelComponent->Load3DModel("../../resources/models/gltf/robot.glb");
+	animModelComponent->Load3DModel((std::string(RESOURCES_DIR) + "/models/gltf/robot.glb").c_str());
 	animModelComponent->SetAnimation(2);
 	Character->AddComponent(animModelComponent);
 }

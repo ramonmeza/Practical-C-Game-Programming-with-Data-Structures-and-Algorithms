@@ -3,6 +3,9 @@
 #include "Random.h"
 #include "Shuffler.h"
 
+#include <cstdio>
+#include <cstring>
+
 #define IMAGE_FILENAME_BUFFER_SIZE 64
 #define DECK_CARD_COUNT 52
 #define PICK_CARDS_COUNT 13
@@ -39,7 +42,7 @@ void Demo3c::Start()
 		}
 
 		//Load card image
-		sprintf_s(imageFile, IMAGE_FILENAME_BUFFER_SIZE, "../../resources/textures/PokerDeckCards/%d.png", i);
+		sprintf_s(imageFile, IMAGE_FILENAME_BUFFER_SIZE, (std::string(RESOURCES_DIR) + "/textures/PokerDeckCards/%d.png").c_str(), i);
 		if (FileExists(imageFile))
 		{
 			CardImages[i] = LoadTexture(imageFile);

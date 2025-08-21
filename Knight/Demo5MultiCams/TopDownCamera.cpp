@@ -34,7 +34,7 @@ bool TopDownCamera::Update(float ElapsedSeconds)
         mCameraVerticalOffset += GetMouseDelta().y * 0.01f;
     }
 
-	Knight::Update(ElapsedSeconds);
+	SceneCamera::Update(ElapsedSeconds);
 
     return true;
 }

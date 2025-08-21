@@ -53,7 +53,7 @@ void Demo5Ortho::DrawFrame()
 //Render help text on the screen
 void Demo5Ortho::DrawGUI()
 {
-	__super::DrawGUI();
+	Knight::DrawGUI();
 	DrawText("Rotate camera angle: move mouse.", 10, 100, 40, WHITE);
 	DrawText("Move camera: Use arrow keys.", 10, 150, 40, WHITE);
 }
@@ -61,8 +61,8 @@ void Demo5Ortho::DrawGUI()
 // Load default resources for the demo
 void Demo5Ortho::OnCreateDefaultResources()
 {
-	__super::OnCreateDefaultResources();
+	Knight::OnCreateDefaultResources();
 
 	UnloadFont(_Font);
-	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+	_Font = LoadFontEx((std::string(RESOURCES_DIR) + "/fonts/sparky.ttf").c_str(), 32, 0, 0);
 }

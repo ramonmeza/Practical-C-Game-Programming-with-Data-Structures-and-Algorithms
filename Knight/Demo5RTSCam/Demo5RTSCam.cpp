@@ -78,7 +78,7 @@ void Demo5RTSCam::DrawFrame()
 //Render help text and unit names of all units (represened by cubes)
 void Demo5RTSCam::DrawGUI()
 {
-	__super::DrawGUI();
+	Knight::DrawGUI();
 
 	for (auto& unit : units) {		
 		BoundingRect rect = Get2DBoundingRectOfCube(unit.position, 1.0f, *RTSCamera->GetCamera3D());
@@ -96,6 +96,6 @@ void Demo5RTSCam::DrawGUI()
 // Load default resources for the demo
 void Demo5RTSCam::OnCreateDefaultResources()
 {
-	__super::OnCreateDefaultResources();
-	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+	Knight::OnCreateDefaultResources();
+	_Font = LoadFontEx((std::string(RESOURCES_DIR) + "/fonts/sparky.ttf").c_str(), 32, 0, 0);
 }

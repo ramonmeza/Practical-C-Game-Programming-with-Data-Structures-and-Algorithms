@@ -1,6 +1,8 @@
 #include "Knight.h"
 #include "Demo8a.h"
 
+#include <cstring>
+
 PerspectiveCamera* camera;
 SceneActor* Character;
 ModelComponent* AnimModelComponent;
@@ -41,7 +43,7 @@ void Demo8a::Start()
 	Character->Position = Vector3 { 0.0f, 0.0f, 0.0f };
 	Character->Rotation.y = -90.0f;
 	AnimModelComponent = Character->CreateAndAddComponent<ModelComponent>();
-	AnimModelComponent->Load3DModel("../../resources/models/m3d/cesium_man.m3d");
+	AnimModelComponent->Load3DModel((std::string(RESOURCES_DIR) + "/models/m3d/cesium_man.m3d").c_str());
 	AnimModelComponent->SetAnimation(0);
 	Character->AddComponent(AnimModelComponent);
 }

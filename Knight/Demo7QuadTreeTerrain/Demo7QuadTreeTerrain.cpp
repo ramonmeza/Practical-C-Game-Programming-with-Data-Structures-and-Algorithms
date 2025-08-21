@@ -4,8 +4,8 @@
 #include <string>   // For filename manipulation
 #include <raymath.h>
 
-const char* HEIGHTMAP_FILENAME = "../../resources/textures/heightmap.png"; // heightmap
-const char* TERRAIN_TEXTURE_FILENAME = "../../resources/textures/terrain_map.png"; // terrain texture
+const char* HEIGHTMAP_FILENAME = (std::string(RESOURCES_DIR) + "/textures/heightmap.png").c_str(); // heightmap
+const char* TERRAIN_TEXTURE_FILENAME = (std::string(RESOURCES_DIR) + "/textures/terrain_map.png").c_str(); // terrain texture
 
 //Main entry point for the demo
 int main(int argc, char* argv[])
@@ -45,8 +45,8 @@ void Demo7QuadTreeTerrain::DrawGUI()
 //Create default resources for the demo
 void Demo7QuadTreeTerrain::OnCreateDefaultResources()
 {
-    __super::OnCreateDefaultResources();
-    _Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+    Knight::OnCreateDefaultResources();
+    _Font = LoadFontEx((std::string(RESOURCES_DIR) + "/fonts/sparky.ttf").c_str(), 32, 0, 0);
 }
 
 void Demo7QuadTreeTerrain::OnConfigKnightApp()

@@ -40,7 +40,7 @@ void Demo6LightShader::Start()
 	pPlayer->Position = Vector3{ 0.f,0.5f,0.f };
 	pPlayer->Rotation = Vector3{ 0,0,0 };
 	ModelComponent* animPlayerComponent = pPlayer->CreateAndAddComponent<ModelComponent>();
-	animPlayerComponent->Load3DModel("../../resources/models/gltf/robot.glb");
+	animPlayerComponent->Load3DModel((std::string(RESOURCES_DIR) + "/models/gltf/robot.glb").c_str());
 	animPlayerComponent->SetAnimation(6);
 	pPlayer->AddComponent(animPlayerComponent);	
 }
@@ -86,6 +86,6 @@ void Demo6LightShader::DrawFrame()
 // Load default resources like fonts, textures, etc.
 void Demo6LightShader::OnCreateDefaultResources()
 {
-	__super::OnCreateDefaultResources();
-	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+	Knight::OnCreateDefaultResources();
+	_Font = LoadFontEx((std::string(RESOURCES_DIR) + "/fonts/sparky.ttf").c_str(), 32, 0, 0);
 }

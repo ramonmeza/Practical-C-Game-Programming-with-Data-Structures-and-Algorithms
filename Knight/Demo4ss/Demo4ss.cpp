@@ -30,9 +30,9 @@ void Demo4ss::Start()
 
 	Config.ShowFPS = true;
 
-	background = LoadTexture("../../resources/textures/p10.png");
-	midground = LoadTexture("../../resources/textures/p11.png");
-	foreground = LoadTexture("../../resources/textures/p12.png");
+	background = LoadTexture((std::string(RESOURCES_DIR) + "/textures/p10.obj").c_str());
+	midground = LoadTexture((std::string(RESOURCES_DIR) + "/textures/p11.obj").c_str());
+	foreground = LoadTexture((std::string(RESOURCES_DIR) + "/textures/p12.obj").c_str());
 }
 
 // Unload resources used by the game
@@ -62,7 +62,7 @@ void Demo4ss::Update(float ElapsedSeconds)
 
 void Demo4ss::DrawGUI()
 {
-	__super::DrawGUI();
+	Knight::DrawGUI();
 
 	Vector2 v2;
 
@@ -89,6 +89,6 @@ void Demo4ss::DrawGUI()
 //Create resources such as fonts, shaders, etc.
 void Demo4ss::OnCreateDefaultResources()
 {
-	__super::OnCreateDefaultResources();
-	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+	Knight::OnCreateDefaultResources();
+	_Font = LoadFontEx((std::string(RESOURCES_DIR) + "/fonts/sparky.ttf").c_str(), 32, 0, 0);
 }

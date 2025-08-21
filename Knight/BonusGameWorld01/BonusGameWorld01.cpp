@@ -234,7 +234,7 @@ void BonusGameWorld01::DrawFrame()
 
 void BonusGameWorld01::DrawGUI()
 {
-	__super::DrawGUI();
+	Knight::DrawGUI();
 	//Draw the shadow map texture for debugging purpose.
 	//Rectangle sr = { 0,0,1023, 1023 };
 	//Rectangle dr = { 0,0,255, 255 };
@@ -247,10 +247,10 @@ void BonusGameWorld01::DrawGUI()
 
 void BonusGameWorld01::OnCreateDefaultResources()
 {
-	__super::OnCreateDefaultResources();
+	Knight::OnCreateDefaultResources();
 
 	UnloadFont(_Font);
-	_Font = LoadFontEx("../../resources/fonts/sparky.ttf", 32, 0, 0);
+	_Font = LoadFontEx((std::string(RESOURCES_DIR) + "/fonts/sparky.ttf").c_str(), 32, 0, 0);
 
 	Config.EnableDefaultLight = false; //Disable default light. 	
 	Config.EnableDefaultRenderPasses = false; //Disable default render passes, we will use ours.
