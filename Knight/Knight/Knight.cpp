@@ -5,6 +5,8 @@
 #include "raylib.h"
 #include "Knight.h"
 #include "rlgl.h"
+#include <cstdio>
+#include <cstring>
 
 Knight* Knight::Instance = nullptr;
 

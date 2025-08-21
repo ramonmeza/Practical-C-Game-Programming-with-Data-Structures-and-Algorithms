@@ -24,7 +24,7 @@ UIPopupManager* UIPopup::ui_manager = NULL;
 void Demo2e::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
-	__super::Start();
+	Knight::Start();
 	GuiSetFont(_Font);
 
 	EnableCursor();
@@ -36,7 +36,7 @@ void Demo2e::Start()
 void Demo2e::Update(float ElapsedSeconds)
 {
 	//process input
-	__super::Update(ElapsedSeconds);
+	Knight::Update(ElapsedSeconds);
 
 	if (!Manager.IsAnyPopupShown()) {
 		if (IsKeyPressed(KEY_M)) {

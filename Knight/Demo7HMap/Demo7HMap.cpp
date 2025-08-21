@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 void Demo7HMap::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
-	__super::Start();
+	Knight::Start();
 
 	Config.ShowFPS = true;
 
@@ -42,12 +42,12 @@ void Demo7HMap::EndGame()
 {
 	UnloadTexture(texture);     // Unload texture
 
-	__super::EndGame();
+	Knight::EndGame();
 }
 
 void Demo7HMap::DrawFrame()
 {
-	__super::DrawFrame();
+	Knight::DrawFrame();
 	DrawGrid(20, 1.0f);
 }
 

@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 void Demo5FPC::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
-	__super::Start();
+	Knight::Start();
 
 	Config.ShowFPS = true;
 

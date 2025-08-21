@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 
 void Demo9a::Start()
 {
-	__super::Start();
+	Knight::Start();
 
 	SetTargetFPS(30);
 
@@ -53,7 +53,7 @@ void Demo9a::EndGame()
 void Demo9a::Update(float DeltaTime)
 {
 	PlayerCharacterFSM->Update(DeltaTime);
-	__super::Update(DeltaTime);
+	Knight::Update(DeltaTime);
 }
 
 void Demo9a::DrawGUI()

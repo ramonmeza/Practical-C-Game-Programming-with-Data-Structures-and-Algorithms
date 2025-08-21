@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
 
 void Demo7Billboard::Start()
 {
-	__super::Start();
+	Knight::Start();
 
 	Config.ShowFPS = true;
 
@@ -90,7 +90,7 @@ void Demo7Billboard::Update(float ElapsedSeconds)
 
 	mainCamera->SetLookAtPosition(player->Position);
 
-	__super::Update(ElapsedSeconds);
+	Knight::Update(ElapsedSeconds);
 }
 
 void Demo7Billboard::DrawGUI()

@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 
 void Demo8a::Start()
 {
-	__super::Start();
+	Knight::Start();
 
 	FrameRate = 30;
 	SetTargetFPS(FrameRate);
@@ -96,7 +96,7 @@ void Demo8a::Update(float ElapsedSeconds)
 		TimeScale -= 0.1f;
 	}
 
-	__super::Update(ElapsedSeconds * TimeScale);
+	Knight::Update(ElapsedSeconds * TimeScale);
 }
 
 void Demo8a::DrawGUI()

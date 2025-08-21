@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 void Demo5MultiCams::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
-	__super::Start();
+	Knight::Start();
 
 	Config.ShowFPS = true;
 
@@ -78,7 +78,7 @@ void Demo5MultiCams::Update(float ElapsedSeconds)
 	pTopDownCamera->Update(ElapsedSeconds);
 
 	//Update the scene
-	__super::Update(ElapsedSeconds);
+	Knight::Update(ElapsedSeconds);
 }
 
 //Render both views

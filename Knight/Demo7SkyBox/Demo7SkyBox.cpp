@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
 void Demo7Skybox::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
-	__super::Start();
+	Knight::Start();
 
 	Config.ShowFPS = true;
 
@@ -60,7 +60,7 @@ void Demo7Skybox::Update(float ElapsedSeconds)
 		Actor->Rotation.y -= 1;  // Rotate right
 	}
 
-	__super::Update(ElapsedSeconds);
+	Knight::Update(ElapsedSeconds);
 
 	pSkyBox->Update(ElapsedSeconds);
 }
@@ -68,7 +68,7 @@ void Demo7Skybox::Update(float ElapsedSeconds)
 void Demo7Skybox::DrawFrame()
 {
 	pSkyBox->Draw();
-	__super::DrawFrame();
+	Knight::DrawFrame();
 	DrawGrid(10, 1.0f);
 }
 

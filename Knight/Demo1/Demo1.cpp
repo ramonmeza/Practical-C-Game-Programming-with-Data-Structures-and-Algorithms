@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 
 void Demo1::Start()
 {
-	__super::Start();
+	Knight::Start();
 
 	Config.ShowFPS = true;
 
@@ -87,7 +87,7 @@ void Demo1::Start()
 
 void Demo1::EndGame()
 {
-	__super::EndGame();
+	Knight::EndGame();
 }
 
 void Demo1::Update(float ElapsedSeconds)
@@ -107,10 +107,10 @@ void Demo1::Update(float ElapsedSeconds)
 
 	modelActor->Rotation.y -= ElapsedSeconds * spinSpeed;
 
-	__super::Update(ElapsedSeconds);
+	Knight::Update(ElapsedSeconds);
 }
 
 void Demo1::DrawFrame()
 {
-	__super::DrawFrame();
+	Knight::DrawFrame();
 }

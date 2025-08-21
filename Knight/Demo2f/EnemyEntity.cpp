@@ -34,7 +34,7 @@ void EnemyEntity::Update(float elaspedTime)
 	}
 
 	//process usual entity updates
-	__super::Update(elaspedTime);
+	Knight::Update(elaspedTime);
 }
 
 void EnemyEntity::DrawGUI()

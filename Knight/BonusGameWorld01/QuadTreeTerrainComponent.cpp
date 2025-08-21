@@ -67,7 +67,7 @@ bool QuadTreeTerrainComponent::CreateFromFile(Vector3 dimension, Vector2 texTile
 
 void QuadTreeTerrainComponent::Update(float ElapsedSeconds)
 {
-	__super::Update(ElapsedSeconds); // Call base class update  
+	Knight::Update(ElapsedSeconds); // Call base class update  
 
     if (IsKeyPressed(KEY_B)) {
         DebugShowBounds = !DebugShowBounds; // Toggle bounding box visibility

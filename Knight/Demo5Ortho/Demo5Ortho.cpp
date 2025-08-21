@@ -21,7 +21,7 @@ Demo5Ortho::Demo5Ortho()
 void Demo5Ortho::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
-	__super::Start();
+	Knight::Start();
 
 	Config.ShowFPS = true;
 
@@ -32,7 +32,7 @@ void Demo5Ortho::Start()
 // Update the camera position based on user input
 void Demo5Ortho::DrawFrame()
 {
-	__super::DrawFrame();
+	Knight::DrawFrame();
 
 	DrawGrid(20, 1.0f);
 

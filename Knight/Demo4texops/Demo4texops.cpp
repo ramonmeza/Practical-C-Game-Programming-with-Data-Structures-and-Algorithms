@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 void Demo4TexOps::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
-	__super::Start();
+	Knight::Start();
 
 	GuiSetStyle(DEFAULT, TEXT_SIZE, 30);
 
@@ -31,7 +31,7 @@ void Demo4TexOps::Start()
 //Update with current demo entity
 void Demo4TexOps::Update(float ElapsedSeconds)
 {
-	__super::Update(ElapsedSeconds);
+	Knight::Update(ElapsedSeconds);
 
 	if (IsKeyPressed(KEY_ENTER) == true || IsMouseButtonPressed(0)== true) {
 		(*it)->Release();

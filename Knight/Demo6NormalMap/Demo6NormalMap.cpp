@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 void Demo6NormalMap::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
-	__super::Start();
+	Knight::Start();
 
 	Config.ShowFPS = true;
 
@@ -83,7 +83,7 @@ void Demo6NormalMap::EndGame()
 	UnloadTexture(diffuse);
 	UnloadTexture(normalMap);
 	UnloadShader(shader);
-	__super::EndGame();
+	Knight::EndGame();
 }
 
 // Update light position and character rotation based on input
@@ -113,13 +113,13 @@ void Demo6NormalMap::Update(float ElapsedSeconds)
 	characterActor->Rotation = rot;
 	cubeActor->Rotation = rot;
 
-	__super::Update(ElapsedSeconds);
+	Knight::Update(ElapsedSeconds);
 }
 
 //Render scene and light source as a small sphere
 void Demo6NormalMap::DrawFrame()
 {
-	__super::DrawFrame();
+	Knight::DrawFrame();
 
 	// Draw light as a small sphere
 	DrawSphere(lightPos, 0.1f, YELLOW);

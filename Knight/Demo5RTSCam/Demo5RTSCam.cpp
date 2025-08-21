@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 void Demo5RTSCam::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
-	__super::Start();
+	Knight::Start();
 
 	Config.ShowFPS = true;
 
@@ -57,13 +57,13 @@ void Demo5RTSCam::Update(float ElapsedSeconds)
 		}
 	}
 
-	__super::Update(ElapsedSeconds);
+	Knight::Update(ElapsedSeconds);
 }
 
 //Render all units as cubes in the scene
 void Demo5RTSCam::DrawFrame()
 {
-	__super::DrawFrame();
+	Knight::DrawFrame();
 
 	// Draw grid for better spatial reference
 	DrawGrid(20, 1.0f);

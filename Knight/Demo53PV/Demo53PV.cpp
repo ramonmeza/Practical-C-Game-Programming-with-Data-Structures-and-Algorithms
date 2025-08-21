@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 void Demo53PV::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
-	__super::Start();
+	Knight::Start();
 
 	Config.ShowFPS = true;
 
@@ -57,13 +57,13 @@ void Demo53PV::Update(float ElapsedSeconds)
 		Actor->Rotation.y -= 1;  // Rotate right
 	}
 
-	__super::Update(ElapsedSeconds);
+	Knight::Update(ElapsedSeconds);
 }
 
 // Draw the frame, including grid and player movement visualization
 void Demo53PV::DrawFrame()
 {
-	__super::DrawFrame();
+	Knight::DrawFrame();
 
 	// Draw grid for better spatial reference
 	DrawGrid(10, 1.0f);

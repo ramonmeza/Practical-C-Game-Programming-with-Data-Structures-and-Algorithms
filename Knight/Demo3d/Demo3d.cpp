@@ -23,7 +23,7 @@ void Demo3d::Start()
 {
 	char imageFile[IMAGE_FILENAME_BUFFER_SIZE];
 
-	__super::Start();
+	Knight::Start();
 
 	Config.ShowFPS = true;
 
@@ -53,7 +53,7 @@ void Demo3d::EndGame()
 	{
 		UnloadTexture(CardImages[i]);
 	}
-	__super::EndGame();
+	Knight::EndGame();
 }
 
 
@@ -69,7 +69,7 @@ void Demo3d::Update(float ElapsedSeconds)
 		SortDealtCards();
 	}
 
-	__super::Update(ElapsedSeconds);
+	Knight::Update(ElapsedSeconds);
 }
 
 void Demo3d::DrawGUI()

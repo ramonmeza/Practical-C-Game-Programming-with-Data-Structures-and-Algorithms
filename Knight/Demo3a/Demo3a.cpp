@@ -27,7 +27,7 @@ int main(int argc, char* argv[])
 
 void Demo3a::Start()
 {
-	__super::Start();
+	Knight::Start();
 
 	Config.ShowFPS = true;
 
@@ -85,5 +85,5 @@ void Demo3a::Update(float ElapsedSeconds)
 		Character->Position = Selector::WeightedRandomSelect<Vector3>(SpawnPoints, SpawnProbabilities, 3);
 	}
 
-	__super::Update(ElapsedSeconds);
+	Knight::Update(ElapsedSeconds);
 }

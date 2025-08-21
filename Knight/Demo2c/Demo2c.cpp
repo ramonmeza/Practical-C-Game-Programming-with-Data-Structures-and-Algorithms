@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 void Demo2c::Start()
 {
 	//Initialize Knight Engine with a default scene and camera
-	__super::Start();
+	Knight::Start();
 
 	Config.ShowFPS = true;
 
@@ -42,7 +42,7 @@ void Demo2c::Update(float ElapsedSeconds)
 		enemy.Update(ElapsedSeconds);
 	}		
 	terrain->Update(ElapsedSeconds);
-	__super::Update(ElapsedSeconds);
+	Knight::Update(ElapsedSeconds);
 }
 
 //Initialize entities in the scene

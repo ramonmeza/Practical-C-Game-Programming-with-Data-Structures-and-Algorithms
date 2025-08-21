@@ -23,7 +23,7 @@ void Demo3c::Start()
 {
 	char imageFile[IMAGE_FILENAME_BUFFER_SIZE];
 
-	__super::Start();
+	Knight::Start();
 
 	Config.ShowFPS = true;
 
@@ -53,7 +53,7 @@ void Demo3c::EndGame()
 	{
 		UnloadTexture(CardImages[i]);
 	}
-	__super::EndGame();
+	Knight::EndGame();
 }
 
 
@@ -64,7 +64,7 @@ void Demo3c::Update(float ElapsedSeconds)
 		Shuffle();
 	}
 
-	__super::Update(ElapsedSeconds);
+	Knight::Update(ElapsedSeconds);
 }
 
 void Demo3c::DrawGUI()

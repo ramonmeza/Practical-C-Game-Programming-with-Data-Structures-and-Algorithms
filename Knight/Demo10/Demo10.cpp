@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 
 void Demo10::Start()
 {
-	__super::Start();
+	Knight::Start();
 
 	SetTargetFPS(30);
 
@@ -80,7 +80,7 @@ void Demo10::Update(float DeltaTime)
 
 	PlayerCharacterFSM->Update(DeltaTime);
 	Turret->Update(DeltaTime);
-	__super::Update(DeltaTime);
+	Knight::Update(DeltaTime);
 }
 
 void Demo10::DrawGUI()

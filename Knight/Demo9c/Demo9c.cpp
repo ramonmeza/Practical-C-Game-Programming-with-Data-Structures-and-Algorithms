@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
 
 void Demo9c::Start()
 {
-	__super::Start();
+	Knight::Start();
 
 	SetTargetFPS(30);
 
@@ -77,12 +77,12 @@ void Demo9c::Update(float DeltaTime)
 		}
 	}
 
-	__super::Update(DeltaTime);
+	Knight::Update(DeltaTime);
 }
 
 void Demo9c::DrawFrame()
 {
-	__super::DrawFrame();
+	Knight::DrawFrame();
 
 	Vector2 start, end;
 

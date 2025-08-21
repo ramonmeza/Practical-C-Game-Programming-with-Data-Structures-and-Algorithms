@@ -69,7 +69,7 @@ void AliveEntity::Update(float elaspedTime)
 		}
 	}
 
-	__super::Update(elaspedTime);
+	Knight::Update(elaspedTime);
 }
 
 void AliveEntity::SetTarget(AliveEntity* target)

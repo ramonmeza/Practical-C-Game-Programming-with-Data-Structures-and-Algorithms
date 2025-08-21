@@ -29,7 +29,7 @@ void PlayerEntity::Update(float elaspedTime)
 	else {
 		rechargeTime += elaspedTime;
 	}
-	__super::Update(elaspedTime);
+	Knight::Update(elaspedTime);
 }
 
 void PlayerEntity::DrawGUI()

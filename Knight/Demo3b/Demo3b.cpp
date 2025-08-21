@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
 
 void Demo3b::Start()
 {
-	__super::Start();
+	Knight::Start();
 
 	Config.ShowFPS = true;
 
@@ -107,5 +107,5 @@ void Demo3b::Update(float ElapsedSeconds)
 		PlaceCharacters();
 	}
 
-	__super::Update(ElapsedSeconds);
+	Knight::Update(ElapsedSeconds);
 }

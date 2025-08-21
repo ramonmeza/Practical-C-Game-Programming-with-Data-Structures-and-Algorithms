@@ -23,7 +23,7 @@ int main(int argc, char* argv[])
 
 void Demo8b::Start()
 {
-	__super::Start();
+	Knight::Start();
 
 	SetTargetFPS(60);
 
@@ -111,12 +111,12 @@ void Demo8b::Update(float ElapsedSeconds)
 		TimeScale -= 0.1f;
 	}
 
-	__super::Update(ElapsedSeconds * TimeScale);
+	Knight::Update(ElapsedSeconds * TimeScale);
 }
 
 void Demo8b::DrawFrame()
 {
-	__super::DrawFrame();
+	Knight::DrawFrame();
 
 }
 
