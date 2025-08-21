@@ -1,4 +1,4 @@
-#pragma once
+
 
 #include "Demo4TexOps.h"
 
