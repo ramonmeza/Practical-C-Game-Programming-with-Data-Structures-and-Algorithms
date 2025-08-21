@@ -4,8 +4,8 @@
 #include <string>   // For filename manipulation
 #include <raymath.h>
 
-const char* HEIGHTMAP_FILENAME = (std::string(RESOURCES_DIR) + "/textures/heightmap.png").c_str(); // heightmap
-const char* TERRAIN_TEXTURE_FILENAME = (std::string(RESOURCES_DIR) + "/textures/terrain_map.png").c_str(); // terrain texture
+const std::string HEIGHTMAP_FILENAME = (std::string(RESOURCES_DIR) + "/textures/heightmap.png").c_str(); // heightmap
+const std::string TERRAIN_TEXTURE_FILENAME = (std::string(RESOURCES_DIR) + "/textures/terrain_map.png").c_str(); // terrain texture
 
 //Main entry point for the demo
 int main(int argc, char* argv[])
@@ -26,7 +26,7 @@ void Demo7QuadTreeTerrain::Start()
     pTerrain->Position = Vector3{ 0.0f, 0.0f, 0.0f };           // Define model position
     pTerrain->Scale = Vector3{ 1,1,1 };
     pQuadTreeTerrain = pTerrain->CreateAndAddComponent<QuadTreeTerrainComponent>();
-    pQuadTreeTerrain->CreateFromFile(Vector3{ 32, 8, 32 }, Vector2{ 8.0f, 8.0f }, HEIGHTMAP_FILENAME, TERRAIN_TEXTURE_FILENAME);
+    pQuadTreeTerrain->CreateFromFile(Vector3{ 32, 8, 32 }, Vector2{ 8.0f, 8.0f }, HEIGHTMAP_FILENAME.c_str(), TERRAIN_TEXTURE_FILENAME.c_str());
 
     pMainCamera = _Scene->CreateSceneObject<FlyThroughCamera>("Main Camera");
     pMainCamera->SetUp(pTerrain->Position, 30, 20, 20, 45, CAMERA_PERSPECTIVE);
