@@ -19,7 +19,7 @@ void TerrainEntity::Create(Scene* pScene, Entity* pParent)
 	Actor->Scale = Vector3{ 20, 1, 20 };
 	ModelComponent* animEnemyComponent = Actor->CreateAndAddComponent<ModelComponent>();
 	animEnemyComponent->Load3DModel((std::string(RESOURCES_DIR) + "/models/obj/bridge.obj").c_str());
-	Image image = LoadImage((std::string(RESOURCES_DIR) + "/models/obj/bridge_diffuse.obj").c_str());
+	Image image = LoadImage((std::string(RESOURCES_DIR) + "/models/obj/bridge_diffuse.png").c_str());
 	Texture2D tex = LoadTextureFromImage(image);
 	UnloadImage(image);
 	animEnemyComponent->GetModel()->materials[0].maps[0].texture = tex;

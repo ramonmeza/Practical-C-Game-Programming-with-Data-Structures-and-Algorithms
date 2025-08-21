@@ -28,7 +28,7 @@ void Demo7PCFShadow::Start()
 	pFloor = _Scene->CreateSceneObject<SceneActor>("Floor");
 	Mesh floorMesh = GenMeshCube(32.0f, 0.1f, 32.0f);
 	ModelComponent* floorComponent = pFloor->CreateAndAddComponent<ModelComponent>();
-	floorComponent->LoadFromMesh(floorMesh, (std::string(RESOURCES_DIR) + "/textures/p8.obj").c_str());
+	floorComponent->LoadFromMesh(floorMesh, (std::string(RESOURCES_DIR) + "/textures/p8.png").c_str());
 	pFloor->AddComponent(floorComponent);
 	
 	pProp = _Scene->CreateSceneObject<SceneActor>("Prop");
@@ -37,7 +37,7 @@ void Demo7PCFShadow::Start()
 	pProp->Rotation = Vector3{ 0,0,0 };
 	
 	ModelComponent* propModelComponent = pProp->CreateAndAddComponent<ModelComponent>();
-	propModelComponent->Load3DModel((std::string(RESOURCES_DIR) + "/models/obj/plane.obj").c_str(), (std::string(RESOURCES_DIR) + "/models/obj/plane_diffuse.obj").c_str());
+	propModelComponent->Load3DModel((std::string(RESOURCES_DIR) + "/models/obj/plane.obj").c_str(), (std::string(RESOURCES_DIR) + "/models/obj/plane_diffuse.png").c_str());
 	propModelComponent->castShadow = Component::eShadowCastingType::Shadow;
 	propModelComponent->receiveShadow = true;
 	pProp->AddComponent(propModelComponent);

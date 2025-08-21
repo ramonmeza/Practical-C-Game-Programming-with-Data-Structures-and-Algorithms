@@ -15,7 +15,7 @@ SimpleDrawTextureDemo::SimpleDrawTextureDemo()  // Initialize texture to default
 
 void SimpleDrawTextureDemo::Create()
 {
-	Image art = LoadImage((std::string(RESOURCES_DIR) + "/textures/demoart.obj").c_str());
+	Image art = LoadImage((std::string(RESOURCES_DIR) + "/textures/demoart.png").c_str());
 	texture = LoadTextureFromImage(art);
 	UnloadImage(art);
 	isReady = true;
@@ -41,7 +41,7 @@ CompressTextureDemo::CompressTextureDemo()
 
 void CompressTextureDemo::Create()
 {
-	Image art_org = LoadImage((std::string(RESOURCES_DIR) + "/textures/demoart.obj").c_str());
+	Image art_org = LoadImage((std::string(RESOURCES_DIR) + "/textures/demoart.png").c_str());
 	original = LoadTextureFromImage(art_org);
 	UnloadImage(art_org);
 
@@ -77,7 +77,7 @@ DrawPartialRotateDemo::DrawPartialRotateDemo()
 
 void DrawPartialRotateDemo::Create()
 {
-	Image art = LoadImage((std::string(RESOURCES_DIR) + "/textures/demoart.obj").c_str());
+	Image art = LoadImage((std::string(RESOURCES_DIR) + "/textures/demoart.png").c_str());
 	texture = LoadTextureFromImage(art);
 	UnloadImage(art);
 	isReady = true;

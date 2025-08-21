@@ -68,7 +68,7 @@ void Demo6Light::Start()
 	pTerrain->Scale = Vector3{ 1, 1, 1 };
 	ModelComponent* animEnemyComponent = pTerrain->CreateAndAddComponent<ModelComponent>();
 	animEnemyComponent->Load3DModel((std::string(RESOURCES_DIR) + "/models/obj/bridge.obj").c_str());
-	Image image = LoadImage((std::string(RESOURCES_DIR) + "/models/obj/bridge_diffuse.obj").c_str());
+	Image image = LoadImage((std::string(RESOURCES_DIR) + "/models/obj/bridge_diffuse.png").c_str());
 	Texture2D tex = LoadTextureFromImage(image);
 	UnloadImage(image);
 	animEnemyComponent->GetModel()->materials[0].maps[0].texture = tex;

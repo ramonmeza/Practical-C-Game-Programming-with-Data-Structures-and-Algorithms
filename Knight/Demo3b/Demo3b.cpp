@@ -37,7 +37,7 @@ void Demo3b::Start()
 
 	Castle = _Scene->CreateSceneObject<SceneActor>("Castle");
 	ModelComponent* modelComponent = Castle->CreateAndAddComponent<ModelComponent>();
-	modelComponent->Load3DModel((std::string(RESOURCES_DIR) + "/models/obj/castle.obj").c_str(), (std::string(RESOURCES_DIR) + "/models/obj/castle_diffuse.obj").c_str());
+	modelComponent->Load3DModel((std::string(RESOURCES_DIR) + "/models/obj/castle.obj").c_str(), (std::string(RESOURCES_DIR) + "/models/obj/castle_diffuse.png").c_str());
 
 	SpawnPointA = _Scene->CreateSceneObject<SceneActor>("SpawnPoint A");
 	SpawnPointA->Position = SpawnPoints[0];

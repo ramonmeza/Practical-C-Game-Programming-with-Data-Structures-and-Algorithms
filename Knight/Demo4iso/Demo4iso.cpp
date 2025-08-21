@@ -29,7 +29,7 @@ void Demo4iso::Start()
 	//Initialize Knight Engine with a default scene and camera
 	Knight::Start();
 
-	Image image = LoadImage((std::string(RESOURCES_DIR) + "/textures/seasons_tiles.obj").c_str());     // Loaded in CPU memory (RAM)
+	Image image = LoadImage((std::string(RESOURCES_DIR) + "/textures/seasons_tiles.png").c_str());     // Loaded in CPU memory (RAM)
 	_mapTiles = LoadTextureFromImage(image);          // Image converted to texture, GPU memory (VRAM)
 	UnloadImage(image);   // Once image has been converted to texture and uploaded to VRAM, it can be unloaded from RAM
 }

@@ -84,7 +84,7 @@ void TerrainEntity::Create(Scene* pScene, Entity* pParent)
 	Actor->Position = Vector3{ 0, -5, 0 };
 	Actor->Scale = Vector3{ 20, 1, 20 };
 	ModelComponent* animEnemyComponent = Actor->CreateAndAddComponent<ModelComponent>();
-	animEnemyComponent->Load3DModel((std::string(RESOURCES_DIR) + "/models/obj/bridge.obj").c_str(), (std::string(RESOURCES_DIR) + "/models/obj/bridge_diffuse.obj").c_str());
+	animEnemyComponent->Load3DModel((std::string(RESOURCES_DIR) + "/models/obj/bridge.obj").c_str(), (std::string(RESOURCES_DIR) + "/models/obj/bridge_diffuse.png").c_str());
 	Actor->AddComponent(animEnemyComponent);
 }
 

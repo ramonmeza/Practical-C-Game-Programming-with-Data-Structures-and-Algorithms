@@ -29,8 +29,8 @@ void Demo6NormalMap::Start()
 	pMainCamera = _Scene->CreateSceneObject<FlyThroughCamera>("Main Camera");
 	pMainCamera->SetUp(Vector3{ 0.0f, 1.0f, 0.0f }, 8.0f, 0, 10, 60, CAMERA_PERSPECTIVE);
 
-	diffuse = LoadTexture((std::string(RESOURCES_DIR) + "/textures/stonewall.obj").c_str());  // Replace with your diffuse texture path
-	normalMap = LoadTexture((std::string(RESOURCES_DIR) + "/textures/stonewall_n.obj").c_str()); // Replace with your normal map texture path
+	diffuse = LoadTexture((std::string(RESOURCES_DIR) + "/textures/stonewall.png").c_str());  // Replace with your diffuse texture path
+	normalMap = LoadTexture((std::string(RESOURCES_DIR) + "/textures/stonewall_n.png").c_str()); // Replace with your normal map texture path
 
 	// Load shaders
 	shader = LoadShader((std::string(RESOURCES_DIR) + "/shaders/glsl330/normalmap.vs").c_str(),
@@ -41,7 +41,7 @@ void Demo6NormalMap::Start()
 	cubeActor = _Scene->CreateSceneObject<SceneActor>("Cube");
 	cubeActor->Position = Vector3{ 3.0f, -1.0f, 0.0f };
 	ModelComponent* modelComponent = cubeActor->CreateAndAddComponent<ModelComponent>();
-	modelComponent->Load3DModel((std::string(RESOURCES_DIR) + "/models/obj/well.obj").c_str(), (std::string(RESOURCES_DIR) + "/models/obj/well_diffuse.obj").c_str());
+	modelComponent->Load3DModel((std::string(RESOURCES_DIR) + "/models/obj/well.obj").c_str(), (std::string(RESOURCES_DIR) + "/models/obj/well_diffuse.png").c_str());
 	for (int i = 0; i < modelComponent->GetModel()->materialCount; i++) {
 		modelComponent->GetModel()->materials[i].shader = shader;
 		modelComponent->GetModel()->materials[i].maps[MATERIAL_MAP_DIFFUSE].texture = diffuse;

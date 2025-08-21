@@ -32,7 +32,7 @@ void Demo7HMap::Start()
 	pTerrain->Scale = Vector3{ 1,1,1 };
 	HMapTerrainModelComponent* heightMap = pTerrain->CreateAndAddComponent<HMapTerrainModelComponent>();
 	Vector3 terrainDimension = Vector3{32,8,32};
-	bool success = heightMap->CreateFromFile(terrainDimension, Vector2{ 8,8 }, (std::string(RESOURCES_DIR) + "/textures/heightmap.png").c_str(), (std::string(RESOURCES_DIR) + "/textures/terrain_map.obj").c_str());
+	bool success = heightMap->CreateFromFile(terrainDimension, Vector2{ 8,8 }, (std::string(RESOURCES_DIR) + "/textures/heightmap.png").c_str(), (std::string(RESOURCES_DIR) + "/textures/terrain_map.png").c_str());
 
 	UnloadImage(image);             // Unload heightmap image from RAM, already uploaded to VRAM
 }

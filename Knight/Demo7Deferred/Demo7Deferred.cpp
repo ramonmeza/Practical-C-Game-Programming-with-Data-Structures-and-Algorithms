@@ -49,7 +49,7 @@ int main() {
 
     // Create scene objects
     Model model = LoadModelFromMesh(GenMeshCube(1.0f, 1.0f, 1.0f));
-    Texture2D texture = LoadTexture((std::string(RESOURCES_DIR) + "/models/obj/wall_diffuse.obj").c_str());
+    Texture2D texture = LoadTexture((std::string(RESOURCES_DIR) + "/models/obj/wall_diffuse.png").c_str());
     model.materials[0].maps[MATERIAL_MAP_ALBEDO].texture = texture;
 
     SetTargetFPS(60);

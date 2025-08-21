@@ -34,11 +34,11 @@ void Demo7Billboard::Start()
 	ground->Position = Vector3{ 0, -3.8f, 0 };
 	ground->Scale = Vector3{ 2, 1, 2 };
 	ModelComponent* animEnemyComponent = ground->CreateAndAddComponent<ModelComponent>();
-	animEnemyComponent->Load3DModel((std::string(RESOURCES_DIR) + "/models/obj/bridge.obj").c_str(), (std::string(RESOURCES_DIR) + "/models/obj/bridge_diffuse.obj").c_str());
+	animEnemyComponent->Load3DModel((std::string(RESOURCES_DIR) + "/models/obj/bridge.obj").c_str(), (std::string(RESOURCES_DIR) + "/models/obj/bridge_diffuse.png").c_str());
 	ground->AddComponent(animEnemyComponent);
 
 	//Load a texture as billboard image
-	billboardImage = LoadTexture((std::string(RESOURCES_DIR) + "/textures/p15-1.obj").c_str());    // Our billboard texture
+	billboardImage = LoadTexture((std::string(RESOURCES_DIR) + "/textures/p15-1.png").c_str());    // Our billboard texture
 
 	// Create a random device and seed the Mersenne Twister engine
 	std::random_device rd;

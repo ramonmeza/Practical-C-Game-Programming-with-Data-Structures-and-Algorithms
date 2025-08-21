@@ -3,7 +3,7 @@
 #include "Random.h"
 #include "Shuffler.h"
 
-#define IMAGE_FILENAME_BUFFER_SIZE 64
+#define IMAGE_FILENAME_BUFFER_SIZE 255
 #define DECK_CARD_COUNT 52
 #define PICK_CARDS_COUNT 13
 int CardIDs[DECK_CARD_COUNT];

@@ -30,9 +30,9 @@ void Demo4ss::Start()
 
 	Config.ShowFPS = true;
 
-	background = LoadTexture((std::string(RESOURCES_DIR) + "/textures/p10.obj").c_str());
-	midground = LoadTexture((std::string(RESOURCES_DIR) + "/textures/p11.obj").c_str());
-	foreground = LoadTexture((std::string(RESOURCES_DIR) + "/textures/p12.obj").c_str());
+	background = LoadTexture((std::string(RESOURCES_DIR) + "/textures/p10.png").c_str());
+	midground = LoadTexture((std::string(RESOURCES_DIR) + "/textures/p11.png").c_str());
+	foreground = LoadTexture((std::string(RESOURCES_DIR) + "/textures/p12.png").c_str());
 }
 
 // Unload resources used by the game
